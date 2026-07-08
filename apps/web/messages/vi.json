@@ -116,5 +116,20 @@
     "generateQuestionCard": "Tạo thẻ câu hỏi",
     "riskNotAvailable": "Chưa có đánh giá rủi ro cho hồ sơ của bạn.",
     "back": "Về danh sách món"
+  },
+  "questionCard": {
+    "title": "Thẻ câu hỏi",
+    "generate": "Tạo",
+    "generating": "Đang tạo…",
+    "showInEn": "Hiện tiếng Anh",
+    "showInVi": "Hiện tiếng Việt",
+    "largeText": "Chữ lớn",
+    "includeDish": "Kèm món ăn",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "fullscreen": "Đưa nhân viên xem",
+    "exitFullscreen": "Thoát",
+    "noProfile": "Tạo hồ sơ để tạo thẻ câu hỏi.",
+    "startProfile": "Tạo hồ sơ dị ứng"
   }
 }

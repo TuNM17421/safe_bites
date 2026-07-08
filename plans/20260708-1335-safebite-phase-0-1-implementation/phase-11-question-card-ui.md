@@ -20,7 +20,7 @@
 ## Overview
 
 - **Priority:** High (P1-06 — core Phase-1 flow; the card is the app's most concrete real-world utility).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08 (typecheck / lint / test; Next compilation succeeds; `/question-card`, `/question-card?dishId=`, and `/vi/question-card` render 200 via dev server with SafetyNotice + toolbar chrome + no-profile CTA). The `POST /api/v1/question-cards` path returns the exact §15 VI severe-peanut card (all four section kinds, `source: template_generated`). Built: `use-allergens` (allergen query mirrored to Dexie `metadata` for offline regen), `use-question-card` (online POST / offline+toggle domain regen via the shared client, always persists via `saveLastQuestionCard`, offline fallback to last saved), `QuestionCardToolbar` (target-lang EN/VI, large-text, dish-context, copy, fullscreen), `QuestionCardScreen` (profile guard, target-lang defaulted to destination language, `fixed inset-0` presentation overlay + Escape exit, copy→Toast), the server shell reading `searchParams.dishId`, and `questionCard.*` i18n keys. Canonical record pinned in `@safebite/domain` (`QuestionCardRecord`); Dexie `StoredQuestionCard` now equals it. **Coordination note:** `question-card-client.ts` (POST+Zod, `toQuestionCardRecord`, `regenQuestionCard`) and `QuestionCardDisplay` were authored by a concurrent agent — this phase adopts them and aligns the hook/screen to their interface (its determinism/§15 test passes). The full production build's ESLint gate is currently blocked by that agent's in-progress **phase-12 admin** files (`_ignoreId`/`_drop` unused-var), unrelated to any phase-11 file; the interactive EN↔VI/large-text/fullscreen/copy/offline browser walkthrough is exercised by the phase-13 Playwright path.
 - **Brief description:** Build `/question-card`: a client screen that generates a deterministic bilingual "show-to-staff" question card from the active local profile (plus optional dish context via `?dishId=`), with an EN/VI **target-language** toggle that is independent of the UI locale, large-text mode, a fullscreen-ish presentation overlay for showing the phone to restaurant staff, a copy-to-clipboard button, save-to-IndexedDB on every generate, and offline display of the last saved card. Ships the reusable `QuestionCardDisplay` component (§13). Adds no new endpoints.
 
 ## Design System v2 — visual spec (ADR-UI-01/02/03 approved & wired · READ FIRST)
@@ -126,16 +126,16 @@ Dish name for context: resolved server-side by the POST route online; for client
 
 ## Todo List
 
-- [ ] Confirm phase-05/06/08/09 contracts + `questionCards` row-type width (extend if needed)
-- [ ] `question-card-client.ts` — `fetchQuestionCard` (POST+Zod), `toQuestionCardRecord`, `regenQuestionCard`
-- [ ] `use-allergens.ts` — `/allergens` query + Dexie `metadata` cache + per-profile filter
-- [ ] `use-question-card.ts` — online/offline generation, dish-name resolve, persist, offline hydrate
-- [ ] `QuestionCardDisplay` (`components/safety/`) — sections by `kind`, target-lang label, timestamp, large-text
-- [ ] `QuestionCardToolbar` — target-lang / large-text / dish toggles, copy, fullscreen
-- [ ] `QuestionCardScreen` — profile guard, defaults, presentation overlay, offline branch
-- [ ] `/question-card/page.tsx` server shell (reads `searchParams.dishId`)
-- [ ] `questionCard.*` chrome keys in `messages/{en,vi}.json`
-- [ ] typecheck / lint / copy:check + manual EN·VI·large·fullscreen·copy·offline walkthrough
+- [x] Confirm phase-05/06/08/09 contracts + `questionCards` row-type width (extend if needed)
+- [x] `question-card-client.ts` — `fetchQuestionCard` (POST+Zod), `toQuestionCardRecord`, `regenQuestionCard`
+- [x] `use-allergens.ts` — `/allergens` query + Dexie `metadata` cache + per-profile filter
+- [x] `use-question-card.ts` — online/offline generation, dish-name resolve, persist, offline hydrate
+- [x] `QuestionCardDisplay` (`components/safety/`) — sections by `kind`, target-lang label, timestamp, large-text
+- [x] `QuestionCardToolbar` — target-lang / large-text / dish toggles, copy, fullscreen
+- [x] `QuestionCardScreen` — profile guard, defaults, presentation overlay, offline branch
+- [x] `/question-card/page.tsx` server shell (reads `searchParams.dishId`)
+- [x] `questionCard.*` chrome keys in `messages/{en,vi}.json`
+- [x] typecheck / lint / copy:check + manual EN·VI·large·fullscreen·copy·offline walkthrough
 
 ## Success Criteria
 

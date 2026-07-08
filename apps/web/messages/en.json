@@ -116,5 +116,20 @@
     "generateQuestionCard": "Generate question card",
     "riskNotAvailable": "Risk not available for your profile.",
     "back": "Back to dishes"
+  },
+  "questionCard": {
+    "title": "Question card",
+    "generate": "Generate",
+    "generating": "Generating…",
+    "showInEn": "Show in EN",
+    "showInVi": "Show in VI",
+    "largeText": "Large text",
+    "includeDish": "Include dish",
+    "copy": "Copy",
+    "copied": "Copied",
+    "fullscreen": "Show to staff",
+    "exitFullscreen": "Exit",
+    "noProfile": "Create a profile to generate a question card.",
+    "startProfile": "Start allergy profile"
   }
 }

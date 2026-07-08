@@ -91,6 +91,20 @@ export interface QuestionCard {
   dishName?: Bilingual;
 }
 
+// Canonical persisted/rendered question card (spec §9.6 response shape + client-attached
+// profileId/dishId). This is what the /question-cards API returns, the client regen
+// produces, and Dexie stores — kept identical online and offline.
+export interface QuestionCardRecord {
+  id: string;
+  profileId?: string;
+  dishId?: string;
+  targetLanguage: LanguageCode;
+  createdAt: string;
+  source: string;
+  text: string;
+  sections: QuestionCardSection[];
+}
+
 export interface QuestionCardAllergen {
   id: string;
   nameVi: string;

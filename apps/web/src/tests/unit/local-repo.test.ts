@@ -67,8 +67,8 @@ describe('allergyCardRepo', () => {
 
 describe('questionCardRepo', () => {
   it('tracks the latest saved card via the pointer', async () => {
-    await questionCardRepo.saveLastQuestionCard({ id: 'qc1', targetLanguage: 'vi', text: 't1', sections: [], allergenIds: [], createdAt: '1' });
-    await questionCardRepo.saveLastQuestionCard({ id: 'qc2', targetLanguage: 'vi', text: 't2', sections: [], allergenIds: [], createdAt: '2' });
+    await questionCardRepo.saveLastQuestionCard({ id: 'qc1', targetLanguage: 'vi', text: 't1', sections: [], source: 'template_generated', createdAt: '1' });
+    await questionCardRepo.saveLastQuestionCard({ id: 'qc2', targetLanguage: 'vi', text: 't2', sections: [], source: 'template_generated', createdAt: '2' });
     expect((await questionCardRepo.loadLastQuestionCard())?.id).toBe('qc2');
     await questionCardRepo.clearLastQuestionCard();
     expect(await questionCardRepo.loadLastQuestionCard()).toBeUndefined();
