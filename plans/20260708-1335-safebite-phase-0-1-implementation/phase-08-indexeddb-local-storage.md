@@ -16,7 +16,7 @@
 ## Overview
 
 - **Priority:** High (foundational — every offline read/write in Phase 1 depends on it).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08. `lib/dexie.ts` (`safebite_pwa_v1`, 5 tables verbatim) + `lib/local-repo.ts` (profile/allergy-card/question-card/saved-dish/metadata repos + `clearAllLocalData` + `assertNoSecrets`). 8 Vitest cases over `fake-indexeddb` pass: save/load/delete profile (+active pointer), allergy card, last question card (pointer), **unknown-status dish survives the round-trip unchanged**, clear-all empties every table, secret-like keys rejected, and a source scan confirms no localStorage/cookie usage. typecheck + lint clean.
 - **Brief description:** Create the client-only Dexie database `safebite_pwa_v1` with the five tables from §10, plus typed repository functions (save / load / delete / clear-all) for the active profile, allergy card, last question card, and saved dish recommendation cards. Enforce the §10.1 "Do not store" list. Persist only already-serialized plain-JSON DTOs so offline reads faithfully reproduce API output — including honest `Unknown` statuses.
 
 ## Key Insights
@@ -136,16 +136,16 @@ export const db = new SafeBiteDB();
 
 ## Todo List
 
-- [ ] Add `dexie`, `client-only`, `fake-indexeddb` deps to `apps/web`
-- [ ] `dexie.ts`: client-only guard, row types, `SafeBiteDB`, `version(1)` schema (verbatim strings), `db` singleton, metadata-key constants
-- [ ] `metadataRepo` (`getMetadata`/`setMetadata`) + `assertNoSecrets` guard
-- [ ] `profileRepo` save/load-active/get/delete with `activeProfileId` pointer
-- [ ] `allergyCardRepo` save/load(profileId)/delete
-- [ ] `questionCardRepo` save-last/load-last/clear with `lastQuestionCardId` pointer
-- [ ] `savedDishRepo` save/get/load-all(no filtering)/delete
-- [ ] `clearAllLocalData` transactional clear of all five tables
-- [ ] Unit tests over `fake-indexeddb` covering all acceptance + Unknown round-trip + no-secrets
-- [ ] `tsc --noEmit` clean + copy-guard passes
+- [x] Add `dexie`, `client-only`, `fake-indexeddb` deps to `apps/web`
+- [x] `dexie.ts`: client-only guard, row types, `SafeBiteDB`, `version(1)` schema (verbatim strings), `db` singleton, metadata-key constants
+- [x] `metadataRepo` (`getMetadata`/`setMetadata`) + `assertNoSecrets` guard
+- [x] `profileRepo` save/load-active/get/delete with `activeProfileId` pointer
+- [x] `allergyCardRepo` save/load(profileId)/delete
+- [x] `questionCardRepo` save-last/load-last/clear with `lastQuestionCardId` pointer
+- [x] `savedDishRepo` save/get/load-all(no filtering)/delete
+- [x] `clearAllLocalData` transactional clear of all five tables
+- [x] Unit tests over `fake-indexeddb` covering all acceptance + Unknown round-trip + no-secrets
+- [x] `tsc --noEmit` clean + copy-guard passes
 
 ## Success Criteria
 
