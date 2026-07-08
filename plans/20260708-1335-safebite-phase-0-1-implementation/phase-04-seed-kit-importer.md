@@ -15,7 +15,7 @@
 ## Overview
 
 - **Priority:** P0 (blocks all read APIs and the risk engine — nothing renders without seeded dishes/risks).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08. `pnpm seed:kit -- --kit ./osm_overpass_seed_kit`: profiles=6, ingredients=8, allergens=14, dishes=11, **DishAllergenRisk=110**, restaurants (header-only) + 3 `*_schema.csv` skipped cleanly; one `ImportRun` per file. Re-run is idempotent (all updates, no dup). 7 Vitest unit tests + typecheck + lint pass; no forbidden copy in scripts or generated DB reason/action. Deviations: (1) allergen catalog reused from `@safebite/domain` (SSOT, 14 rows incl. treenut) instead of a duplicate 13-row list. (2) `apps/web/tsconfig.json` `include` extended with `scripts`/`prisma` so importers are typechecked. (3) `apps/web` gained a `test` script + `vitest.config.ts`. (4) Kit path resolved against the repo root (script runs with cwd=apps/web).
 - **Brief description:** Implement `apps/web/scripts/import-seed.ts`, runnable via `pnpm seed:kit -- --kit ./osm_overpass_seed_kit`. It parses the kit CSVs (BOM-aware), upserts `ProfileTemplate`, `Ingredient`, `Dish`, `Restaurant` by stable id, derives the canonical + pseudo `Allergen` set (§6.4), and normalizes the 10 dish `default_*_risk` columns into `DishAllergenRisk` rows with deterministic template reasons/actions (§6.5). One transaction per file, per-file `ImportRun` tracking, header-only files skipped cleanly.
 
 ## Key Insights
@@ -120,18 +120,18 @@ CSV row → normalize multi-value cols (split "," → string[]) → upsert Dish
 
 ## Todo List
 
-- [ ] Add `csv-parse` + `tsx` devDeps and `seed:kit` script to `apps/web/package.json`
-- [ ] Implement `seed/csv.ts` with BOM-aware parse + `requireColumns` + `splitList` + `toNumber`
-- [ ] Implement `seed/allergens.ts` (13-row seed + derive + upsert)
-- [ ] Implement `seed/risk-templates.ts` (column map, normalizeRiskLevel, buildReasonAction)
-- [ ] Implement `seed/import-profiles.ts`
-- [ ] Implement `seed/import-ingredients.ts` (returns allergen tag union)
-- [ ] Implement `seed/import-dishes.ts` (Dish + 10 DishAllergenRisk per dish)
-- [ ] Implement `seed/import-restaurants.ts` (unverified, header-only-safe)
-- [ ] Implement `import-seed.ts` orchestrator + ImportRun + summary + schema-file skip
-- [ ] Write `apps/web/src/tests/unit/seed-import.test.ts` and make it pass
-- [ ] Run `pnpm seed:kit -- --kit ./osm_overpass_seed_kit`; verify acceptance counts
-- [ ] Run `pnpm copy:check` — no forbidden copy in generated reasons/actions
+- [x] Add `csv-parse` + `tsx` devDeps and `seed:kit` script to `apps/web/package.json`
+- [x] Implement `seed/csv.ts` with BOM-aware parse + `requireColumns` + `splitList` + `toNumber`
+- [x] Implement `seed/allergens.ts` (13-row seed + derive + upsert)
+- [x] Implement `seed/risk-templates.ts` (column map, normalizeRiskLevel, buildReasonAction)
+- [x] Implement `seed/import-profiles.ts`
+- [x] Implement `seed/import-ingredients.ts` (returns allergen tag union)
+- [x] Implement `seed/import-dishes.ts` (Dish + 10 DishAllergenRisk per dish)
+- [x] Implement `seed/import-restaurants.ts` (unverified, header-only-safe)
+- [x] Implement `import-seed.ts` orchestrator + ImportRun + summary + schema-file skip
+- [x] Write `apps/web/src/tests/unit/seed-import.test.ts` and make it pass
+- [x] Run `pnpm seed:kit -- --kit ./osm_overpass_seed_kit`; verify acceptance counts
+- [x] Run `pnpm copy:check` — no forbidden copy in generated reasons/actions
 
 ## Success Criteria
 

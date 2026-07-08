@@ -27,7 +27,7 @@ Allowed statuses only: `Suitable · Ask First · Risky · Avoid · Unknown`. **U
 | 01 | [Repo bootstrap & tooling](phase-01-repo-bootstrap-and-tooling.md) | — | pnpm monorepo, tsconfig/eslint/vitest, root scripts, env, docker-compose | ✅ Done (2026-07-08) |
 | 02 | [Web foundation + health](phase-02-web-app-foundation-and-health.md) | 01 | App Router + next-intl locale routing, semantic Tailwind, env/envelope, `/api/health`, landing | ✅ Done (2026-07-08) |
 | 03 | [Database, Prisma & migrations](phase-03-database-prisma-schema-and-migrations.md) | 01 | All §5 enums + 9 models, PostGIS migration, db singleton, allergen-catalog seed | ✅ Done (2026-07-08) |
-| 04 | [Seed-kit importer](phase-04-seed-kit-importer.md) | 03 | BOM-safe upsert profiles/ingredients/dishes/restaurants; derive allergens; 10 risk cols → DishAllergenRisk; ImportRun | ☐ |
+| 04 | [Seed-kit importer](phase-04-seed-kit-importer.md) | 03 | BOM-safe upsert profiles/ingredients/dishes/restaurants; derive allergens; 10 risk cols → DishAllergenRisk; ImportRun | ✅ Done (2026-07-08) |
 | 05 | [Domain: risk engine + question card](phase-05-domain-risk-engine-and-question-card.md) | 01 | Pure `@safebite/domain`: types, Zod, deterministic engine (unknown-never-suitable), bilingual card, §8.5 tests | ✅ Done (2026-07-08) |
 | 06 | [API endpoints `/api/v1`](phase-06-api-endpoints.md) | 03, 05 | 7 Zod-validated route handlers delegating to domain; envelope; Decimal→number | ☐ |
 | 07 | [PWA shell & offline](phase-07-pwa-shell-and-offline.md) | 02 | Manifest, Serwist SW (never-cache recommendations), offline.html, app-shell chrome, `/home` | ☐ |
