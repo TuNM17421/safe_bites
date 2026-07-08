@@ -21,6 +21,7 @@
     "db:seed": "pnpm --filter @safebite/web exec prisma db seed",
     "seed:kit": "pnpm --filter @safebite/web seed:kit",
     "seed:openmap": "pnpm --filter @safebite/web seed:openmap",
+    "seed:restaurant-demo-menu": "pnpm --filter @safebite/web seed:restaurant-demo-menu",
     "copy:check": "pnpm --filter @safebite/web copy:check"
   },
   "devDependencies": {
