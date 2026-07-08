@@ -18,6 +18,12 @@ import { newCounts, type Counts } from './seed/types';
 const prisma = new PrismaClient();
 let hadFailure = false;
 
+// Interactive-transaction options. Prisma's defaults (5s timeout, 2s maxWait) are fine for
+// a local DB but too tight for a remote target (Neon): each file imports rows with sequential
+// findUnique+upsert round-trips, which exceed 5s over network latency. Generous limits let the
+// one-off seed complete against a remote DB without changing local behaviour.
+const TX_OPTS = { maxWait: 20_000, timeout: 120_000 } as const;
+
 function parseArgs(): { kit: string } {
   const args = process.argv.slice(2);
   const i = args.indexOf('--kit');
@@ -66,7 +72,7 @@ async function runFile(
     return newCounts();
   }
   try {
-    const counts = await prisma.$transaction((tx) => importer(tx, rows));
+    const counts = await prisma.$transaction((tx) => importer(tx, rows), TX_OPTS);
     console.log(
       `  ${name}: read=${counts.read} inserted=${counts.inserted} updated=${counts.updated} skipped=${counts.skipped}`,
     );
@@ -98,7 +104,7 @@ async function main() {
   );
 
   const allergenRows = deriveAllergenRows(allergenTags);
-  await prisma.$transaction((tx) => upsertAllergens(tx, allergenRows));
+  await prisma.$transaction((tx) => upsertAllergens(tx, allergenRows), TX_OPTS);
   console.log(`  allergens: upserted=${allergenRows.length}`);
 
   let riskCounts = newCounts();
