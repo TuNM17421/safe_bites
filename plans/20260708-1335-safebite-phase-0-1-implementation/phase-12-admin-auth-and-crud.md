@@ -32,7 +32,7 @@ Infra applied (`tokens.safebite.css` imported, `safebite` preset in tailwind, `l
 - **`AdminDataTable`:** `border-sb-border`, `shadow-sb-e1`, **tabular figures** for counts/confidence/dates; `review_status` filter; sidebar items use `lucide-react` (`LayoutGrid` / `UtensilsCrossed` / dish-risk `TriangleAlert` / etc.) — **no emoji**.
 - **Risk level chip:** reuse `StatusBadge` styling (lucide glyph + status trio) to render the dish-risk `riskLevel`. Admin edits **facts** (riskLevel/confidence/reason/action/reviewStatus) — it never sets a recommendation status; the engine still owns Suitable/Unknown.
 - The `/admin` island keeps its phase-12 i18n exceptions (`next/link`, fixed `en`) — but still uses `sb-*` tokens + lucide. The mockup's **severe-report review queue** and **OCR/LLM review** screens are Phase 3–5 (reference only; not this phase).
-- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Admin dashboard". Spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
+- **Mockup:** `docs/design/safebite-ui-ux-mockups.html` → "Admin dashboard". Spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
 
 ## Key Insights
 

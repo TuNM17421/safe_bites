@@ -2,17 +2,31 @@
 import { useTranslations } from 'next-intl';
 import type { DishRecommendationCard, LanguageCode } from '@safebite/domain';
 import { ConfidenceMeter } from '@/components/status/confidence-badge';
-import { LastCheckedBadge, SourceBadge } from '@/components/status/source-badge';
+import { AllergenBadge, LastCheckedBadge, SavedBadge, SourceBadge } from '@/components/status/source-badge';
 import { StatusBadge } from '@/components/status/status-badge';
 
 // Reusable evidence block (dish list, dish detail). The Suitable caveat is baked in so no
 // consumer can forget it; every card shows source / confidence / reason / action / last-checked.
-export function RecommendationCard({ card, lang }: { card: DishRecommendationCard; lang: LanguageCode }) {
+// `showSubtitle` (dish list) leads with the native VI name + the translated subtitle; the
+// dish-detail page keeps its own bilingual header and opts out.
+export function RecommendationCard({
+  card,
+  lang,
+  showSubtitle = false,
+}: {
+  card: DishRecommendationCard;
+  lang: LanguageCode;
+  showSubtitle?: boolean;
+}) {
   const t = useTranslations('dishes');
+  const title = showSubtitle ? card.name.vi : card.name[lang];
   return (
     <article className="rounded-sb-md border border-sb-border bg-sb-surface p-4 shadow-sb-e1">
-      <header className="flex items-center justify-between gap-2">
-        <h3 className="text-base font-bold text-sb-fg">{card.name[lang]}</h3>
+      <header className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="text-sb-title font-bold text-sb-fg">{title}</h3>
+          {showSubtitle && lang === 'en' && <p className="mt-0.5 text-sb-body-s text-sb-muted">{card.name.en}</p>}
+        </div>
         <StatusBadge status={card.status} />
       </header>
       <dl className="mt-3 grid gap-1.5 border-t border-sb-border pt-3 text-[13px] text-sb-fg">
@@ -26,9 +40,11 @@ export function RecommendationCard({ card, lang }: { card: DishRecommendationCar
         </div>
       </dl>
       <footer className="mt-3 flex flex-wrap items-center gap-2">
+        {card.matchedAllergens.length > 0 && <AllergenBadge label={t(`risk.${card.riskLevel}`)} />}
         <ConfidenceMeter level={card.confidence} />
         <SourceBadge source={card.source} />
         <LastCheckedBadge label={t('lastChecked', { date: card.lastCheckedAt })} />
+        {card.stale && <SavedBadge label={t('savedOffline')} />}
       </footer>
       {card.status === 'suitable' && (
         <p className="mt-3 rounded-xl bg-sb-surface-2 p-2.5 text-xs text-sb-muted">{t('suitableCaveat')}</p>

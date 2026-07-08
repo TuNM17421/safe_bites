@@ -17,7 +17,7 @@ export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
   return (
-    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-sb-border bg-sb-surface pb-[env(safe-area-inset-bottom)]">
+    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
       {TABS.map(({ href, key, Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (

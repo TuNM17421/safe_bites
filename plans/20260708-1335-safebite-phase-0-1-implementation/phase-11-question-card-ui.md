@@ -30,7 +30,7 @@ Infra applied (`tokens.safebite.css` imported, `safebite` preset in tailwind, `l
 - **Tokens `sb-*`** (surfaces/text/`border-sb-border`/`shadow-sb-e*`/`rounded-sb-*`/`focus-visible:shadow-sb-focus`) — no raw hex, no legacy `status-*`.
 - **`QuestionCardDisplay`:** big readable blocks per `section.kind`; large-text scales the type; fullscreen = `fixed inset-0 z-50` overlay on `bg-sb-surface` (high contrast). Body is bilingual DATA; chrome via `useTranslations`.
 - **Toolbar icons (`lucide-react`):** `Copy`, `Maximize`/`Minimize`, `AArrowUp` (large text), `Languages` (target toggle). "Copied" confirmation → `@/components/common/toast` (`role="status"`). Empty (no profile) → `@/components/common/state-view` + onboarding CTA.
-- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Main flow · Question card". Snippets/spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
+- **Mockup:** `docs/design/safebite-ui-ux-mockups.html` → "Main flow · Question card". Snippets/spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
 
 ## Key Insights
 

@@ -13,7 +13,8 @@
     "copy:check": "tsx scripts/assert-no-unsafe-copy.ts",
     "postinstall": "prisma generate",
     "seed:kit": "tsx scripts/import-seed.ts",
-    "seed:openmap": "tsx scripts/import-openmap.ts"
+    "seed:openmap": "tsx scripts/import-openmap.ts",
+    "seed:restaurant-demo-menu": "tsx scripts/import-demo-menu.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

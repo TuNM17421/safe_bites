@@ -6,6 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { adminMessages } from './admin-messages';
 import { AdminLogout } from './logout-button';
+// The /admin segment is a separate top-level route tree (no shared app/layout.tsx), so it must
+// pull in the global stylesheet itself — [locale]/layout.tsx's import doesn't reach here, which
+// left the whole admin console unstyled (Tailwind + sb-* tokens never loaded).
+import '../globals.css';
 
 // Admin shell: fixed-locale intl island (locale="en") + its own TanStack Query client
 // (the /admin tree is outside the public (app) providers). Deliberately uses next/link +
@@ -15,6 +19,7 @@ const NAV = [
   { href: '/admin/dishes', key: 'dishes' },
   { href: '/admin/ingredients', key: 'ingredients' },
   { href: '/admin/dish-risks', key: 'dishRisks' },
+  { href: '/admin/restaurants', key: 'restaurants' },
 ] as const;
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

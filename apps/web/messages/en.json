@@ -7,7 +7,22 @@
     "positioning": "An allergy-aware travel food assistant for Hanoi. Build a private allergy profile, browse local dishes by risk level, and generate bilingual question cards for restaurant staff.",
     "noInstall": "No install required — it runs right in your browser.",
     "startProfile": "Start allergy profile",
-    "browseDishes": "Browse dish guide"
+    "browseDishes": "Browse dish guide",
+    "kicker": "Allergy-aware travel food",
+    "legendTitle": "How we rate each dish",
+    "legend": {
+      "avoid": "Likely contains your allergen",
+      "risky": "May contain it — and your profile is severe",
+      "askFirst": "Check with the restaurant before ordering",
+      "unknown": "Not enough information yet",
+      "suitable": "Lower risk — still confirm with staff"
+    },
+    "chips": {
+      "honest": "Risk-aware, not alarmist",
+      "bilingual": "English & Tiếng Việt",
+      "offline": "Works offline",
+      "private": "Private on your device"
+    }
   },
   "safety": {
     "disclaimer": "This app helps you understand possible allergy risks. It cannot guarantee food safety. Always confirm ingredients and preparation with restaurant staff before ordering.",
@@ -16,7 +31,7 @@
   },
   "statuses": {
     "suitable": "Suitable",
-    "askFirst": "Ask First",
+    "ask_first": "Ask First",
     "risky": "Risky",
     "avoid": "Avoid",
     "unknown": "Unknown"
@@ -36,7 +51,12 @@
     "showAllergyCard": "Show allergy card",
     "generateQuestionCard": "Generate question card",
     "offlineIndicator": "You are offline — showing saved information only.",
-    "restaurantSearchComingLater": "Restaurant search — coming later"
+    "restaurantSearchComingLater": "Restaurant search — coming later",
+    "welcome": "Welcome to SafeBite",
+    "greeting": "Welcome back",
+    "greetingNamed": "Hi {name}",
+    "online": "Online",
+    "offline": "Offline"
   },
   "offline": {
     "title": "You are offline",
@@ -74,7 +94,17 @@
     "chooseCity": "Destination city",
     "chooseLanguage": "Language",
     "reviewDisclaimer": "Before you start",
-    "acceptDisclaimer": "I understand this app helps reduce risk but cannot guarantee food safety."
+    "acceptDisclaimer": "I understand this app helps reduce risk but cannot guarantee food safety.",
+    "title": "Your profile",
+    "allergensQuestion": "What do you need to avoid?",
+    "searchAllergens": "Search allergens…",
+    "allergensHint": "Recognition over recall — your saved allergens stay visible on every scan and filter.",
+    "noSearchResults": "No allergens match your search.",
+    "anaphylaxisNote": "Applies stricter risk wording",
+    "continue": "Continue",
+    "saveCard": "I understand — save my card",
+    "safetyFirst": "Safety first",
+    "offlineSaveNotice": "Your allergy card will be saved on this device for offline access."
   },
   "allergyCard": {
     "offlineAvailable": "Available offline",
@@ -82,7 +112,11 @@
     "crossContact": "Cross-contact",
     "lastUpdated": "Last updated",
     "noCard": "No allergy card yet. Create your profile first.",
-    "startProfile": "Start allergy profile"
+    "startProfile": "Start allergy profile",
+    "offlineMeta": "Available offline · Last updated {date}",
+    "showToStaff": "Show this card to restaurant staff.",
+    "crossContactAvoid": "Avoid shared cookware",
+    "crossContactOk": "Shared cookware likely OK"
   },
   "profile": {
     "destinationCity": "Destination city",
@@ -91,7 +125,8 @@
     "restartOnboarding": "Restart onboarding",
     "clearData": "Clear local + offline data",
     "noProfile": "No profile yet.",
-    "startProfile": "Start allergy profile"
+    "startProfile": "Start allergy profile",
+    "you": "Your profile"
   },
   "dishes": {
     "reason": "Reason",
@@ -115,7 +150,17 @@
     "hiddenIngredients": "Possible hidden ingredients",
     "generateQuestionCard": "Generate question card",
     "riskNotAvailable": "Risk not available for your profile.",
-    "back": "Back to dishes"
+    "back": "Back to dishes",
+    "screenTitle": "Local dishes",
+    "rankedReminder": "Ranked by risk for your allergy profile. Always confirm with staff before ordering.",
+    "savedOffline": "Saved offline",
+    "risk": {
+      "contains": "Contains",
+      "likely_contains": "Likely",
+      "possible": "Possible",
+      "unlikely": "Unlikely",
+      "unknown": "Unknown"
+    }
   },
   "questionCard": {
     "title": "Question card",
@@ -130,6 +175,15 @@
     "fullscreen": "Show to staff",
     "exitFullscreen": "Exit",
     "noProfile": "Create a profile to generate a question card.",
-    "startProfile": "Start allergy profile"
+    "startProfile": "Start allergy profile",
+    "askTitle": "Ask the restaurant",
+    "copyText": "Copy text",
+    "sourceNote": "Source: {source} · Available offline",
+    "sections": {
+      "severity_statement": "Severity",
+      "ingredient_question": "Ingredient",
+      "cross_contact_question": "Cross-contact",
+      "kitchen_check": "Kitchen check"
+    }
   }
 }

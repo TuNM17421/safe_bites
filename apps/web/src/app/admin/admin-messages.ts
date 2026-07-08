@@ -5,7 +5,14 @@
 
 export const adminMessages = {
   title: 'SafeBite Admin',
-  nav: { dashboard: 'Dashboard', dishes: 'Dishes', ingredients: 'Ingredients', dishRisks: 'Dish risks', logout: 'Log out' },
+  nav: {
+    dashboard: 'Dashboard',
+    dishes: 'Dishes',
+    ingredients: 'Ingredients',
+    dishRisks: 'Dish risks',
+    restaurants: 'Restaurants',
+    logout: 'Log out',
+  },
   login: { title: 'Admin sign in', token: 'Admin token', submit: 'Sign in', error: 'Invalid admin token.' },
   dashboard: {
     title: 'Dashboard',
@@ -26,6 +33,15 @@ export const adminMessages = {
     cancel: 'Cancel',
     confirmDelete: 'Delete this record?',
     loading: 'Loading…',
+    approve: 'Approve',
+    reject: 'Reject',
+    flag: 'Flag',
+    manageMenu: 'Manage menu',
+    back: 'Back',
+    add: 'Add',
+    remove: 'Remove',
+    review: 'Review',
+    menu: 'Menu',
   },
   fields: {
     nameVi: 'Name (VI)',
@@ -45,6 +61,63 @@ export const adminMessages = {
     reasonEn: 'Reason (EN)',
     actionVi: 'Action (VI)',
     actionEn: 'Action (EN)',
+    canonicalName: 'Canonical name',
+    slug: 'Slug',
+    amenity: 'Amenity',
+    brand: 'Brand',
+    operator: 'Operator',
+    cuisineRaw: 'Cuisine (raw)',
+    cuisineNormalized: 'Cuisine tags (comma-separated)',
+    fullAddress: 'Full address',
+    street: 'Street',
+    housenumber: 'House number',
+    ward: 'Ward',
+    district: 'District',
+    city: 'City',
+    country: 'Country',
+    lat: 'Latitude',
+    lon: 'Longitude',
+    phone: 'Phone',
+    website: 'Website',
+    websiteMenu: 'Menu URL',
+    openingHours: 'Opening hours',
+    sourceUrl: 'Source URL',
+    dataLicense: 'Data license',
+    attributionRequired: 'Attribution required',
+    externalSource: 'External source',
+    verificationStatus: 'Verification status',
+    menuStatus: 'Menu status',
+    notes: 'Internal notes',
+    rawName: 'Menu item name (raw)',
+    section: 'Section',
+    priceAmount: 'Price',
+    currency: 'Currency',
+    menuSourceType: 'Menu source',
+    menuSourceUrl: 'Menu source URL',
+    mappingConfidence: 'Mapping confidence (0–1)',
+    ingredientNotes: 'Ingredient notes',
+    customizationNotes: 'Customization notes',
+    sharedCookware: 'Shared cookware',
+    sharedFryer: 'Shared fryer',
+    canCustomize: 'Can customize',
+    confirmed: 'Confirm dish-inferred override',
+    lastVerifiedAt: 'Last verified',
+  },
+  restaurant: {
+    heading: 'Restaurants',
+    filterVerification: 'Verification',
+    filterMenu: 'Menu status',
+    filterSource: 'Source',
+    filterHasMenu: 'Has menu items',
+    filterAny: 'Any',
+    menuItems: 'Menu items',
+    count: 'Items',
+    editRestaurant: 'Edit restaurant',
+    newMenuItem: 'New menu item',
+    allergenStatuses: 'Allergen statuses',
+    saveStatuses: 'Save allergen statuses',
+    noMenuItems: 'No menu items yet.',
+    notFound: 'Restaurant not found.',
   },
 } as const;
 
@@ -71,3 +144,39 @@ export const SOURCE_TYPES = [
   'admin_verified',
 ] as const;
 export const REVIEW_STATUSES = ['needs_review', 'approved', 'rejected'] as const;
+
+// Phase 02 restaurant/menu enum options (client-safe; mirror the domain/Zod vocab).
+export const VERIFICATION_STATUSES = [
+  'unverified',
+  'restaurant_contacted',
+  'restaurant_confirmed',
+  'admin_verified',
+  'expired',
+  'flagged',
+] as const;
+export const RESTAURANT_MENU_STATUSES = [
+  'not_observed',
+  'menu_url_available',
+  'observed_not_verified',
+  'restaurant_submitted',
+  'admin_verified',
+] as const;
+export const MENU_ITEM_STATUSES = ['observed_not_verified', 'restaurant_submitted', 'admin_verified'] as const;
+export const MENU_SOURCE_TYPES = [
+  'official_website',
+  'website_menu_tag',
+  'user_upload',
+  'restaurant_upload',
+  'admin_manual',
+  'manual_seed',
+] as const;
+export const ALLERGEN_SOURCES = [
+  'admin_manual',
+  'restaurant_submitted',
+  'official_menu',
+  'user_report',
+  'dish_inferred',
+] as const;
+export const SHARED_COOKWARE = ['unknown', 'no', 'yes', 'possible'] as const;
+export const SHARED_FRYER = ['unknown', 'no', 'yes', 'possible', 'not_applicable'] as const;
+export const CAN_CUSTOMIZE = ['unknown', 'true', 'false'] as const;

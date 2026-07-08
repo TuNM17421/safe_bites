@@ -12,7 +12,7 @@ export function LanguageToggle({ value, onChange }: { value: LanguageCode; onCha
           type="button"
           onClick={() => onChange(l)}
           aria-pressed={value === l}
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${value === l ? 'bg-sb-primary text-sb-primary-foreground' : 'text-sb-muted'}`}
+          className={`inline-flex min-h-sb-tap items-center rounded-full px-4 text-sb-body-s font-semibold ${value === l ? 'bg-sb-primary text-sb-primary-foreground' : 'text-sb-muted'}`}
         >
           {l.toUpperCase()}
         </button>

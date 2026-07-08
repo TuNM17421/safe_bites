@@ -1,6 +1,11 @@
 export * from './types';
+export * from './restaurant-types';
 export * from './schemas';
+export * from './restaurant-schemas';
 export { copy } from './copy';
 export { STATUS_RANK, ALLERGEN_CATALOG, ALLERGY_ALLERGEN_IDS } from './constants';
 export { evaluateDish, evaluateDishes } from './risk-engine';
+export { evaluateMenuItem } from './menu-item';
+export { evaluateRestaurantReadiness } from './restaurant-readiness';
+export { isStale, downgradeConfidence } from './staleness';
 export { buildQuestionCard } from './question-card';

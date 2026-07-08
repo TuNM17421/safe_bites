@@ -4,7 +4,7 @@
 
 The verified design system (`sb-*` tokens + lucide icons) is **already wired** — `globals.css` imports
 `tokens.safebite.css`, `tailwind.config.ts` registers the `safebite` preset, `lucide-react` is installed.
-Phases **10/11/12** were built on it and already match the HTML mock (`visuals/safebite-ui-ux-mockups.html`).
+Phases **10/11/12** were built on it and already match the HTML mock (`docs/design/safebite-ui-ux-mockups.html`).
 But the shell + **Phase-09** screens were committed *before* the design system landed (`492cacf` Phase 09 sits
 below the design commit `36d3a71`), so they still wear the **first-pass palette** (`bg-background`/`bg-muted`/
 `bg-safety`/`text-muted-foreground`) and **emoji nav icons**. This phase re-skins those files so the *live app*
@@ -16,7 +16,7 @@ emoji→lucide swaps.
 ## Context Links
 - Design spec + ready-to-paste snippets: `reports/ui-ux-design-integration-guide.md`
 - Token reference: `apps/web/DESIGN_TOKENS.md`, `apps/web/src/app/tokens.safebite.css`
-- Visual reference: `visuals/safebite-ui-ux-mockups.html` (per-screen sections named below)
+- Visual reference: `docs/design/safebite-ui-ux-mockups.html` (per-screen sections named below)
 - Progress tracker: `reports/ui-ux-progress-tracker.md` (tick §A A2b + §C rows on completion)
 - Rule constraints (unchanged): `useTranslations` for copy, `@/i18n/navigation` for links (public app),
   semantic tokens only, status = icon + label + colour, no forbidden safety copy.

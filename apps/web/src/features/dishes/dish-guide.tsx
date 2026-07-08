@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Shield } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { LanguageCode } from '@safebite/domain';
 import { LanguageToggle } from '@/components/common/language-toggle';
@@ -43,10 +43,18 @@ export function DishGuide() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-end">
+      <header className="flex items-center justify-between gap-2 pb-1">
+        <h1 className="text-sb-title font-bold text-sb-fg">{t('screenTitle')}</h1>
         <LanguageToggle value={dataLang} onChange={setDataLang} />
-      </div>
+      </header>
       <DishFilterBar summary={rec.data?.summary ?? EMPTY_SUMMARY} active={filter} onChange={setFilter} />
+      <p
+        role="note"
+        className="flex items-start gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-3 p-3 text-sb-body-s text-sb-muted"
+      >
+        <Shield aria-hidden className="mt-0.5 size-4 shrink-0" />
+        {t('rankedReminder')}
+      </p>
 
       {rec.isLoading && (
         <div className="flex flex-col gap-3">

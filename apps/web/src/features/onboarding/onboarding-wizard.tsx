@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
+import { Check, ChevronLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ALLERGY_ALLERGEN_IDS } from '@safebite/domain';
-import { useRouter } from '@/i18n/navigation';
 import { buildAllergyCard } from '@/features/allergy-card/build-allergy-card';
+import { useRouter } from '@/i18n/navigation';
 import { allergyCardRepo, profileRepo } from '@/lib/local-repo';
 import { useProfileStore } from '@/lib/profile-store';
 import { buildProfile } from './build-profile';
@@ -48,29 +49,54 @@ export function OnboardingWizard() {
     <StepCrossContact key="cross" allergens={allergenItems} />,
     <StepCity key="city" cities={config.data?.supportedCities ?? ['hanoi']} />,
     <StepLanguage key="language" />,
-    <StepDisclaimer key="disclaimer" saving={saving} onFinish={finish} />,
+    <StepDisclaimer key="disclaimer" />,
   ];
 
   return (
-    <div className="flex flex-col gap-5">
-      <p className="text-xs text-sb-muted">{t('stepOf', { current: draft.step + 1, total: TOTAL })}</p>
-      {steps[draft.step]}
-      <div className="flex justify-between">
-        <button
-          type="button"
-          disabled={draft.step === 0}
-          onClick={() => draft.setStep(draft.step - 1)}
-          className="rounded-sb-sm border border-sb-border px-4 py-2 text-sb-fg focus-visible:shadow-sb-focus disabled:opacity-40"
-        >
-          {t('back')}
-        </button>
-        {draft.step < TOTAL - 1 && (
+    <div className="flex min-h-[70vh] flex-col gap-5">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => draft.setStep(draft.step - 1)}
+            disabled={draft.step === 0}
+            aria-label={t('back')}
+            className="grid size-12 shrink-0 place-items-center rounded-full text-sb-muted hover:bg-sb-surface-2 focus-visible:shadow-sb-focus disabled:opacity-40"
+          >
+            <ChevronLeft aria-hidden className="size-5" />
+          </button>
+          <h1 className="text-sb-title font-bold text-sb-fg">{t('title')}</h1>
+        </div>
+        <p className="text-sb-caption font-bold uppercase tracking-wide text-sb-faint">
+          {t('stepOf', { current: draft.step + 1, total: TOTAL })}
+        </p>
+        <div aria-hidden className="flex gap-1.5">
+          {Array.from({ length: TOTAL }).map((_, i) => (
+            <span key={i} className={`h-1.5 flex-1 rounded-full ${i <= draft.step ? 'bg-sb-brand' : 'bg-sb-border'}`} />
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1">{steps[draft.step]}</div>
+
+      <div className="sticky bottom-0 z-20 -mx-4 mt-auto border-t border-sb-border bg-sb-surface px-4 py-3">
+        {draft.step < TOTAL - 1 ? (
           <button
             type="button"
             onClick={() => draft.setStep(draft.step + 1)}
-            className="rounded-sb-sm bg-sb-primary px-4 py-2 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
+            className="min-h-sb-tap w-full rounded-sb-md bg-sb-primary px-4 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
           >
-            {t('next')}
+            {t('continue')}
+          </button>
+        ) : (
+          <button
+            type="button"
+            disabled={!draft.accepted || saving}
+            onClick={finish}
+            className="inline-flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-md bg-sb-primary px-4 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus disabled:opacity-40"
+          >
+            {!saving && <Check aria-hidden className="size-5" />}
+            {saving ? t('saving') : t('saveCard')}
           </button>
         )}
       </div>
