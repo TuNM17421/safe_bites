@@ -13,7 +13,7 @@ Two columns per item: **Design-ready** (tokens/icon/spec settled) and **In-code*
 |---|------|---------|--------|
 | A1 | ADR-UI-01 — `sb-*` token system (verified status trio + surfaces/brand/elevation/radius/type) via preset | `globals.css` `@import` + `tailwind.config.ts` `presets:[safebite]` | ✅ wired |
 | A2 | ADR-UI-02 — `lucide-react` dependency added | `package.json` | ✅ added (run `pnpm install`) |
-| A2b | Replace emoji nav icons with lucide (shell re-skin) | `bottom-nav.tsx` (owner 07/09) | ☐ do when shell touched |
+| A2b | Shell + Phase-09 re-skin to `sb-*` + lucide (13 files) — see **`../phase-16-shell-reskin-to-design-system.md`** | `app-shell/*`, landing/home/offline, onboarding, allergy-card, profile | ☐ planned |
 | A3 | ADR-UI-03 — `SkeletonCard` / `StateView` / `Toast` created | `components/common/` | ✅ created |
 | A4 | Brand/elevation/radius/type scales available | preset | ✅ wired |
 | A5 | Repo-wide token namespace decided → **`sb-*`** | — | ✅ resolved |
