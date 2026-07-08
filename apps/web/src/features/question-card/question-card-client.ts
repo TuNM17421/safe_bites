@@ -44,6 +44,7 @@ export interface FetchQuestionCardBody {
     destinationCity?: string;
   };
   dishId?: string;
+  menuItemId?: string;
   targetLanguage: LanguageCode;
 }
 

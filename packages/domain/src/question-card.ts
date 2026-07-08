@@ -24,7 +24,11 @@ function severityStatement(lang: LanguageCode, sevWord: string, names: string[],
   return `I have a ${sevWord} allergy to ${nameList}.`;
 }
 
-function ingredientQuestion(lang: LanguageCode, list: string): string {
+// Names the specific dish/menu item when provided (§15 menu context); otherwise generic.
+function ingredientQuestion(lang: LanguageCode, list: string, itemName?: string): string {
+  if (itemName) {
+    return lang === 'vi' ? `${itemName} có ${list} không?` : `Does ${itemName} contain ${list}?`;
+  }
   return lang === 'vi' ? `Món này có ${list} không?` : `Does this dish contain ${list}?`;
 }
 
@@ -62,9 +66,10 @@ export function buildQuestionCard(input: QuestionCardInput): QuestionCard {
   );
 
   const nameList = joinList(names, lang);
+  const itemName = dishName ? dishName[lang] : undefined;
   const sections: QuestionCardSection[] = [
     { kind: 'severity_statement', text: severityStatement(lang, SEVERITY_WORD[lang][highestSeverity], names, nameList) },
-    { kind: 'ingredient_question', text: ingredientQuestion(lang, joinList(containsTerms, lang)) },
+    { kind: 'ingredient_question', text: ingredientQuestion(lang, joinList(containsTerms, lang), itemName) },
   ];
   if (anyCrossContact) {
     sections.push({ kind: 'cross_contact_question', text: crossContactQuestion(lang, nameList) });

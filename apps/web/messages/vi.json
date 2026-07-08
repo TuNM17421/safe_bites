@@ -209,9 +209,14 @@
     "error": "Không thể tải danh sách nhà hàng.",
     "retry": "Thử lại",
     "offlineNoSaved": "Bạn đang ngoại tuyến và chưa có nhà hàng đã lưu.",
+    "offlineSavedNotice": "Bạn đang ngoại tuyến. Chỉ hiển thị thông tin nhà hàng đã lưu. Thực đơn và cách chế biến có thể đã thay đổi. Vui lòng xác nhận với nhân viên trước khi gọi món.",
     "showAllergyCard": "Xem thẻ dị ứng",
     "loading": "Đang tải nhà hàng…",
-    "resultCount": "{count, plural, other {# nhà hàng}}"
+    "resultCount": "{count, plural, other {# nhà hàng}}",
+    "viewList": "Danh sách",
+    "viewMap": "Bản đồ",
+    "mapComingSoon": "Chế độ bản đồ sắp có",
+    "mapNote": "Mở một nhà hàng để xem vị trí và liên kết OpenStreetMap."
   },
   "restaurantCard": {
     "viewDetails": "Xem chi tiết",
@@ -302,5 +307,14 @@
       "true": "Có",
       "false": "Không"
     }
+  },
+  "locationPermission": {
+    "useMyLocation": "Dùng vị trí của tôi",
+    "explanation": "Chúng tôi chỉ dùng vị trí của bạn để sắp xếp các quán ăn gần đây trên thiết bị này. Hồ sơ dị ứng của bạn không được thêm vào URL. Bạn cũng có thể duyệt theo thành phố.",
+    "prompting": "Đang lấy vị trí của bạn…",
+    "denied": "Quyền truy cập vị trí đã bị từ chối. Bạn vẫn có thể duyệt theo thành phố.",
+    "unsupported": "Vị trí không khả dụng trên thiết bị này. Bạn vẫn có thể duyệt theo thành phố.",
+    "sortingByDistance": "Đang sắp xếp theo khoảng cách từ bạn",
+    "clear": "Xóa"
   }
 }

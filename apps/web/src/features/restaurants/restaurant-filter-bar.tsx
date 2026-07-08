@@ -5,9 +5,9 @@ import type { RestaurantFilters, RestaurantSort } from './restaurants-client';
 
 // Hanoi districts as stored in the data (proper nouns — not translated copy).
 const DISTRICTS = ['Hoàn Kiếm', 'Ba Đình', 'Tây Hồ'];
-// 'nearest' is intentionally omitted until Phase 08 wires the location flow — without a
-// clientLocation it would be a no-op. The sort.nearest i18n key is kept for that phase.
-const SORTS: RestaurantSort[] = ['recommended', 'last_checked', 'name'];
+// 'nearest' only appears once a clientLocation is granted (otherwise it's a no-op).
+const BASE_SORTS: RestaurantSort[] = ['recommended', 'last_checked', 'name'];
+const LOCATED_SORTS: RestaurantSort[] = ['recommended', 'nearest', 'last_checked', 'name'];
 
 const selectCls =
   'min-h-sb-tap rounded-sb-sm border border-sb-border bg-sb-surface px-3 text-sb-body-s text-sb-fg focus-visible:shadow-sb-focus focus-visible:outline-none';
@@ -15,11 +15,14 @@ const selectCls =
 export function RestaurantFilterBar({
   filters,
   onChange,
+  showNearest = false,
 }: {
   filters: RestaurantFilters;
   onChange: (next: RestaurantFilters) => void;
+  showNearest?: boolean;
 }) {
   const t = useTranslations('restaurants');
+  const sorts = showNearest ? LOCATED_SORTS : BASE_SORTS;
   const set = (patch: Partial<RestaurantFilters>) => onChange({ ...filters, ...patch });
 
   return (
@@ -50,7 +53,7 @@ export function RestaurantFilterBar({
         <label className="flex flex-col gap-1 text-xs text-sb-muted">
           <span>{t('filterSort')}</span>
           <select value={filters.sort} onChange={(e) => set({ sort: e.target.value as RestaurantSort })} className={selectCls}>
-            {SORTS.map((s) => (
+            {sorts.map((s) => (
               <option key={s} value={s}>
                 {t(`sort.${s}`)}
               </option>

@@ -209,9 +209,14 @@
     "error": "Could not load restaurants.",
     "retry": "Retry",
     "offlineNoSaved": "You are offline and have no saved restaurants.",
+    "offlineSavedNotice": "You are offline. Showing saved restaurant information only. Menus and preparation methods may have changed. Please confirm with staff before ordering.",
     "showAllergyCard": "Show allergy card",
     "loading": "Loading restaurants…",
-    "resultCount": "{count, plural, one {# restaurant} other {# restaurants}}"
+    "resultCount": "{count, plural, one {# restaurant} other {# restaurants}}",
+    "viewList": "List",
+    "viewMap": "Map",
+    "mapComingSoon": "Map view is coming",
+    "mapNote": "Open a restaurant to see its location and an OpenStreetMap link."
   },
   "restaurantCard": {
     "viewDetails": "View details",
@@ -302,5 +307,14 @@
       "true": "Yes",
       "false": "No"
     }
+  },
+  "locationPermission": {
+    "useMyLocation": "Use my location",
+    "explanation": "We use your location only to sort nearby food places on this device. Your allergy profile is not added to the URL. You can browse by city instead.",
+    "prompting": "Getting your location…",
+    "denied": "Location permission was denied. You can still browse by city.",
+    "unsupported": "Location is not available on this device. You can still browse by city.",
+    "sortingByDistance": "Sorting by distance from you",
+    "clear": "Clear"
   }
 }

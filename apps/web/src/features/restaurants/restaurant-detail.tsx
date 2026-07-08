@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, ExternalLink, Globe, MapPin, Phone } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Globe, MapPin, Phone, WifiOff } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { LanguageCode, RecommendationStatus } from '@safebite/domain';
 import { SkeletonCard } from '@/components/common/skeleton-card';
@@ -20,22 +19,19 @@ import { ConfidenceMeter } from '@/components/status/confidence-badge';
 import { useOnlineStatus } from '@/components/app-shell/use-online-status';
 import { Link } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
-import { fetchRestaurantDetailRec } from './restaurants-client';
+import { useRestaurantDetail } from './use-restaurant-detail';
 
 export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: string }) {
   const t = useTranslations('restaurantDetail');
   const tStatus = useTranslations('statuses');
+  const tList = useTranslations('restaurants');
   const locale = useLocale();
   const hydrated = useProfileStore((s) => s.hydrated);
   const profile = useProfileStore((s) => s.profile);
   const online = useOnlineStatus();
   const [dataLang, setDataLang] = useState<LanguageCode>(locale === 'vi' ? 'vi' : 'en');
 
-  const query = useQuery({
-    queryKey: ['restaurant-detail', restaurantIdOrSlug, profile?.id ?? 'none'],
-    enabled: Boolean(profile) && online,
-    queryFn: () => fetchRestaurantDetailRec(restaurantIdOrSlug, profile!),
-  });
+  const detail = useRestaurantDetail(restaurantIdOrSlug, profile);
 
   const backLink = (
     <Link href="/restaurants" className="inline-flex items-center gap-1 text-sb-body-s text-sb-muted hover:text-sb-fg">
@@ -59,23 +55,21 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
         />
       </div>
     );
-  if (query.isPending && query.fetchStatus !== 'idle') return <div className="flex flex-col gap-3">{backLink}<SkeletonCard /></div>;
-  if (query.isError) {
-    const notFound = (query.error as Error).message === 'restaurant_not_found';
+  if (detail.isLoading) return <div className="flex flex-col gap-3">{backLink}<SkeletonCard /></div>;
+  if (detail.isError && !detail.data) {
     return (
       <div className="flex flex-col gap-3">
         {backLink}
-        <StateView tone="neutral" title={notFound ? t('notFound') : t('error')} />
+        <StateView tone="neutral" title={detail.notFound ? t('notFound') : t('error')} />
       </div>
     );
   }
-  // Offline with no data: the detail query is disabled offline (no restaurant cache in Phase 07),
-  // so show an explicit offline state instead of an indefinite skeleton.
-  if (!online && !query.data)
+  // Offline with no cached detail: explicit offline state instead of an indefinite skeleton.
+  if (!online && !detail.data)
     return <div className="flex flex-col gap-3">{backLink}<StateView tone="warm" title={t('offline')} /></div>;
-  if (!query.data) return <div className="flex flex-col gap-3">{backLink}<SkeletonCard /></div>;
+  if (!detail.data) return <div className="flex flex-col gap-3">{backLink}<SkeletonCard /></div>;
 
-  const { restaurant: r, recommendation: rec, menuRecommendations, attribution } = query.data;
+  const { restaurant: r, recommendation: rec, menuRecommendations, attribution } = detail.data;
   const osmUrl =
     r.lat !== null && r.lon !== null
       ? `https://www.openstreetmap.org/?mlat=${r.lat}&mlon=${r.lon}#map=18/${r.lat}/${r.lon}`
@@ -87,6 +81,13 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
         {backLink}
         <LanguageToggle value={dataLang} onChange={setDataLang} />
       </div>
+
+      {detail.source === 'saved' ? (
+        <p role="status" className="flex items-start gap-2 rounded-sb-md border border-sb-status-ask-first-border bg-sb-status-ask-first-bg p-3 text-sb-body-s text-sb-status-ask-first-fg">
+          <WifiOff aria-hidden className="mt-0.5 size-4 shrink-0" />
+          {tList('offlineSavedNotice')}
+        </p>
+      ) : null}
 
       {/* Header */}
       <header className="flex flex-col gap-1">

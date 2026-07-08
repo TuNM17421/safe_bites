@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MapPinned, ShieldCheck, WifiOff } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { LanguageCode } from '@safebite/domain';
@@ -7,7 +7,10 @@ import { SkeletonCard } from '@/components/common/skeleton-card';
 import { StateView } from '@/components/common/state-view';
 import { LanguageToggle } from '@/components/common/language-toggle';
 import { RestaurantCard } from '@/components/restaurants/restaurant-card';
+import { RestaurantMapShell } from '@/components/restaurants/restaurant-map-shell';
 import { useOnlineStatus } from '@/components/app-shell/use-online-status';
+import { LocationPermissionPanel } from '@/features/location/location-permission-panel';
+import { useGeolocation } from '@/features/location/use-geolocation';
 import { Link } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
 import { RestaurantFilterBar } from './restaurant-filter-bar';
@@ -22,9 +25,20 @@ export function RestaurantGuide() {
   const online = useOnlineStatus();
   const [dataLang, setDataLang] = useState<LanguageCode>(locale === 'vi' ? 'vi' : 'en');
   const [filters, setFilters] = useState<RestaurantFilters>({ sort: 'recommended' });
+  const [view, setView] = useState<'list' | 'map'>('list');
+  const geo = useGeolocation();
 
   const city = profile?.destinationCity ?? 'hanoi';
-  const rec = useRestaurantRecommendations(city, profile, filters);
+  const rec = useRestaurantRecommendations(city, profile, filters, geo.location);
+
+  // Keep sort coherent with location: default → nearest on grant, nearest → recommended on clear.
+  useEffect(() => {
+    setFilters((f) => {
+      if (geo.location && f.sort === 'recommended') return { ...f, sort: 'nearest' };
+      if (!geo.location && f.sort === 'nearest') return { ...f, sort: 'recommended' };
+      return f;
+    });
+  }, [geo.location]);
 
   // Free-text search is client-side over the fetched page (name + address).
   const results = useMemo(() => {
@@ -64,7 +78,23 @@ export function RestaurantGuide() {
         <ShieldCheck aria-hidden className="mt-0.5 size-4 shrink-0" />
         {t('rankedReminder')}
       </p>
-      <RestaurantFilterBar filters={filters} onChange={setFilters} />
+      <LocationPermissionPanel status={geo.status} onRequest={geo.request} onClear={geo.clear} />
+      <RestaurantFilterBar filters={filters} onChange={setFilters} showNearest={Boolean(geo.location)} />
+      <div className="inline-flex self-start rounded-full border border-sb-border p-0.5">
+        {(['list', 'map'] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            aria-pressed={view === v}
+            onClick={() => setView(v)}
+            className={`min-h-sb-tap rounded-full px-4 text-sb-body-s font-semibold focus-visible:shadow-sb-focus focus-visible:outline-none ${
+              view === v ? 'bg-sb-primary text-sb-primary-foreground' : 'text-sb-muted'
+            }`}
+          >
+            {t(v === 'list' ? 'viewList' : 'viewMap')}
+          </button>
+        ))}
+      </div>
     </div>
   );
 
@@ -106,11 +136,23 @@ export function RestaurantGuide() {
   } else {
     body = (
       <div className="flex flex-col gap-3">
+        {rec.source === 'saved' ? (
+          <p role="status" className="flex items-start gap-2 rounded-sb-md border border-sb-status-ask-first-border bg-sb-status-ask-first-bg p-3 text-sb-body-s text-sb-status-ask-first-fg">
+            <WifiOff aria-hidden className="mt-0.5 size-4 shrink-0" />
+            {t('offlineSavedNotice')}
+          </p>
+        ) : null}
         <p className="text-xs text-sb-faint">{t('resultCount', { count: results.length })}</p>
-        {results.map((item) => (
-          <RestaurantCard key={item.restaurantId} item={item} lang={dataLang} />
-        ))}
-        {rec.data?.attribution ? <p className="pt-1 text-xs text-sb-faint">{rec.data.attribution}</p> : null}
+        {view === 'map' ? (
+          <RestaurantMapShell attribution={rec.data?.attribution ?? null} />
+        ) : (
+          <>
+            {results.map((item) => (
+              <RestaurantCard key={item.restaurantId} item={item} lang={dataLang} />
+            ))}
+            {rec.data?.attribution ? <p className="pt-1 text-xs text-sb-faint">{rec.data.attribution}</p> : null}
+          </>
+        )}
       </div>
     );
   }

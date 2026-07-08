@@ -47,7 +47,7 @@ export function MenuItemRecommendationCard({ rec, lang }: { rec: MenuRecommendat
       </div>
 
       <Link
-        href="/question-card"
+        href={`/question-card?menuItemId=${encodeURIComponent(rec.menuItemId)}`}
         className="mt-3 inline-flex min-h-sb-tap items-center gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-2 px-4 text-sb-body-s font-bold text-sb-fg focus-visible:shadow-sb-focus focus-visible:outline-none"
       >
         <MessageCircle aria-hidden className="size-4" />

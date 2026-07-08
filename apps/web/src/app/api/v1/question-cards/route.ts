@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   const parsed = await parseBody(req, questionCardRequestSchema);
   if (!parsed.ok) return parsed.response;
-  const { profile: p, dishId, targetLanguage } = parsed.data;
+  const { profile: p, dishId, menuItemId, targetLanguage } = parsed.data;
 
   const profile: LocalUserProfile = {
     id: p.id,
@@ -35,8 +35,14 @@ export async function POST(req: Request) {
     aliasesEn: a.aliasesEn,
   }));
 
+  // Resolve the item name to name in the ingredient question: a specific menu item takes
+  // precedence over a mapped dish (§15 menu context). Name lookup only — no allergy data.
   let dishName: { en: string; vi: string } | undefined;
-  if (dishId) {
+  if (menuItemId) {
+    const item = await prisma.menuItem.findUnique({ where: { id: menuItemId } });
+    if (item) dishName = { en: item.nameEn ?? item.rawName, vi: item.nameVi ?? item.rawName };
+  }
+  if (!dishName && dishId) {
     const dish = await prisma.dish.findUnique({ where: { id: dishId } });
     if (dish) dishName = { en: dish.canonicalNameEn, vi: dish.canonicalNameVi };
   }

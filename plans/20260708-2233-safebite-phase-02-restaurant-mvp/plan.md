@@ -23,7 +23,7 @@ Risk **reduction**, never elimination. List-first; map is decorative P1.
 | 05 | [Admin restaurant & menu UI](phase-05-admin-restaurant-and-menu-ui.md) | ✅ Done | 04 |
 | 06 | [Public restaurant APIs](phase-06-public-restaurant-apis.md) | ✅ Done | 01, 02 |
 | 07 | [Public restaurant UI](phase-07-public-restaurant-ui.md) | ✅ Done | 06 |
-| 08 | [Location, map shell, offline, question card](phase-08-location-map-offline-questioncard.md) | Not started | 07 |
+| 08 | [Location, map shell, offline, question card](phase-08-location-map-offline-questioncard.md) | ✅ Done | 07 |
 | 09 | [Tests, README, quality gates](phase-09-tests-readme-quality-gates.md) | Not started | all |
 
 ## Build order (spec §20)

@@ -93,6 +93,7 @@ export const questionCardRequestSchema = z.object({
     destinationCity: z.string().optional(),
   }),
   dishId: z.string().optional(),
+  menuItemId: z.string().optional(),
   targetLanguage: languageCodeSchema,
   offlineCache: z.boolean().optional(),
 });

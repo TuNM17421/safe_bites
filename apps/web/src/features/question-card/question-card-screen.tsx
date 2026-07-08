@@ -18,7 +18,7 @@ function defaultTargetLanguage(city: string): LanguageCode {
   return ['hanoi', 'da_nang', 'hoi_an'].includes(city) ? 'vi' : 'en';
 }
 
-export function QuestionCardScreen({ dishId }: { dishId?: string }) {
+export function QuestionCardScreen({ dishId, menuItemId }: { dishId?: string; menuItemId?: string }) {
   const t = useTranslations('questionCard');
   const hydrated = useProfileStore((s) => s.hydrated);
   const profile = useProfileStore((s) => s.profile);
@@ -34,7 +34,7 @@ export function QuestionCardScreen({ dishId }: { dishId?: string }) {
     if (profile) setTargetLanguage(defaultTargetLanguage(profile.destinationCity));
   }, [profile]);
 
-  const qc = useQuestionCard({ profile, targetLanguage, dishId, includeDish });
+  const qc = useQuestionCard({ profile, targetLanguage, dishId, menuItemId, includeDish });
 
   const sectionLabels = {
     severity_statement: t('sections.severity_statement'),

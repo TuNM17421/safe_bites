@@ -23,6 +23,27 @@ export interface MetadataRow {
   updatedAt: string;
 }
 
+// Phase 08 offline restaurant cache (§12). `payload` is the exact validated API response DTO
+// (already JSON-safe). `profileFingerprint` scopes a cache entry to a profile; the raw profile
+// and exact location are never stored here (§12/§16).
+export interface CachedRestaurantSearch {
+  cacheKey: string; // `${city}:${profileFingerprint}`
+  city: string;
+  profileFingerprint: string;
+  savedAt: string;
+  expiresAt: string;
+  payload: unknown;
+}
+
+export interface CachedRestaurantDetail {
+  cacheKey: string; // `${idOrSlug}:${profileFingerprint}`
+  restaurantId: string;
+  profileFingerprint: string;
+  savedAt: string;
+  expiresAt: string;
+  payload: unknown;
+}
+
 export const ACTIVE_PROFILE_ID = 'activeProfileId';
 export const LAST_QUESTION_CARD_ID = 'lastQuestionCardId';
 
@@ -35,6 +56,8 @@ export class SafeBiteDB extends Dexie {
   questionCards!: Table<StoredQuestionCard, string>;
   savedDishes!: Table<SavedDish, string>;
   metadata!: Table<MetadataRow, string>;
+  lastRestaurantSearch!: Table<CachedRestaurantSearch, string>;
+  lastRestaurantDetail!: Table<CachedRestaurantDetail, string>;
 
   constructor() {
     super('safebite_pwa_v1');
@@ -44,6 +67,11 @@ export class SafeBiteDB extends Dexie {
       questionCards: 'id, profileId, dishId, targetLanguage, createdAt',
       savedDishes: 'dishId, status, savedAt, lastCheckedAt',
       metadata: 'key, updatedAt',
+    });
+    // v2 (Phase 08): additive offline restaurant caches; existing stores/data are preserved.
+    this.version(2).stores({
+      lastRestaurantSearch: 'cacheKey, city, savedAt',
+      lastRestaurantDetail: 'cacheKey, restaurantId, savedAt',
     });
   }
 }

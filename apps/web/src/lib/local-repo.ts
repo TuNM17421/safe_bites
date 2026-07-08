@@ -4,6 +4,8 @@ import {
   ACTIVE_PROFILE_ID,
   db,
   LAST_QUESTION_CARD_ID,
+  type CachedRestaurantDetail,
+  type CachedRestaurantSearch,
   type SavedDish,
   type StoredAllergyCard,
   type StoredQuestionCard,
@@ -107,14 +109,45 @@ export const savedDishRepo = {
   },
 };
 
+// Offline restaurant cache (§12). Keyed by profile fingerprint; never stores the raw profile or
+// exact location. Always surfaced with a stale/offline warning by the UI.
+const RESTAURANT_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+export const restaurantCacheRepo = {
+  async saveSearch(city: string, profileFingerprint: string, payload: unknown): Promise<void> {
+    const now = Date.now();
+    await db.lastRestaurantSearch.put({
+      cacheKey: `${city}:${profileFingerprint}`,
+      city,
+      profileFingerprint,
+      savedAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + RESTAURANT_CACHE_TTL_MS).toISOString(),
+      payload,
+    });
+  },
+  async loadSearch(city: string, profileFingerprint: string): Promise<CachedRestaurantSearch | undefined> {
+    return db.lastRestaurantSearch.get(`${city}:${profileFingerprint}`);
+  },
+  async saveDetail(idOrSlug: string, profileFingerprint: string, restaurantId: string, payload: unknown): Promise<void> {
+    const now = Date.now();
+    await db.lastRestaurantDetail.put({
+      cacheKey: `${idOrSlug}:${profileFingerprint}`,
+      restaurantId,
+      profileFingerprint,
+      savedAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + RESTAURANT_CACHE_TTL_MS).toISOString(),
+      payload,
+    });
+  },
+  async loadDetail(idOrSlug: string, profileFingerprint: string): Promise<CachedRestaurantDetail | undefined> {
+    return db.lastRestaurantDetail.get(`${idOrSlug}:${profileFingerprint}`);
+  },
+};
+
 export async function clearAllLocalData(): Promise<void> {
   await db.transaction(
     'rw',
-    db.profiles,
-    db.allergyCards,
-    db.questionCards,
-    db.savedDishes,
-    db.metadata,
+    [db.profiles, db.allergyCards, db.questionCards, db.savedDishes, db.metadata, db.lastRestaurantSearch, db.lastRestaurantDetail],
     async () => {
       await Promise.all([
         db.profiles.clear(),
@@ -122,6 +155,8 @@ export async function clearAllLocalData(): Promise<void> {
         db.questionCards.clear(),
         db.savedDishes.clear(),
         db.metadata.clear(),
+        db.lastRestaurantSearch.clear(),
+        db.lastRestaurantDetail.clear(),
       ]);
     },
   );
