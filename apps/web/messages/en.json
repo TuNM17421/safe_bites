@@ -1,0 +1,24 @@
+{
+  "common": {
+    "appName": "SafeBite Travel"
+  },
+  "landing": {
+    "tagline": "Understand local dish risk and speak up at the table.",
+    "positioning": "An allergy-aware travel food assistant for Hanoi. Build a private allergy profile, browse local dishes by risk level, and generate bilingual question cards for restaurant staff.",
+    "noInstall": "No install required — it runs right in your browser.",
+    "startProfile": "Start allergy profile",
+    "browseDishes": "Browse dish guide"
+  },
+  "safety": {
+    "disclaimer": "This app helps you understand possible allergy risks. It cannot guarantee food safety. Always confirm ingredients and preparation with restaurant staff before ordering.",
+    "offlineNotice": "You are offline. Showing saved information only. Please confirm with restaurant staff before ordering.",
+    "suitableCaveat": "This looks lower risk for your profile, but please confirm with staff before ordering."
+  },
+  "statuses": {
+    "suitable": "Suitable",
+    "askFirst": "Ask First",
+    "risky": "Risky",
+    "avoid": "Avoid",
+    "unknown": "Unknown"
+  }
+}

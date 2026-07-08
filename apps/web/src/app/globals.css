@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Semantic design tokens as HSL channel triplets. Referenced via Tailwind
+   (`hsl(var(--token))`) — never use raw hex/rgb in components. */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 40%;
+  --border: 214 32% 88%;
+
+  /* Safety-notice surface */
+  --safety: 45 93% 90%;
+  --safety-foreground: 26 83% 22%;
+
+  /* Recommendation status tokens (Avoid > Risky > Ask First > Unknown > Suitable) */
+  --status-suitable: 142 60% 34%;
+  --status-ask-first: 38 92% 40%;
+  --status-risky: 24 90% 47%;
+  --status-avoid: 0 72% 47%;
+  --status-unknown: 215 14% 42%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 222 47% 9%;
+    --foreground: 210 40% 96%;
+    --muted: 217 33% 16%;
+    --muted-foreground: 215 20% 68%;
+    --border: 217 30% 26%;
+
+    --safety: 40 60% 20%;
+    --safety-foreground: 45 93% 82%;
+
+    --status-suitable: 142 52% 52%;
+    --status-ask-first: 38 90% 58%;
+    --status-risky: 24 88% 60%;
+    --status-avoid: 0 72% 62%;
+    --status-unknown: 215 20% 68%;
+  }
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}

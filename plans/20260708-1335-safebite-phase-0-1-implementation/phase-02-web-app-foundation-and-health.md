@@ -20,7 +20,7 @@
 ## Overview
 
 - **Priority:** P0 (blocks every UI and API phase)
-- **Current status:** Not started
+- **Current status:** ✅ Done — verified 2026-07-08. `pnpm typecheck`/`lint` green; `next build` compiles + prerenders `/en` `/vi` (SSG); dev smoke test: `/api/health` returns `{status:ok, db:unknown}` envelope, `/` → 307 `/en`, `/vi` renders VI, unknown locale `/xx` → 307 `/en/xx` → 404. Notes: (1) unknown locale is a redirect-then-404 chain (standard next-intl `localePrefix:'always'`), not a direct 404; (2) `next build` warns "Next.js ESLint plugin not detected" — non-fatal, we lint via the shared flat base; adding `@next/eslint-plugin-next` is an optional follow-up; (3) `sharp` build script approved alongside `esbuild` in `pnpm-workspace.yaml`.
 - **Brief description:** Bootstrap `apps/web` as a Next.js 15 / React 19 App Router application: build config (`next.config.ts`, Tailwind + PostCSS, `globals.css` semantic tokens), the next-intl skeleton (`[locale]` routing, provider, `@/i18n/navigation`, baseline `messages/{en,vi}.json`), the two foundation libs (`lib/env.ts` zod-validated env, `lib/api-response.ts` envelope helpers), the `/api/health` route (DB ping deferred to Phase 03), and the landing page `/` per §12.1. This establishes the next-intl + token + envelope skeleton the rest of the app builds on.
 
 ## Key Insights
@@ -117,18 +117,18 @@ lib/env.ts --> publicEnv (build-inlined) | serverEnv() (lazy, server-only)
 
 ## Todo List
 
-- [ ] `apps/web/package.json` + `tsconfig.json` created/extended; `pnpm install` clean
-- [ ] `postcss.config.mjs`, `tailwind.config.ts`, `next.config.ts` (next-intl plugin) in place
-- [ ] `globals.css` with semantic surface + five status tokens + safety token (light/dark)
-- [ ] `src/i18n/{routing,navigation,request}.ts` + `src/middleware.ts` (matcher excludes `/api`)
-- [ ] `messages/en.json` + `messages/vi.json` with `common`/`landing`/`safety`/`statuses`
-- [ ] `app/[locale]/layout.tsx` root layout (provider, `setRequestLocale`, `<html lang>`)
-- [ ] `lib/api-response.ts` (`ApiResponse<T>` + `apiOk`/`apiError`)
-- [ ] `lib/env.ts` (zod `publicEnv` + lazy `serverEnv()`, CSV parsing, `en|vi` guard)
-- [ ] `app/api/health/route.ts` returns `{status:'ok', db:'unknown'}` via envelope
-- [ ] `app/[locale]/page.tsx` landing with §12.1 CTAs + safety note (all i18n keys)
-- [ ] `typecheck` + `lint` pass; `pnpm dev` serves `/en`, `/vi`, `/api/health`
-- [ ] Flag to CI-scripts phase: add `apps/web/messages` to §16 copy-guard scan globs
+- [x] `apps/web/package.json` + `tsconfig.json` created/extended; `pnpm install` clean
+- [x] `postcss.config.mjs`, `tailwind.config.ts`, `next.config.ts` (next-intl plugin) in place
+- [x] `globals.css` with semantic surface + five status tokens + safety token (light/dark)
+- [x] `src/i18n/{routing,navigation,request}.ts` + `src/middleware.ts` (matcher excludes `/api`)
+- [x] `messages/en.json` + `messages/vi.json` with `common`/`landing`/`safety`/`statuses`
+- [x] `app/[locale]/layout.tsx` root layout (provider, `setRequestLocale`, `<html lang>`)
+- [x] `lib/api-response.ts` (`ApiResponse<T>` + `apiOk`/`apiError`)
+- [x] `lib/env.ts` (zod `publicEnv` + lazy `serverEnv()`, CSV parsing, `en|vi` guard)
+- [x] `app/api/health/route.ts` returns `{status:'ok', db:'unknown'}` via envelope
+- [x] `app/[locale]/page.tsx` landing with §12.1 CTAs + safety note (all i18n keys)
+- [x] `typecheck` + `lint` pass; `pnpm dev` serves `/en`, `/vi`, `/api/health`
+- [x] Flag to CI-scripts phase: add `apps/web/messages` to §16 copy-guard scan globs
 
 ## Success Criteria
 

@@ -1,0 +1,24 @@
+{
+  "common": {
+    "appName": "SafeBite Travel"
+  },
+  "landing": {
+    "tagline": "Hiểu rủi ro món ăn địa phương và tự tin trao đổi tại bàn ăn.",
+    "positioning": "Trợ lý ẩm thực du lịch nhận biết dị ứng cho Hà Nội. Tạo hồ sơ dị ứng riêng tư, xem món ăn địa phương theo mức rủi ro, và tạo thẻ câu hỏi song ngữ cho nhân viên nhà hàng.",
+    "noInstall": "Không cần cài đặt — chạy ngay trong trình duyệt.",
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "browseDishes": "Xem danh mục món ăn"
+  },
+  "safety": {
+    "disclaimer": "Ứng dụng giúp bạn hiểu các rủi ro dị ứng có thể có. Ứng dụng không thể đảm bảo an toàn thực phẩm. Luôn xác nhận thành phần và cách chế biến với nhân viên nhà hàng trước khi gọi món.",
+    "offlineNotice": "Bạn đang ngoại tuyến. Chỉ hiển thị thông tin đã lưu. Vui lòng xác nhận với nhân viên nhà hàng trước khi gọi món.",
+    "suitableCaveat": "Món này có vẻ rủi ro thấp hơn với hồ sơ của bạn, nhưng hãy xác nhận với nhân viên trước khi gọi món."
+  },
+  "statuses": {
+    "suitable": "Phù hợp hơn",
+    "askFirst": "Hỏi trước",
+    "risky": "Rủi ro",
+    "avoid": "Nên tránh",
+    "unknown": "Chưa rõ"
+  }
+}
