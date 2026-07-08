@@ -20,6 +20,24 @@
 - **Current status:** Not started.
 - **Brief description:** Build the two dish-guide screens. `/dishes` fetches per-profile recommendations via TanStack Query (`POST /api/v1/recommendations/dishes` with the active local profile), groups the returned cards by status in visual-priority order, and renders each card with status/confidence/reason/action/source/last-checked. `/dishes/[dishId]` shows dish detail (names, description, common + hidden ingredients) plus the risk block for the active profile. Includes EN/VI data toggle, always-on safety reminder, Suitable caveat, and empty/error/offline states. Consumes API + stores from phases 6/8/9; adds no new endpoints.
 
+## Design System v2 — visual spec (ADR-UI-01/02/03 approved & wired · READ FIRST)
+
+Build this UI to the verified design system. Infra is already applied: `@import './tokens.safebite.css'` in
+`globals.css`, `presets:[safebite]` in `tailwind.config.ts`, `lucide-react` in `package.json` (run `pnpm install`).
+
+- **Tokens — use `sb-*`, no raw hex, no legacy single-value `status-*` in NEW files.** Surfaces
+  `bg-sb-surface`/`-surface-2`/`-surface-3`; text `text-sb-fg`/`text-sb-muted`/`text-sb-faint`; `border-sb-border`;
+  elevation `shadow-sb-e1..e4`; radius `rounded-sb-md`/`-lg`; focus `focus-visible:shadow-sb-focus`.
+- **Status trio + icons:** `text-sb-status-<s>-fg bg-sb-status-<s>-bg border-sb-status-<s>-border`
+  (`<s> ∈ suitable|ask-first|risky|avoid|unknown`). Glyphs via `lucide-react`:
+  CircleCheck / MessageCircleQuestion / TriangleAlert / OctagonX / CircleHelp. Status = icon + label + colour.
+  **Confidence is hue-neutral** (grey segments + word), never a ladder hue, never a %.
+- **Components (ready-to-paste in `reports/ui-ux-design-integration-guide.md` §3):** `StatusBadge`,
+  `ConfidenceMeter`, `SourceBadge`, `RecommendationCard` (Suitable caveat baked in), `LanguageToggle`.
+  Loading → `@/components/common/skeleton-card`; empty/error/offline-no-saved → `@/components/common/state-view`.
+- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Main flow · Dish guide" + "Foundations".
+- **Supersedes** the "To modify → add `status-*` tokens" note below: those tokens now come from the preset — do **not** add single-value `status-*`. Tick `reports/ui-ux-progress-tracker.md` (§B/§C) as you build.
+
 ## Key Insights
 
 - **This is a client feature, not RSC.** The recommendation call is `POST` because the profile lives only on-device (§9.5). The active profile comes from Dexie/Zustand (phase-08), so the data fetch must run in a `'use client'` component. The route `page.tsx` stays a thin server shell; all interactivity lives in a client container.

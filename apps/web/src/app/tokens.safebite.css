@@ -1,0 +1,175 @@
+/* =====================================================================
+   SafeBite Travel — Design Tokens v2  (ADDITIVE · namespaced --sb-*)
+   Generated from the verified design-decisions doc (WCAG 2.2 checked).
+   Drop-in: add  @import './tokens.safebite.css';  as the FIRST line of
+   src/app/globals.css (above @tailwind base). Colors are HSL channel
+   triplets → consume via Tailwind as hsl(var(--sb-x) / <alpha>).
+   Does NOT touch existing --background / --status-* tokens.
+   ===================================================================== */
+:root {
+    --sb-bg: 218 27% 94%;
+    --sb-surface: 0 0% 100%;
+    --sb-surface-2: 216 38% 97%;
+    --sb-surface-3: 213 36% 95%;
+    --sb-overlay: 0 0% 100%;
+    --sb-border: 214 32% 91%;
+    --sb-border-strong: 213 27% 84%;
+    --sb-fg: 222 47% 11%;
+    --sb-muted: 215 19% 35%;
+    --sb-faint: 215 16% 47%;
+    --sb-brand-50: 212 100% 97%;
+    --sb-brand-100: 212 100% 93%;
+    --sb-brand-200: 210 100% 86%;
+    --sb-brand-300: 210 100% 76%;
+    --sb-brand-400: 214 100% 68%;
+    --sb-brand-500: 213 87% 55%;
+    --sb-brand-600: 212 90% 44%;
+    --sb-brand-700: 213 88% 33%;
+    --sb-brand-800: 213 84% 27%;
+    --sb-brand-900: 213 79% 20%;
+    --sb-brand: 212 90% 44%;
+    --sb-brand-ink: 213 88% 33%;
+    --sb-brand-foreground: 0 0% 100%;
+    --sb-brand-soft: 212 100% 97%;
+    --sb-primary: 212 90% 44%;
+    --sb-primary-foreground: 0 0% 100%;
+    --sb-ring: 212 90% 44%;
+    --sb-appetite: 9 83% 63%;
+    --sb-appetite-soft: 11 100% 97%;
+    --sb-appetite-ink: 7 58% 44%;
+    --sb-status-suitable-fg: 155 90% 20%;
+    --sb-status-suitable-bg: 152 45% 94%;
+    --sb-status-suitable-border: 155 64% 34%;
+    --sb-status-ask-first-fg: 40 100% 24%;
+    --sb-status-ask-first-bg: 39 87% 94%;
+    --sb-status-ask-first-border: 41 60% 41%;
+    --sb-status-risky-fg: 23 100% 30%;
+    --sb-status-risky-bg: 27 87% 94%;
+    --sb-status-risky-border: 22 73% 44%;
+    --sb-status-avoid-fg: 0 80% 35%;
+    --sb-status-avoid-bg: 0 83% 95%;
+    --sb-status-avoid-border: 0 65% 48%;
+    --sb-status-unknown-fg: 214 18% 30%;
+    --sb-status-unknown-bg: 214 26% 95%;
+    --sb-status-unknown-border: 214 12% 47%;
+    --sb-e1: 0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.04);
+    --sb-e2: 0 2px 4px rgba(15,23,42,.06),0 8px 20px rgba(15,23,42,.08);
+    --sb-e3: 0 6px 16px rgba(15,23,42,.10),0 12px 32px rgba(15,23,42,.10);
+    --sb-e4: 0 12px 28px rgba(15,23,42,.14),0 24px 60px rgba(15,23,42,.18);
+    --sb-focus: 0 0 0 2px hsl(var(--sb-surface)), 0 0 0 4px hsl(var(--sb-ring));
+}
+
+/* Dark — explicit toggle (.dark or [data-theme="dark"]) wins over system */
+:root[data-theme="dark"], .dark {
+    --sb-bg: 221 44% 7%;
+    --sb-surface: 222 47% 11%;
+    --sb-surface-2: 222 45% 16%;
+    --sb-surface-3: 217 33% 17%;
+    --sb-overlay: 218 35% 22%;
+    --sb-border: 218 35% 22%;
+    --sb-border-strong: 220 29% 28%;
+    --sb-fg: 214 32% 91%;
+    --sb-muted: 215 20% 65%;
+    --sb-faint: 217 17% 56%;
+    --sb-brand-50: 213 79% 20%;
+    --sb-brand-100: 213 84% 27%;
+    --sb-brand-200: 213 88% 33%;
+    --sb-brand-300: 212 90% 44%;
+    --sb-brand-400: 213 87% 55%;
+    --sb-brand-500: 214 100% 68%;
+    --sb-brand-600: 210 100% 76%;
+    --sb-brand-700: 210 100% 86%;
+    --sb-brand-800: 212 100% 93%;
+    --sb-brand-900: 212 100% 97%;
+    --sb-brand: 214 100% 68%;
+    --sb-brand-ink: 210 100% 76%;
+    --sb-brand-foreground: 211 82% 13%;
+    --sb-brand-soft: 218 48% 20%;
+    --sb-primary: 214 100% 68%;
+    --sb-primary-foreground: 211 82% 13%;
+    --sb-ring: 214 100% 68%;
+    --sb-appetite: 8 100% 70%;
+    --sb-appetite-soft: 312 17% 17%;
+    --sb-appetite-ink: 9 100% 77%;
+    --sb-status-suitable-fg: 153 68% 70%;
+    --sb-status-suitable-bg: 156 48% 11%;
+    --sb-status-suitable-border: 153 43% 43%;
+    --sb-status-ask-first-fg: 41 86% 72%;
+    --sb-status-ask-first-bg: 43 59% 13%;
+    --sb-status-ask-first-border: 42 56% 42%;
+    --sb-status-risky-fg: 23 88% 74%;
+    --sb-status-risky-bg: 22 61% 14%;
+    --sb-status-risky-border: 24 48% 52%;
+    --sb-status-avoid-fg: 0 80% 80%;
+    --sb-status-avoid-bg: 0 43% 16%;
+    --sb-status-avoid-border: 0 47% 60%;
+    --sb-status-unknown-fg: 214 18% 73%;
+    --sb-status-unknown-bg: 218 30% 16%;
+    --sb-status-unknown-border: 216 12% 48%;
+    --sb-e1: 0 1px 2px rgba(0,0,0,.4);
+    --sb-e2: 0 2px 6px rgba(0,0,0,.5);
+    --sb-e3: 0 8px 24px rgba(0,0,0,.55);
+    --sb-e4: 0 20px 48px rgba(0,0,0,.65);
+    --sb-focus: 0 0 0 2px hsl(var(--sb-surface)), 0 0 0 4px hsl(var(--sb-ring));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sb-bg: 221 44% 7%;
+    --sb-surface: 222 47% 11%;
+    --sb-surface-2: 222 45% 16%;
+    --sb-surface-3: 217 33% 17%;
+    --sb-overlay: 218 35% 22%;
+    --sb-border: 218 35% 22%;
+    --sb-border-strong: 220 29% 28%;
+    --sb-fg: 214 32% 91%;
+    --sb-muted: 215 20% 65%;
+    --sb-faint: 217 17% 56%;
+    --sb-brand-50: 213 79% 20%;
+    --sb-brand-100: 213 84% 27%;
+    --sb-brand-200: 213 88% 33%;
+    --sb-brand-300: 212 90% 44%;
+    --sb-brand-400: 213 87% 55%;
+    --sb-brand-500: 214 100% 68%;
+    --sb-brand-600: 210 100% 76%;
+    --sb-brand-700: 210 100% 86%;
+    --sb-brand-800: 212 100% 93%;
+    --sb-brand-900: 212 100% 97%;
+    --sb-brand: 214 100% 68%;
+    --sb-brand-ink: 210 100% 76%;
+    --sb-brand-foreground: 211 82% 13%;
+    --sb-brand-soft: 218 48% 20%;
+    --sb-primary: 214 100% 68%;
+    --sb-primary-foreground: 211 82% 13%;
+    --sb-ring: 214 100% 68%;
+    --sb-appetite: 8 100% 70%;
+    --sb-appetite-soft: 312 17% 17%;
+    --sb-appetite-ink: 9 100% 77%;
+    --sb-status-suitable-fg: 153 68% 70%;
+    --sb-status-suitable-bg: 156 48% 11%;
+    --sb-status-suitable-border: 153 43% 43%;
+    --sb-status-ask-first-fg: 41 86% 72%;
+    --sb-status-ask-first-bg: 43 59% 13%;
+    --sb-status-ask-first-border: 42 56% 42%;
+    --sb-status-risky-fg: 23 88% 74%;
+    --sb-status-risky-bg: 22 61% 14%;
+    --sb-status-risky-border: 24 48% 52%;
+    --sb-status-avoid-fg: 0 80% 80%;
+    --sb-status-avoid-bg: 0 43% 16%;
+    --sb-status-avoid-border: 0 47% 60%;
+    --sb-status-unknown-fg: 214 18% 73%;
+    --sb-status-unknown-bg: 218 30% 16%;
+    --sb-status-unknown-border: 216 12% 48%;
+    --sb-e1: 0 1px 2px rgba(0,0,0,.4);
+    --sb-e2: 0 2px 6px rgba(0,0,0,.5);
+    --sb-e3: 0 8px 24px rgba(0,0,0,.55);
+    --sb-e4: 0 20px 48px rgba(0,0,0,.65);
+    --sb-focus: 0 0 0 2px hsl(var(--sb-surface)), 0 0 0 4px hsl(var(--sb-ring));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

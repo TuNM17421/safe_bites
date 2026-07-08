@@ -23,6 +23,15 @@
 - **Current status:** Not started.
 - **Brief description:** Build `/question-card`: a client screen that generates a deterministic bilingual "show-to-staff" question card from the active local profile (plus optional dish context via `?dishId=`), with an EN/VI **target-language** toggle that is independent of the UI locale, large-text mode, a fullscreen-ish presentation overlay for showing the phone to restaurant staff, a copy-to-clipboard button, save-to-IndexedDB on every generate, and offline display of the last saved card. Ships the reusable `QuestionCardDisplay` component (§13). Adds no new endpoints.
 
+## Design System v2 — visual spec (ADR-UI-01/02/03 approved & wired · READ FIRST)
+
+Infra applied (`tokens.safebite.css` imported, `safebite` preset in tailwind, `lucide-react` added → `pnpm install`).
+
+- **Tokens `sb-*`** (surfaces/text/`border-sb-border`/`shadow-sb-e*`/`rounded-sb-*`/`focus-visible:shadow-sb-focus`) — no raw hex, no legacy `status-*`.
+- **`QuestionCardDisplay`:** big readable blocks per `section.kind`; large-text scales the type; fullscreen = `fixed inset-0 z-50` overlay on `bg-sb-surface` (high contrast). Body is bilingual DATA; chrome via `useTranslations`.
+- **Toolbar icons (`lucide-react`):** `Copy`, `Maximize`/`Minimize`, `AArrowUp` (large text), `Languages` (target toggle). "Copied" confirmation → `@/components/common/toast` (`role="status"`). Empty (no profile) → `@/components/common/state-view` + onboarding CTA.
+- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Main flow · Question card". Snippets/spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
+
 ## Key Insights
 
 - **`targetLanguage` ≠ UI locale (locked decision).** The card is DATA. A traveler reading the app in English wants a **Vietnamese** card to hand to Hanoi staff (spec §9.6 example: `profile.language: "en"`, `targetLanguage: "vi"`). Default `targetLanguage` to the **destination language** (Vietnamese for the Hanoi pilot), NOT the current `/en`|`/vi` URL locale. The toggle flips only `targetLanguage`; it never touches the route locale.

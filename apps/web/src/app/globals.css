@@ -1,3 +1,7 @@
+/* SafeBite design tokens v2 (ADR-UI-01) — sb-* namespaced, additive.
+   Ships light/dark surfaces, brand ramp, verified status trio, elevation, radius,
+   type + motion tokens, and the prefers-reduced-motion rule. See DESIGN_TOKENS.md. */
+@import './tokens.safebite.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

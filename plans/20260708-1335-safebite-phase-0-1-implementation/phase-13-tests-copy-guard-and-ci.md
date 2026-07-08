@@ -31,6 +31,19 @@
 - **Current status:** Not started.
 - **Brief description:** Ship the quality-gate layer: the `assert-no-unsafe-copy.ts` denylist scanner (`pnpm copy:check`), the two web-side Vitest unit suites (`seed-import`, `api-validation`), the Playwright e2e happy path (§17.2's 14 steps), the manual PWA QA checklist (§17.3), the GitHub Actions CI pipeline wiring `typecheck → lint → test → copy:check → e2e`, and the finalized root README with the §4.3 run sequence. Every §21 DoD item is mapped to a concrete automated or manual check. The two domain unit suites are authored in phase-05; this phase consumes and runs them.
 
+## Design System v2 — test/QA acceptance (ADR-UI-01/02/03)
+
+Add these to the quality gates (design layer; complements the safety-copy gate):
+- **A11y / visual:** every status renders **icon + label + colour** (not colour alone); visible focus ring on
+  interactive elements; body text ≥14px and inputs 16px; **light + dark** both pass; `prefers-reduced-motion`
+  honoured (no shimmer/slide under it — the global rule ships in `tokens.safebite.css`).
+- **Labels:** only the five status labels; every Suitable card renders `suitableCaveat` (`copy:check` unchanged).
+- **Tokens:** grep NEW UI files (`src/components`, `src/features`) for **raw hex** (fail if present) and for
+  **legacy single-value `status-*`** usage (should be `sb-*`).
+- **Icons:** no emoji used as UI icons (grep the emoji range in `src/components`/`src/features`); status uses the
+  lucide glyph map (CircleCheck / MessageCircleQuestion / TriangleAlert / OctagonX / CircleHelp).
+- Manual parity reference: `visuals/safebite-ui-ux-mockups.html`. Design tracker: `reports/ui-ux-progress-tracker.md`.
+
 ## Key Insights
 
 - **The copy guard's scan roots must be the UNION, not just §16's three.** §16 names `apps/web/src`, `packages/domain/src`, `apps/web/prisma`. But the confirmed next-intl override puts bilingual chrome in `apps/web/messages/{en,vi}.json` (phase-02 flag) and phase-07 puts safety copy in `apps/web/public/offline.html` + the manifest — both **outside** §16's roots. This phase is the canonical owner of the script, so it implements the superset from day one: a single `SCAN_TARGETS` constant covering src + domain + prisma + `messages/*.json` + `public/**/*.{html,webmanifest}`. Phases 02/07's "extend the globs" notes are satisfied here; if either lands a thin stub earlier, phase-13's version supersedes it (single source of truth — DRY).

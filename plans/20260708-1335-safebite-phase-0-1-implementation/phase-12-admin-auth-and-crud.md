@@ -24,6 +24,16 @@
 - **Current status:** Not started
 - **Brief description:** Add token-gated admin: `lib/admin-auth.ts` (cookie + verify helpers, edge-safe), compose the admin guard into the existing next-intl `middleware.ts`, a `POST /api/v1/admin/login` route that sets the httpOnly `sbt_admin` cookie, and CRUD route handlers for `dishes` / `ingredients` / `dish-risks` (§9.7) with Zod validation at every boundary. Plus a desktop-first admin UI island (`/admin`): login, dashboard counts, three tables (`AdminDataTable`) with create/edit/delete forms and a `review_status` filter. Admin never sets a recommendation *status* — it edits *facts* (risk level, confidence, reason, action, review status); the risk engine still owns Suitable/Unknown, preserving "Unknown never becomes Suitable".
 
+## Design System v2 — visual spec (ADR-UI-01/02/03 approved & wired · READ FIRST)
+
+Infra applied (`tokens.safebite.css` imported, `safebite` preset in tailwind, `lucide-react` added → `pnpm install`).
+
+- **Tokens `sb-*`** for the desktop admin (surfaces/text/`border-sb-border`/`shadow-sb-e1`/`rounded-sb-*`) — no raw hex, no legacy `status-*`.
+- **`AdminDataTable`:** `border-sb-border`, `shadow-sb-e1`, **tabular figures** for counts/confidence/dates; `review_status` filter; sidebar items use `lucide-react` (`LayoutGrid` / `UtensilsCrossed` / dish-risk `TriangleAlert` / etc.) — **no emoji**.
+- **Risk level chip:** reuse `StatusBadge` styling (lucide glyph + status trio) to render the dish-risk `riskLevel`. Admin edits **facts** (riskLevel/confidence/reason/action/reviewStatus) — it never sets a recommendation status; the engine still owns Suitable/Unknown.
+- The `/admin` island keeps its phase-12 i18n exceptions (`next/link`, fixed `en`) — but still uses `sb-*` tokens + lucide. The mockup's **severe-report review queue** and **OCR/LLM review** screens are Phase 3–5 (reference only; not this phase).
+- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Admin dashboard". Spec: `reports/ui-ux-design-integration-guide.md` §3. Track: `reports/ui-ux-progress-tracker.md` §B/§C.
+
 ## Key Insights
 
 - **Compose, don't replace, the middleware (critical).** Phase-02 already ships `src/middleware.ts` = `createMiddleware(routing)` with a matcher that **excludes `/api`**. The admin guard must intercept `/admin` and `/api/v1/admin` **before** delegating to the intl middleware, and the matcher must be extended to include `/api/v1/admin/:path*` (otherwise admin API is unguarded). Order matters: fall through to `intlMiddleware(req)` only for non-admin paths.
