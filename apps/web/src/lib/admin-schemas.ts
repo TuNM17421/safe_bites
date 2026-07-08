@@ -1,4 +1,13 @@
 import { EvidenceType, ReviewStatus, RiskLevel, SourceType } from '@prisma/client';
+import {
+  canCustomizeSchema,
+  menuItemAllergenSourceSchema,
+  menuItemVerificationStatusSchema,
+  restaurantMenuStatusSchema,
+  restaurantVerificationStatusSchema,
+  sharedCookwareSchema,
+  sharedFryerSchema,
+} from '@safebite/domain';
 import { z } from 'zod';
 
 // Zod at every admin boundary (spec §9.7). Prisma enums via z.nativeEnum so the vocab
@@ -127,6 +136,140 @@ export const dishRiskUpdateSchema = z
   })
   .partial();
 
+// ---- Restaurant (§5.2/§5.3) ----
+export const adminRestaurantQuerySchema = z.object({
+  review_status: z.enum(['needs_review', 'approved', 'rejected', 'all']).default('all'),
+  verification_status: optionalText,
+  menu_status: optionalText,
+  city: optionalText,
+  district: optionalText,
+  source: z.nativeEnum(SourceType).optional(),
+  has_menu_items: z.enum(['true', 'false']).optional(),
+  needs_review: z.enum(['true', 'false']).optional(),
+});
+
+export const restaurantCreateSchema = z.object({
+  id: z.string().min(1).optional(),
+  canonicalName: localizedText,
+  nameVi: optionalText,
+  nameEn: optionalText,
+  slug: optionalText,
+  amenity: optionalText,
+  brand: optionalText,
+  operator: optionalText,
+  cuisineRaw: optionalText,
+  cuisineNormalized: stringArray,
+  fullAddress: optionalText,
+  street: optionalText,
+  housenumber: optionalText,
+  ward: optionalText,
+  district: z.string().min(1),
+  city: z.string().min(1).default('hanoi'),
+  country: z.string().min(1).default('Vietnam'),
+  lat: z.number().min(-90).max(90).optional(),
+  lon: z.number().min(-180).max(180).optional(),
+  phone: optionalText,
+  website: optionalText,
+  websiteMenu: optionalText,
+  openingHours: optionalText,
+  sourceUrl: optionalText,
+  sourceObservedAt: z.coerce.date().optional(),
+  dataLicense: optionalText,
+  attributionRequired: z.boolean().default(false),
+  externalSource: z.nativeEnum(SourceType).default(SourceType.manual_seed),
+  reviewStatus: reviewStatusEnum.default(ReviewStatus.needs_review),
+  verificationStatus: restaurantVerificationStatusSchema.default('unverified'),
+  menuStatus: restaurantMenuStatusSchema.default('not_observed'),
+  notes: optionalText,
+});
+export const restaurantUpdateSchema = restaurantCreateSchema.omit({ id: true }).partial();
+
+// ---- Menu item (§5.4) ----
+const menuSourceTypeSchema = z.enum([
+  'official_website',
+  'website_menu_tag',
+  'user_upload',
+  'restaurant_upload',
+  'admin_manual',
+  'manual_seed',
+]);
+
+export const menuItemCreateSchema = z.object({
+  id: z.string().min(1).optional(),
+  dishId: optionalText,
+  rawName: z.string().min(1),
+  nameVi: optionalText,
+  nameEn: optionalText,
+  section: optionalText,
+  descriptionVi: safeOptionalText,
+  descriptionEn: safeOptionalText,
+  priceAmount: z.number().nonnegative().optional(),
+  currency: z.string().min(1).default('VND'),
+  menuSourceType: menuSourceTypeSchema,
+  menuSourceUrl: optionalText,
+  observedAt: z.coerce.date().optional(),
+  parsedBy: z.string().min(1).default('manual'),
+  mappingConfidence: confidenceSchema.optional(),
+  menuStatus: menuItemVerificationStatusSchema.default('observed_not_verified'),
+  ingredientNotes: safeOptionalText,
+  customizationNotes: safeOptionalText,
+  sharedCookware: sharedCookwareSchema.default('unknown'),
+  sharedFryer: sharedFryerSchema.default('unknown'),
+  canCustomize: canCustomizeSchema.default('unknown'),
+  notes: optionalText,
+});
+export const menuItemUpdateSchema = menuItemCreateSchema.omit({ id: true }).partial();
+
+// ---- Menu item allergen status (§5.5) — PUT full-replacement array ----
+const allergenStatusItemSchema = z
+  .object({
+    allergenId: z.string().min(1),
+    riskLevel: z.nativeEnum(RiskLevel),
+    confidence: confidenceSchema,
+    source: menuItemAllergenSourceSchema,
+    reasonEn: safeLocalizedText,
+    reasonVi: safeLocalizedText.optional(),
+    lastVerifiedAt: z.coerce.date().optional(),
+    verificationStatus: menuItemVerificationStatusSchema.default('observed_not_verified'),
+    // dish_inferred must be explicitly confirmed before it is written as an override (§5.5).
+    confirmed: z.boolean().optional(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.riskLevel === 'unknown' && v.confidence > 0.5) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['confidence'],
+        message: 'Unknown risk confidence must not exceed 0.5.',
+      });
+    }
+    if (v.source === 'dish_inferred' && v.confirmed !== true) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['source'],
+        message: 'dish_inferred status must be explicitly confirmed.',
+      });
+    }
+  });
+
+export const allergenStatusReplaceSchema = z
+  .object({ statuses: z.array(allergenStatusItemSchema).max(30).default([]) })
+  .superRefine((v, ctx) => {
+    const seen = new Set<string>();
+    v.statuses.forEach((s, i) => {
+      if (seen.has(s.allergenId)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['statuses', i, 'allergenId'],
+          message: 'Duplicate allergenId in status list.',
+        });
+      }
+      seen.add(s.allergenId);
+    });
+  });
+
 export type DishCreateInput = z.infer<typeof dishCreateSchema>;
 export type IngredientCreateInput = z.infer<typeof ingredientCreateSchema>;
 export type DishRiskCreateInput = z.infer<typeof dishRiskCreateSchema>;
+export type RestaurantCreateInput = z.infer<typeof restaurantCreateSchema>;
+export type MenuItemCreateInput = z.infer<typeof menuItemCreateSchema>;
+export type AllergenStatusReplaceInput = z.infer<typeof allergenStatusReplaceSchema>;

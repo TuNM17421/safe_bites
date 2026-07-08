@@ -19,7 +19,7 @@ Risk **reduction**, never elimination. List-first; map is decorative P1.
 | 01 | [Domain types & evaluators](phase-01-domain-types-and-evaluators.md) | ✅ Done | — |
 | 02 | [Prisma schema & migration](phase-02-prisma-schema-and-migration.md) | ✅ Done | — |
 | 03 | [Importer wiring & demo menu seed](phase-03-importer-wiring-and-demo-seed.md) | ✅ Done | 02 |
-| 04 | [Admin restaurant & menu APIs](phase-04-admin-restaurant-and-menu-apis.md) | Not started | 02 |
+| 04 | [Admin restaurant & menu APIs](phase-04-admin-restaurant-and-menu-apis.md) | ✅ Done | 02 |
 | 05 | [Admin restaurant & menu UI](phase-05-admin-restaurant-and-menu-ui.md) | Not started | 04 |
 | 06 | [Public restaurant APIs](phase-06-public-restaurant-apis.md) | Not started | 01, 02 |
 | 07 | [Public restaurant UI](phase-07-public-restaurant-ui.md) | Not started | 06 |
