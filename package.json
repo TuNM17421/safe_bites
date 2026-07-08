@@ -12,6 +12,7 @@
     "build": "pnpm --filter @safebite/web build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @safebite/web test:e2e",
     "typecheck": "pnpm -r typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

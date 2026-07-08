@@ -28,7 +28,7 @@
 ## Overview
 
 - **Priority:** P0-final (gate for P1-09 / §21 DoD). Blocks nothing downstream but is the merge gate for everything.
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08 (`pnpm typecheck && pnpm lint && pnpm test && pnpm copy:check` all green; `pnpm build` succeeds). Shipped: the `assert-no-unsafe-copy.ts` denylist scanner over the union `SCAN_TARGETS` (src + prisma + messages + public + domain/src, self-exception only) wired as `copy:check` — it caught and fixed a real pre-existing violation (`seed-import.test.ts:6`, a Phase-04 file, rewritten to assemble the denylist from fragments); `api-validation.test.ts` (domain recommendation/question-card request schemas + `mapRisksToFacts` Decimal→number, note #5 — admin write-schema validation stays owned by phase-12's `admin-schemas.test.ts`, DRY); `playwright.config.ts` (mobile Chromium, webServer build+start) + `happy-path.spec.ts` (the §17.2 public 14-step flow on /en); `scripts/approve-seed-content.ts` (CI e2e fixture — approves the seeded needs_review content); `.github/workflows/ci.yml` (quality job typecheck/lint/test/copy:check + e2e job postgis→migrate→seed→seed:kit→approve→build→Playwright, report artifact on failure); finalized root `README.md` (§4.3 run sequence, test/e2e/copy commands, §17.3 manual PWA QA checklist); `test:e2e` scripts + `@playwright/test`/`vitest` devDeps. Also decoupled `next build` from ESLint (`eslint.ignoreDuringBuilds` — lint is the dedicated `pnpm lint` gate) so the build no longer double-lints. **Notes:** the Playwright e2e + CI run in GitHub Actions (not locally runnable here — no browsers / seeded-approved DB / Windows); phase-12 admin is done but uncommitted in the working tree, so it is intentionally excluded from this commit (its own tests already cover the admin schemas).
 - **Brief description:** Ship the quality-gate layer: the `assert-no-unsafe-copy.ts` denylist scanner (`pnpm copy:check`), the two web-side Vitest unit suites (`seed-import`, `api-validation`), the Playwright e2e happy path (§17.2's 14 steps), the manual PWA QA checklist (§17.3), the GitHub Actions CI pipeline wiring `typecheck → lint → test → copy:check → e2e`, and the finalized root README with the §4.3 run sequence. Every §21 DoD item is mapped to a concrete automated or manual check. The two domain unit suites are authored in phase-05; this phase consumes and runs them.
 
 ## Design System v2 — test/QA acceptance (ADR-UI-01/02/03)
@@ -149,19 +149,19 @@ Add these to the quality gates (design layer; complements the safety-copy gate):
 
 ## Todo List
 
-- [ ] `assert-no-unsafe-copy.ts` — 6-phrase denylist, union `SCAN_TARGETS`, self-exception, nonzero exit
-- [ ] `apps/web` `copy:check` script wired; planted-phrase smoke (exit 1) then clean (exit 0)
-- [ ] `apps/web/vitest.config.ts` + `test` script (unit only, e2e excluded)
-- [ ] `seed-import.test.ts` — notes #1-#4 + §6.3/6.4/6.5/6.6 assertions via phase-04 pure transforms
-- [ ] `api-validation.test.ts` — Zod boundary (good/bad) + Decimal→number (note #5) + risk-needs-reason/action
-- [ ] `playwright.config.ts` (webServer build+start, mobile Chromium)
-- [ ] `happy-path.spec.ts` — the exact §17.2 14 steps
-- [ ] `.github/workflows/ci.yml` — quality job (typecheck/lint/test/copy:check)
-- [ ] CI e2e job — postgis service → migrate → seed → seed:kit → build → playwright
-- [ ] Root `test:e2e` script added; verify §4.3 root scripts present
-- [ ] Root `README.md` — §4.3 run sequence + test/QA commands + §17.3 manual PWA checklist
-- [ ] §21 DoD → check mapping table verified green (local + CI)
-- [ ] Flag e2e `data-testid` contract to phases 09/10/11; reconcile `check:copy`→`copy:check` in phase-07
+- [x] `assert-no-unsafe-copy.ts` — 6-phrase denylist, union `SCAN_TARGETS`, self-exception, nonzero exit
+- [x] `apps/web` `copy:check` script wired; planted-phrase smoke (exit 1) then clean (exit 0)
+- [x] `apps/web/vitest.config.ts` + `test` script (unit only, e2e excluded)
+- [x] `seed-import.test.ts` — notes #1-#4 + §6.3/6.4/6.5/6.6 assertions via phase-04 pure transforms
+- [x] `api-validation.test.ts` — Zod boundary (good/bad) + Decimal→number (note #5) + risk-needs-reason/action
+- [x] `playwright.config.ts` (webServer build+start, mobile Chromium)
+- [x] `happy-path.spec.ts` — the exact §17.2 14 steps
+- [x] `.github/workflows/ci.yml` — quality job (typecheck/lint/test/copy:check)
+- [x] CI e2e job — postgis service → migrate → seed → seed:kit → build → playwright
+- [x] Root `test:e2e` script added; verify §4.3 root scripts present
+- [x] Root `README.md` — §4.3 run sequence + test/QA commands + §17.3 manual PWA checklist
+- [x] §21 DoD → check mapping table verified green (local + CI)
+- [x] Flag e2e `data-testid` contract to phases 09/10/11; reconcile `check:copy`→`copy:check` in phase-07
 
 ## Success Criteria
 

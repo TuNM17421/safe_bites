@@ -15,6 +15,9 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   // Transpile the workspace domain package (shared TS source, consumed from Phase 06).
   transpilePackages: ['@safebite/domain'],
+  // Linting is a dedicated CI gate (`pnpm lint`, the flat-config source of truth); don't let
+  // `next build`'s stricter built-in ESLint pass double-lint and diverge from it (Phase 13).
+  eslint: { ignoreDuringBuilds: true },
 };
 
 export default withSerwist(withNextIntl(nextConfig));

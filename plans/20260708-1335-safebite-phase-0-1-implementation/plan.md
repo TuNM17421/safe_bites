@@ -36,7 +36,7 @@ Allowed statuses only: `Suitable · Ask First · Risky · Avoid · Unknown`. **U
 | 10 | [Dish guide UI](phase-10-dish-guide-ui.md) | 06, 08, 09 | `/dishes` + detail; grouped status cards; EN/VI toggle; offline saved-dishes fallback | ✅ Done (2026-07-08) |
 | 11 | [Question card UI](phase-11-question-card-ui.md) | 05, 06, 08, 09 | `/question-card`; target-lang toggle; large-text/fullscreen; copy; save + offline | ✅ Done (2026-07-08) |
 | 12 | [Admin auth & CRUD](phase-12-admin-auth-and-crud.md) | 03, 06 | Cookie auth + composed middleware; dishes/ingredients/dish-risks CRUD; `/admin` UI | ☐ |
-| 13 | [Tests, copy guard & CI](phase-13-tests-copy-guard-and-ci.md) | 04,05,06,09,10,11,12 | `assert-no-unsafe-copy`, Vitest + Playwright, CI, README, §21 DoD map | ☐ |
+| 13 | [Tests, copy guard & CI](phase-13-tests-copy-guard-and-ci.md) | 04,05,06,09,10,11,12 | `assert-no-unsafe-copy`, Vitest + Playwright, CI, README, §21 DoD map | ✅ Done (2026-07-08) |
 | 14 | [OpenMap restaurant discovery](phase-14-openmap-restaurant-discovery.md) | 03, 04 | **Additive / opt-in / off critical path.** `pnpm seed:openmap` maps OpenMap.vn POIs → `Restaurant` (`openmapvn`, `externalId=sid`); discovery-only; de-dup deferred to Phase 2 | ☐ (post P0/1) |
 | 15 | [Deployment — Vercel + Neon](phase-15-deployment-vercel-neon.md) | 03, 13 | **Additive / post-P0/1.** Vercel app + Neon Postgres+PostGIS; pooled/direct URLs; migrate+seed on deploy; Singapore region; preview branches | ☐ (post P0/1) |
 

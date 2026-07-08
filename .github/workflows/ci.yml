@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Prisma client is needed for the web typecheck (no DB required).
+      - run: pnpm --filter @safebite/web exec prisma generate
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm copy:check
+
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: safebite
+          POSTGRES_PASSWORD: safebite
+          POSTGRES_DB: safebite
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U safebite"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://safebite:safebite@localhost:5432/safebite
+      DIRECT_URL: postgresql://safebite:safebite@localhost:5432/safebite
+      ADMIN_TOKEN: change-me-in-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @safebite/web exec prisma migrate deploy
+      - run: pnpm db:seed
+      - run: pnpm seed:kit -- --kit ./osm_overpass_seed_kit
+      # e2e fixture: make the seeded (needs_review) content visible to the public path.
+      - run: pnpm --filter @safebite/web exec tsx scripts/approve-seed-content.ts
+      - run: pnpm build
+      - run: pnpm --filter @safebite/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
