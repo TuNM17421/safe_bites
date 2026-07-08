@@ -29,6 +29,13 @@ from typing import Dict, Iterable, List, Tuple
 
 import requests
 
+# Windows consoles default to cp1252; force UTF-8 so Vietnamese area names in print() don't crash.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 # Official OSMF-run Overpass instance is the only endpoint used by default.
 OFFICIAL_ENDPOINT = "https://overpass-api.de/api/interpreter"
 # Community mirror: opt-in via --mirror only. It has its own ToS/privacy and would
