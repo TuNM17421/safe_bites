@@ -53,14 +53,14 @@ export function OnboardingWizard() {
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-xs text-muted-foreground">{t('stepOf', { current: draft.step + 1, total: TOTAL })}</p>
+      <p className="text-xs text-sb-muted">{t('stepOf', { current: draft.step + 1, total: TOTAL })}</p>
       {steps[draft.step]}
       <div className="flex justify-between">
         <button
           type="button"
           disabled={draft.step === 0}
           onClick={() => draft.setStep(draft.step - 1)}
-          className="rounded-lg border border-border px-4 py-2 disabled:opacity-40"
+          className="rounded-sb-sm border border-sb-border px-4 py-2 text-sb-fg focus-visible:shadow-sb-focus disabled:opacity-40"
         >
           {t('back')}
         </button>
@@ -68,7 +68,7 @@ export function OnboardingWizard() {
           <button
             type="button"
             onClick={() => draft.setStep(draft.step + 1)}
-            className="rounded-lg bg-foreground px-4 py-2 font-semibold text-background"
+            className="rounded-sb-sm bg-sb-primary px-4 py-2 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
           >
             {t('next')}
           </button>

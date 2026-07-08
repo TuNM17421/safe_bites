@@ -1,13 +1,14 @@
 'use client';
+import { CircleUser, House, IdCard, MessageCircle, UtensilsCrossed } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 
 const TABS = [
-  { href: '/home', key: 'home', icon: '🏠' },
-  { href: '/dishes', key: 'dishes', icon: '🍜' },
-  { href: '/allergy-card', key: 'allergyCard', icon: '🪪' },
-  { href: '/question-card', key: 'questionCard', icon: '💬' },
-  { href: '/profile', key: 'profile', icon: '👤' },
+  { href: '/home', key: 'home', Icon: House },
+  { href: '/dishes', key: 'dishes', Icon: UtensilsCrossed },
+  { href: '/allergy-card', key: 'allergyCard', Icon: IdCard },
+  { href: '/question-card', key: 'questionCard', Icon: MessageCircle },
+  { href: '/profile', key: 'profile', Icon: CircleUser },
 ] as const;
 
 // Mobile bottom navigation. Locale-aware links via @/i18n/navigation; no restaurant tab
@@ -16,20 +17,20 @@ export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
   return (
-    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-border bg-background">
-      {TABS.map((tab) => {
-        const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-sb-border bg-sb-surface pb-[env(safe-area-inset-bottom)]">
+      {TABS.map(({ href, key, Icon }) => {
+        const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link
-            key={tab.href}
-            href={tab.href}
+            key={href}
+            href={href}
             aria-current={active ? 'page' : undefined}
-            className={`flex flex-col items-center gap-0.5 py-2 text-xs ${active ? 'text-foreground' : 'text-muted-foreground'}`}
+            className="flex min-h-[48px] flex-col items-center justify-center gap-0.5 py-2 text-xs focus-visible:shadow-sb-focus"
           >
-            <span aria-hidden className="text-lg">
-              {tab.icon}
+            <span className={`flex items-center rounded-full px-3 py-0.5 ${active ? 'bg-sb-brand-soft text-sb-brand' : 'text-sb-muted'}`}>
+              <Icon aria-hidden className="size-5" />
             </span>
-            {t(tab.key)}
+            <span className={active ? 'text-sb-brand' : 'text-sb-muted'}>{t(key)}</span>
           </Link>
         );
       })}

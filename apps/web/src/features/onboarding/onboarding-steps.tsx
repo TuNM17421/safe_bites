@@ -23,7 +23,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-3 py-1.5 text-sm ${active ? 'border-foreground bg-foreground text-background' : 'border-border'}`}
+      className={`rounded-full border px-3 py-1.5 text-sm focus-visible:shadow-sb-focus ${active ? 'border-sb-primary bg-sb-primary text-sb-primary-foreground' : 'border-sb-border text-sb-fg'}`}
     >
       {children}
     </button>
@@ -62,7 +62,7 @@ export function StepSeverity({ allergens }: { allergens: Allergen[] }) {
   const lang = useLang();
   const { selectedAllergenIds, severity, setSeverity } = useOnboardingDraft();
   const selected = allergens.filter((a) => selectedAllergenIds.includes(a.id));
-  if (selected.length === 0) return <p className="text-sm text-muted-foreground">{t('noAllergensSelected')}</p>;
+  if (selected.length === 0) return <p className="text-sm text-sb-muted">{t('noAllergensSelected')}</p>;
   return (
     <section className="flex flex-col gap-4">
       <h2 className="font-semibold">{t('setSeverity')}</h2>
@@ -87,7 +87,7 @@ export function StepCrossContact({ allergens }: { allergens: Allergen[] }) {
   const lang = useLang();
   const { selectedAllergenIds, crossContact, setCrossContact } = useOnboardingDraft();
   const selected = allergens.filter((a) => selectedAllergenIds.includes(a.id));
-  if (selected.length === 0) return <p className="text-sm text-muted-foreground">{t('noAllergensSelected')}</p>;
+  if (selected.length === 0) return <p className="text-sm text-sb-muted">{t('noAllergensSelected')}</p>;
   return (
     <section className="flex flex-col gap-4">
       <h2 className="font-semibold">{t('setCrossContact')}</h2>
@@ -156,7 +156,7 @@ export function StepDisclaimer({ saving, onFinish }: { saving: boolean; onFinish
         type="button"
         disabled={!accepted || saving}
         onClick={onFinish}
-        className="rounded-lg bg-status-suitable px-4 py-3 font-semibold text-background disabled:opacity-40"
+        className="rounded-sb-md bg-sb-primary px-4 py-3 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus disabled:opacity-40"
       >
         {saving ? t('saving') : t('finish')}
       </button>
