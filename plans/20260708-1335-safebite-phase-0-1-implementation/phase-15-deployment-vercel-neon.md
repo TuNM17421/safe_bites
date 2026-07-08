@@ -11,7 +11,7 @@
 
 ## Overview
 
-- **Current status:** Not started.
+- **Current status:** ✅ Artifacts done — verified 2026-07-08. Shipped the repo-side deliverables: **`docs/deployment.md`** (full runbook — Neon Singapore setup, pooled vs direct URL, Vercel Root Directory `apps/web` + env vars, migrate-on-deploy, one-time prod seed + dish approval, preview branches, rollback/PITR, security, troubleshooting), **`apps/web/vercel.json`** (`buildCommand: prisma generate && prisma migrate deploy && next build`, framework nextjs), and a README **Deployment** section linking the runbook. Verified (no re-add): `datasource.directUrl = env("DIRECT_URL")` already in `schema.prisma` (phase-03), `DIRECT_URL` already documented in `.env.example`, schema has 9 models. `vercel.json` is valid JSON; `copy:check`/`typecheck` stay green. **Note:** the live cloud **provisioning** (create the Neon project, Vercel project, set env/secrets, first deploy + prod seed, enable the Neon↔Vercel preview integration, smoke `/api/health`) is an **operator task executed by following the runbook** — it needs Neon/Vercel credentials and is out of scope for the repo. Skipped the optional `.github/workflows/deploy.yml` (YAGNI — Vercel's build command runs the migrate; the runbook documents the CI-driven alternative). `db:deploy` already exists as a root script, so it was not duplicated into `apps/web/package.json`.
 - **Brief description:** Stand up production on **Vercel** (Next.js RSC + `/api` serverless functions) and **Neon** (serverless Postgres + PostGIS). Wire the pooled/direct connection strings, env vars, migrate-on-deploy, a one-time prod seed, region co-location (Singapore), and the Neon↔Vercel preview-branch integration. No app-code/data-model changes beyond the phase-03 `directUrl` datasource delta.
 
 ## Key Insights
@@ -73,12 +73,12 @@
 - [ ] Neon project (Singapore) + DB; capture pooled + direct URLs
 - [ ] Vercel project, Root Directory = `apps/web`, pnpm build
 - [ ] Env vars: `DATABASE_URL` (pooled, `pgbouncer=true`), `DIRECT_URL` (direct), strong `ADMIN_TOKEN`, `NEXT_PUBLIC_*`
-- [ ] Confirm `datasource.directUrl` (phase-03); add `DIRECT_URL` to `.env.example`
+- [x] Confirm `datasource.directUrl` (phase-03); add `DIRECT_URL` to `.env.example` — both already present
 - [ ] Build runs `prisma generate` + `migrate deploy`; verify 9 tables + `postgis` on Neon
 - [ ] One-time prod seed (`db:seed` + `seed:kit`) via `DIRECT_URL`; verify counts
 - [ ] Enable Neon↔Vercel preview-branch integration
 - [ ] Smoke prod: `/api/health` `db:ok`, core flows, no restaurant surface
-- [ ] Write `docs/deployment.md` runbook
+- [x] Write `docs/deployment.md` runbook + `apps/web/vercel.json` build command + README link
 
 ## Success Criteria
 

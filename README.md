@@ -60,9 +60,17 @@ mobile emulation:
 - [ ] Every status shows icon + label + colour (not colour alone); Suitable cards show the confirm-with-staff caveat.
 - [ ] Light and dark both legible; `prefers-reduced-motion` disables shimmer/slide.
 
+## Deployment
+
+Production runs on **Vercel** (Next.js app) + **Neon** (serverless Postgres + PostGIS),
+co-located in Singapore. See **[`docs/deployment.md`](docs/deployment.md)** for the full runbook —
+Neon setup, Vercel root directory + env vars, migrate-on-deploy (pooled vs direct URL), the one-time
+production seed, preview branches, rollback, and troubleshooting.
+
 ## Status
 
-Phases 01–13 (Phase 0 + 1) implemented: bootstrap, web foundation, database, seed importer,
-domain risk engine, public API, PWA shell, IndexedDB, onboarding/profile/allergy card, dish
-guide, question card, admin CRUD, and the test/copy-guard/CI quality layer. See `plans/` for the
-full implementation plan and `docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md` for the spec.
+Phase 0/1 implemented (phases 01–13): bootstrap, web foundation, database, seed importer, domain
+risk engine, public API, PWA shell, IndexedDB, onboarding/profile/allergy card, dish guide, question
+card, and the test/copy-guard/CI quality layer — plus the additive admin CRUD (12), OpenMap
+discovery importer (14), the deployment runbook (15), and the design-system re-skin (16). See
+`plans/` for the full implementation plan and `docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md` for the spec.

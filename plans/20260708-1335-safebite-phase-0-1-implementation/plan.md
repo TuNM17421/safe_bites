@@ -38,7 +38,7 @@ Allowed statuses only: `Suitable · Ask First · Risky · Avoid · Unknown`. **U
 | 12 | [Admin auth & CRUD](phase-12-admin-auth-and-crud.md) | 03, 06 | Cookie auth + composed middleware; dishes/ingredients/dish-risks CRUD; `/admin` UI | ☐ |
 | 13 | [Tests, copy guard & CI](phase-13-tests-copy-guard-and-ci.md) | 04,05,06,09,10,11,12 | `assert-no-unsafe-copy`, Vitest + Playwright, CI, README, §21 DoD map | ✅ Done (2026-07-08) |
 | 14 | [OpenMap restaurant discovery](phase-14-openmap-restaurant-discovery.md) | 03, 04 | **Additive / opt-in / off critical path.** `pnpm seed:openmap` maps OpenMap.vn POIs → `Restaurant` (`openmapvn`, `externalId=sid`); discovery-only; de-dup deferred to Phase 2 | ☐ (post P0/1) |
-| 15 | [Deployment — Vercel + Neon](phase-15-deployment-vercel-neon.md) | 03, 13 | **Additive / post-P0/1.** Vercel app + Neon Postgres+PostGIS; pooled/direct URLs; migrate+seed on deploy; Singapore region; preview branches | ☐ (post P0/1) |
+| 15 | [Deployment — Vercel + Neon](phase-15-deployment-vercel-neon.md) | 03, 13 | **Additive / post-P0/1.** Vercel app + Neon Postgres+PostGIS; pooled/direct URLs; migrate+seed on deploy; Singapore region; preview branches | ✅ Artifacts (runbook+vercel.json); provisioning = manual |
 | 16 | [Shell re-skin to design system v2](phase-16-shell-reskin-to-design-system.md) | design-v2 | **Presentation-only.** Re-skin shell + Phase-09 screens to `sb-*` tokens + lucide icons; mock↔live parity | ✅ Done (2026-07-08) |
 
 ## Dependency graph
