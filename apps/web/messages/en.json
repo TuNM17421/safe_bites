@@ -92,5 +92,29 @@
     "clearData": "Clear local + offline data",
     "noProfile": "No profile yet.",
     "startProfile": "Start allergy profile"
+  },
+  "dishes": {
+    "reason": "Reason",
+    "action": "Action",
+    "lastChecked": "Checked {date}",
+    "suitableCaveat": "This looks lower risk for your profile, but please confirm with staff before ordering.",
+    "confidence": {
+      "low": "Low confidence",
+      "medium": "Medium confidence",
+      "high": "High confidence"
+    },
+    "filterAll": "All",
+    "emptyNoProfile": "Create a profile to see dish risks for your allergies.",
+    "startProfile": "Start allergy profile",
+    "emptyNotSeeded": "No dishes for this city yet.",
+    "error": "Could not load recommendations.",
+    "retry": "Retry",
+    "offlineNoSaved": "You are offline and have no saved dishes.",
+    "showAllergyCard": "Show allergy card",
+    "commonIngredients": "Common ingredients",
+    "hiddenIngredients": "Possible hidden ingredients",
+    "generateQuestionCard": "Generate question card",
+    "riskNotAvailable": "Risk not available for your profile.",
+    "back": "Back to dishes"
   }
 }

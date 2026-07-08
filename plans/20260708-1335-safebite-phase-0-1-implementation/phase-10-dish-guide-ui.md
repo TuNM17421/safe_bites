@@ -17,7 +17,7 @@
 ## Overview
 
 - **Priority:** High (P1-05 — a core Phase-1 user flow).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08 (typecheck/lint/production build; `/dishes` + `/dishes/[dishId]` SSR-render 200; no forbidden copy, no raw hex — built to **design system v2** `sb-*` tokens + lucide icons per the integration guide). Built: `status-visuals` (display order + group-key map), `StatusBadge`/`ConfidenceMeter`/`SourceBadge`, reusable `RecommendationCard` (Suitable caveat baked in), `LanguageToggle` (data-lang, not URL locale), `dishes-client` (Zod-parsed POST/GET), `use-dish-recommendations` (TanStack Query + Dexie persist + offline hydrate), `DishGuide` container (all state branches: no-profile/loading/error/not-seeded/offline-no-saved/grouped), `DishFilterBar`/`DishGroupList`/`DishCard`, `DishDetail` (names EN/VI, ingredients, per-profile risk block, question-card CTA), and `dishes.*` i18n keys. Groups render in visual priority Avoid>Risky>Ask First>Unknown>Suitable. **Notes:** (1) recommendation API grouping (incl. soy→unknown, never suitable) was verified end-to-end in phase 06; (2) DB is now **Neon** (ADR-008) — seeded (14 allergens, 6 templates, 29 dishes) but dishes are `needs_review`, so `/dishes` shows the "not seeded / empty" state until an admin approves them (phase 12); (3) the interactive browser render of grouped cards with a saved profile is exercised by the phase-13 Playwright happy path.
 - **Brief description:** Build the two dish-guide screens. `/dishes` fetches per-profile recommendations via TanStack Query (`POST /api/v1/recommendations/dishes` with the active local profile), groups the returned cards by status in visual-priority order, and renders each card with status/confidence/reason/action/source/last-checked. `/dishes/[dishId]` shows dish detail (names, description, common + hidden ingredients) plus the risk block for the active profile. Includes EN/VI data toggle, always-on safety reminder, Suitable caveat, and empty/error/offline states. Consumes API + stores from phases 6/8/9; adds no new endpoints.
 
 ## Design System v2 — visual spec (ADR-UI-01/02/03 approved & wired · READ FIRST)
@@ -141,20 +141,20 @@ group in visual-priority order ──► DishCard[] ──► RecommendationCard
 
 ## Todo List
 
-- [ ] Confirm phase-06/08/09 contracts (endpoints, profile hook, Dexie, chrome keys)
-- [ ] `status-visuals.ts` — display order + group-key map + semantic token map
-- [ ] `StatusBadge`, `ConfidenceBadge`, `SourceBadge`
-- [ ] `RecommendationCard` (evidence block + Suitable caveat)
-- [ ] `LanguageToggle` (data-lang, defaults to URL locale)
-- [ ] `dishes-client.ts` — POST/GET fetchers + Zod parsing
-- [ ] `use-dish-recommendations.ts` — query + Dexie persist + offline hydrate
-- [ ] `DishGuide` container with all state branches
-- [ ] `DishFilterBar` + `DishGroupList` (priority order, counts)
-- [ ] `DishCard`
-- [ ] `/dishes/page.tsx` server shell
-- [ ] `DishDetail` + `/dishes/[dishId]/page.tsx`
-- [ ] Add chrome message keys (en/vi) + status tokens (if absent)
-- [ ] typecheck / lint / copy:check + manual state walkthrough
+- [x] Confirm phase-06/08/09 contracts (endpoints, profile hook, Dexie, chrome keys)
+- [x] `status-visuals.ts` — display order + group-key map + semantic token map
+- [x] `StatusBadge`, `ConfidenceBadge`, `SourceBadge`
+- [x] `RecommendationCard` (evidence block + Suitable caveat)
+- [x] `LanguageToggle` (data-lang, defaults to URL locale)
+- [x] `dishes-client.ts` — POST/GET fetchers + Zod parsing
+- [x] `use-dish-recommendations.ts` — query + Dexie persist + offline hydrate
+- [x] `DishGuide` container with all state branches
+- [x] `DishFilterBar` + `DishGroupList` (priority order, counts)
+- [x] `DishCard`
+- [x] `/dishes/page.tsx` server shell
+- [x] `DishDetail` + `/dishes/[dishId]/page.tsx`
+- [x] Add chrome message keys (en/vi) + status tokens (if absent)
+- [x] typecheck / lint / copy:check + manual state walkthrough
 
 ## Success Criteria
 

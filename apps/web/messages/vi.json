@@ -92,5 +92,29 @@
     "clearData": "Xóa dữ liệu cục bộ + ngoại tuyến",
     "noProfile": "Chưa có hồ sơ.",
     "startProfile": "Tạo hồ sơ dị ứng"
+  },
+  "dishes": {
+    "reason": "Lý do",
+    "action": "Nên làm",
+    "lastChecked": "Kiểm tra {date}",
+    "suitableCaveat": "Món này có vẻ rủi ro thấp hơn với hồ sơ của bạn, nhưng hãy xác nhận với nhân viên trước khi gọi món.",
+    "confidence": {
+      "low": "Độ tin cậy thấp",
+      "medium": "Độ tin cậy vừa",
+      "high": "Độ tin cậy cao"
+    },
+    "filterAll": "Tất cả",
+    "emptyNoProfile": "Tạo hồ sơ để xem rủi ro món ăn theo dị ứng của bạn.",
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "emptyNotSeeded": "Chưa có món ăn cho thành phố này.",
+    "error": "Không tải được gợi ý.",
+    "retry": "Thử lại",
+    "offlineNoSaved": "Bạn đang ngoại tuyến và chưa có món đã lưu.",
+    "showAllergyCard": "Xem thẻ dị ứng",
+    "commonIngredients": "Thành phần thường có",
+    "hiddenIngredients": "Thành phần ẩn có thể có",
+    "generateQuestionCard": "Tạo thẻ câu hỏi",
+    "riskNotAvailable": "Chưa có đánh giá rủi ro cho hồ sơ của bạn.",
+    "back": "Về danh sách món"
   }
 }

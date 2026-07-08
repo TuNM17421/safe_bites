@@ -33,7 +33,7 @@ Allowed statuses only: `Suitable · Ask First · Risky · Avoid · Unknown`. **U
 | 07 | [PWA shell & offline](phase-07-pwa-shell-and-offline.md) | 02 | Manifest, Serwist SW (never-cache recommendations), offline.html, app-shell chrome, `/home` | ✅ Done (2026-07-08) |
 | 08 | [IndexedDB local storage (Dexie)](phase-08-indexeddb-local-storage.md) | 02 | `safebite_pwa_v1` 5 tables + save/load/delete/clear repos; do-not-store guard | ✅ Done (2026-07-08) |
 | 09 | [Onboarding, profile & allergy card](phase-09-onboarding-profile-and-allergy-card.md) | 05, 06, 08 | Local-first wizard + offline allergy card + profile; honest Unknown; no profile in URL | ✅ Done (2026-07-08) |
-| 10 | [Dish guide UI](phase-10-dish-guide-ui.md) | 06, 08, 09 | `/dishes` + detail; grouped status cards; EN/VI toggle; offline saved-dishes fallback | ☐ |
+| 10 | [Dish guide UI](phase-10-dish-guide-ui.md) | 06, 08, 09 | `/dishes` + detail; grouped status cards; EN/VI toggle; offline saved-dishes fallback | ✅ Done (2026-07-08) |
 | 11 | [Question card UI](phase-11-question-card-ui.md) | 05, 06, 08, 09 | `/question-card`; target-lang toggle; large-text/fullscreen; copy; save + offline | ☐ |
 | 12 | [Admin auth & CRUD](phase-12-admin-auth-and-crud.md) | 03, 06 | Cookie auth + composed middleware; dishes/ingredients/dish-risks CRUD; `/admin` UI | ☐ |
 | 13 | [Tests, copy guard & CI](phase-13-tests-copy-guard-and-ci.md) | 04,05,06,09,10,11,12 | `assert-no-unsafe-copy`, Vitest + Playwright, CI, README, §21 DoD map | ☐ |
