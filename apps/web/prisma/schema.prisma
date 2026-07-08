@@ -1,0 +1,282 @@
+// SafeBite Travel — Prisma schema (spec §5).
+// ADR-007: SourceType includes `openmapvn`; Restaurant has `externalId` + index.
+// ADR-008: datasource declares `directUrl` for migrations (pooled url at runtime).
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------- Enums (§5.1) ----------
+
+enum LanguageCode {
+  en
+  vi
+}
+
+enum ReviewStatus {
+  needs_review
+  approved
+  rejected
+}
+
+enum RiskLevel {
+  contains
+  likely_contains
+  possible
+  unlikely
+  unknown
+}
+
+enum RecommendationStatus {
+  suitable
+  ask_first
+  risky
+  avoid
+  unknown
+}
+
+enum EvidenceType {
+  manual_seed
+  canonical_recipe
+  menu_observed
+  restaurant_verified
+  user_report
+  llm_inferred
+}
+
+enum SourceType {
+  manual_seed
+  menu_observed
+  restaurant_submitted
+  user_submitted
+  expert_review
+  openstreetmap
+  openmapvn // ADR-007: second restaurant-discovery source (OpenMap.vn)
+  google_places
+  foursquare
+  admin_verified
+}
+
+enum ProfileType {
+  allergy
+  religious
+  diet
+  preference
+}
+
+enum Strictness {
+  low
+  medium
+  strict
+}
+
+// ---------- Core models (§5.2) ----------
+
+model ProfileTemplate {
+  id            String      @id @map("profile_id")
+  nameVi        String      @map("profile_name_vi")
+  nameEn        String      @map("profile_name_en")
+  profileType   ProfileType @map("profile_type")
+  strictness    Strictness  @map("strictness_default")
+  descriptionVi String?     @map("description_vi") @db.Text
+  descriptionEn String?     @map("description_en") @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Allergen {
+  id        String   @id @map("allergen_id")
+  nameVi    String   @map("name_vi")
+  nameEn    String   @map("name_en")
+  aliasesVi String[] @default([]) @map("aliases_vi")
+  aliasesEn String[] @default([]) @map("aliases_en")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dishRisks DishAllergenRisk[]
+}
+
+model Ingredient {
+  id                 String       @id @map("ingredient_id")
+  canonicalNameVi    String       @map("canonical_name_vi")
+  canonicalNameEn    String       @map("canonical_name_en")
+  ingredientCategory String       @map("ingredient_category")
+  aliasesVi          String[]     @default([]) @map("aliases_vi")
+  aliasesEn          String[]     @default([]) @map("aliases_en")
+  majorAllergenTags  String[]     @default([]) @map("major_allergen_tags")
+  dietaryFlags       String[]     @default([]) @map("dietary_flags")
+  halalRelevance     String?      @map("halal_relevance")
+  hinduRelevance     String?      @map("hindu_relevance")
+  veganRelevance     String?      @map("vegan_relevance")
+  calorieRelevance   String?      @map("calorie_relevance")
+  riskNotesVi        String?      @map("risk_notes_vi") @db.Text
+  riskNotesEn        String?      @map("risk_notes_en") @db.Text
+  reviewStatus       ReviewStatus @default(needs_review) @map("review_status")
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  dishes DishIngredient[]
+}
+
+model Dish {
+  id                          String       @id @map("dish_id")
+  canonicalNameVi             String       @map("canonical_name_vi")
+  canonicalNameEn             String       @map("canonical_name_en")
+  aliasesVi                   String[]     @default([]) @map("aliases_vi")
+  aliasesEn                   String[]     @default([]) @map("aliases_en")
+  dishCategory                String       @map("dish_category")
+  cuisine                     String
+  regionTags                  String[]     @default([]) @map("region_tags")
+  mealType                    String[]     @default([]) @map("meal_type")
+  descriptionVi               String?      @map("description_vi") @db.Text
+  descriptionEn               String?      @map("description_en") @db.Text
+  commonIngredientsVi         String?      @map("common_ingredients_vi") @db.Text
+  commonIngredientsEn         String?      @map("common_ingredients_en") @db.Text
+  possibleHiddenIngredientsVi String?      @map("possible_hidden_ingredients_vi") @db.Text
+  possibleHiddenIngredientsEn String?      @map("possible_hidden_ingredients_en") @db.Text
+  calorieClass                String?      @map("calorie_class")
+  spicyLevel                  String?      @map("spicy_level")
+  pickyEaterFlags             String[]     @default([]) @map("picky_eater_flags")
+  sourceType                  SourceType   @default(manual_seed) @map("source_type")
+  sourceUrl                   String?      @map("source_url")
+  reviewStatus                ReviewStatus @default(needs_review) @map("review_status")
+  notes                       String?      @db.Text
+  createdAt                   DateTime     @default(now())
+  updatedAt                   DateTime     @updatedAt
+
+  ingredients   DishIngredient[]
+  allergenRisks DishAllergenRisk[]
+}
+
+model DishIngredient {
+  dishId           String       @map("dish_id")
+  ingredientId     String       @map("ingredient_id")
+  ingredientRole   String       @map("ingredient_role")
+  probabilityLevel String       @map("probability_level")
+  confidence       Decimal      @db.Decimal(3, 2)
+  evidenceType     EvidenceType @map("evidence_type")
+  sourceUrl        String?      @map("source_url")
+  notes            String?      @db.Text
+
+  dish       Dish       @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@id([dishId, ingredientId, ingredientRole])
+}
+
+model DishAllergenRisk {
+  id                  String       @id @default(cuid())
+  dishId              String       @map("dish_id")
+  allergenId          String       @map("allergen_id")
+  riskLevel           RiskLevel    @map("risk_level")
+  confidence          Decimal      @db.Decimal(3, 2)
+  reasonVi            String       @map("reason_vi") @db.Text
+  reasonEn            String       @map("reason_en") @db.Text
+  recommendedActionVi String       @map("recommended_action_vi") @db.Text
+  recommendedActionEn String       @map("recommended_action_en") @db.Text
+  evidenceType        EvidenceType @default(manual_seed) @map("evidence_type")
+  sourceType          SourceType   @default(manual_seed) @map("source_type")
+  sourceUrl           String?      @map("source_url")
+  reviewStatus        ReviewStatus @default(needs_review) @map("review_status")
+  lastCheckedAt       DateTime     @default(now()) @map("last_checked_at")
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  dish     Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  allergen Allergen @relation(fields: [allergenId], references: [id], onDelete: Cascade)
+
+  @@unique([dishId, allergenId])
+  @@index([allergenId, riskLevel])
+}
+
+// ---------- Restaurant models — Phase 0 discovery only (§5.3) ----------
+
+model Restaurant {
+  id                  String       @id @map("restaurant_id")
+  externalSource      SourceType   @map("external_source")
+  osmType             String?      @map("osm_type")
+  osmId               String?      @map("osm_id")
+  externalId          String?      @map("external_id") // ADR-007: non-OSM stable id (OpenMap sid, etc.)
+  canonicalName       String       @map("canonical_name")
+  nameVi              String?      @map("name_vi")
+  nameEn              String?      @map("name_en")
+  amenity             String?
+  cuisineRaw          String?      @map("cuisine_raw")
+  cuisineNormalized   String[]     @default([]) @map("cuisine_normalized")
+  fullAddress         String?      @map("full_address")
+  street              String?
+  housenumber         String?
+  ward                String?
+  district            String?
+  city                String
+  country             String       @default("Vietnam")
+  lat                 Decimal?     @db.Decimal(10, 7)
+  lon                 Decimal?     @db.Decimal(10, 7)
+  phone               String?
+  website             String?
+  websiteMenu         String?      @map("website_menu")
+  openingHours        String?      @map("opening_hours")
+  sourceUrl           String?      @map("source_url")
+  sourceObservedAt    DateTime?    @map("source_observed_at")
+  dataLicense         String?      @map("data_license")
+  attributionRequired Boolean      @default(false) @map("attribution_required")
+  discoveryConfidence Decimal?     @map("discovery_confidence") @db.Decimal(3, 2)
+  menuStatus          String       @default("not_observed") @map("menu_status")
+  verificationStatus  String       @default("unverified") @map("verification_status")
+  reviewStatus        ReviewStatus @default(needs_review) @map("review_status")
+  rawTagsJson         Json?        @map("raw_tags_json")
+  notes               String?      @db.Text
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  menuItems MenuItem[]
+
+  @@index([externalSource, externalId])
+}
+
+model MenuItem {
+  id                String     @id @map("menu_item_id")
+  restaurantId      String     @map("restaurant_id")
+  dishId            String?    @map("dish_id")
+  rawName           String     @map("raw_name")
+  nameVi            String?    @map("name_vi")
+  nameEn            String?    @map("name_en")
+  section           String?
+  descriptionVi     String?    @map("description_vi") @db.Text
+  descriptionEn     String?    @map("description_en") @db.Text
+  priceAmount       Decimal?   @map("price_amount") @db.Decimal(12, 2)
+  currency          String?    @default("VND")
+  menuSourceType    String     @map("menu_source_type")
+  menuSourceUrl     String?    @map("menu_source_url")
+  observedAt        DateTime   @map("observed_at")
+  parsedBy          String     @default("manual") @map("parsed_by")
+  mappingConfidence Decimal?   @map("mapping_confidence") @db.Decimal(3, 2)
+  menuStatus        String     @default("observed_not_verified") @map("menu_status")
+  notes             String?    @db.Text
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+// ---------- Import tracking (§5.4) ----------
+
+model ImportRun {
+  id           String    @id @default(cuid())
+  sourceName   String
+  sourcePath   String
+  status       String
+  rowsRead     Int       @default(0)
+  rowsInserted Int       @default(0)
+  rowsUpdated  Int       @default(0)
+  rowsSkipped  Int       @default(0)
+  errors       Json?
+  startedAt    DateTime  @default(now())
+  finishedAt   DateTime?
+}
