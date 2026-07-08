@@ -1,4 +1,4 @@
-import { restaurantDetailRecommendationRequestSchema } from '@safebite/domain';
+import { restaurantDetailRecommendationRequestSchema, restaurantIdOrSlugSchema } from '@safebite/domain';
 import { apiError, apiOk, parseBody } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { haversineMeters } from '@/lib/geo/haversine';
@@ -14,7 +14,10 @@ type Ctx = { params: Promise<{ restaurantIdOrSlug: string }> };
 // §8.4 — personalized restaurant detail: readiness + per-menu-item recommendations. Profile in
 // the POST body, never the URL (§16.1). Resolves by id OR slug; approved rows only.
 export async function POST(req: Request, ctx: Ctx) {
-  const { restaurantIdOrSlug } = await ctx.params;
+  const params = await ctx.params;
+  const idParse = restaurantIdOrSlugSchema.safeParse(params.restaurantIdOrSlug);
+  if (!idParse.success) return apiError('VALIDATION_ERROR', 'Invalid restaurant identifier.', { status: 400 });
+  const restaurantIdOrSlug = idParse.data;
   const parsed = await parseBody(req, restaurantDetailRecommendationRequestSchema);
   if (!parsed.ok) return parsed.response;
   const { profile: p, clientLocation } = parsed.data;

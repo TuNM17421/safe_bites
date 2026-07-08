@@ -53,6 +53,10 @@ export const clientLocationSchema = geoPointSchema.extend({
 
 export const restaurantSortSchema = z.enum(['recommended', 'nearest', 'last_checked', 'name']);
 
+// Path param for the detail endpoints — validated even though Prisma parameterizes the query,
+// per §8/§16.3 ("validate path params").
+export const restaurantIdOrSlugSchema = z.string().min(1).max(128);
+
 // Partial profile posted for personalized recommendations (mirrors recommendationRequestSchema).
 const recommendationProfileSchema = z.object({
   id: z.string().default('local'),

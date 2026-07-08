@@ -75,10 +75,14 @@ export async function POST(req: Request) {
   const profile = buildProfile(p, city);
   const now = new Date();
 
+  // Readiness + distance are computed per-restaurant, so the whole matched set must be loaded
+  // before sorting/paginating in memory. `take` is a defensive cap far above the Phase-02
+  // single-city scale (§19.3: 30-50 approved rows), bounding worst-case memory / abuse.
   const restaurants = await prisma.restaurant.findMany({
     where: approvedRestaurantWhere({ city, district: filters.district, q: filters.q, cuisine: filters.cuisine }),
     include: { menuItems: { include: { allergenStatuses: true } } },
     orderBy: { id: 'asc' },
+    take: 500,
   });
 
   const dishRecMap = await loadDishRecMap(
@@ -100,9 +104,12 @@ export async function POST(req: Request) {
   const page = sorted.slice(offset, offset + limit);
   const nextCursor = offset + limit < sorted.length ? String(offset + limit) : null;
 
+  // Scope attribution to the page actually returned (ListItem.source is the restaurant's
+  // externalSource), matching the §8.1 browse behaviour — so we never advertise a source
+  // that isn't present on this page.
   return apiOk({
     restaurants: page,
     nextCursor,
-    attribution: attributionFor(restaurants.map((r) => r.externalSource)),
+    attribution: attributionFor(page.map((r) => r.source)),
   });
 }

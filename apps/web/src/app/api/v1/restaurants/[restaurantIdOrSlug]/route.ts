@@ -1,3 +1,4 @@
+import { restaurantIdOrSlugSchema } from '@safebite/domain';
 import { apiError, apiOk } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { attributionFor, restaurantDetailDTO } from '@/lib/restaurant-serializers';
@@ -9,7 +10,10 @@ type Ctx = { params: Promise<{ restaurantIdOrSlug: string }> };
 
 // §8.2 — approved restaurant metadata + raw menu rows, no personalization. Resolves by id OR slug.
 export async function GET(_req: Request, ctx: Ctx) {
-  const { restaurantIdOrSlug } = await ctx.params;
+  const params = await ctx.params;
+  const idParse = restaurantIdOrSlugSchema.safeParse(params.restaurantIdOrSlug);
+  if (!idParse.success) return apiError('VALIDATION_ERROR', 'Invalid restaurant identifier.', { status: 400 });
+  const restaurantIdOrSlug = idParse.data;
   const restaurant = await prisma.restaurant.findFirst({
     where: {
       reviewStatus: 'approved',
