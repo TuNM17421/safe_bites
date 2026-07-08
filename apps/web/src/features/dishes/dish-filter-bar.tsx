@@ -18,7 +18,7 @@ export function DishFilterBar({
   const t = useTranslations('dishes');
   const tStatus = useTranslations('statuses');
   const chip = (on: boolean) =>
-    `rounded-full border px-3 py-1 text-xs font-semibold ${on ? 'border-sb-primary bg-sb-primary text-sb-primary-foreground' : 'border-sb-border text-sb-muted'}`;
+    `inline-flex min-h-sb-tap items-center rounded-full border px-4 text-sb-body-s font-semibold focus-visible:shadow-sb-focus ${on ? 'border-sb-brand bg-sb-brand-soft text-sb-brand-ink' : 'border-sb-border bg-sb-surface text-sb-fg'}`;
 
   return (
     <div className="flex flex-wrap gap-2">

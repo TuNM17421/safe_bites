@@ -25,8 +25,8 @@ export function DishGroupList({
         if (cards.length === 0) return null;
         return (
           <section key={s} className="flex flex-col gap-3">
-            <h2 className="text-sm font-bold text-sb-muted">
-              {tStatus(s)} · {cards.length}
+            <h2 className="text-sb-label uppercase tracking-wide text-sb-muted">
+              {tStatus(s)} <span className="text-sb-faint">· {cards.length}</span>
             </h2>
             {cards.map((card) => (
               <DishCard key={card.dishId} card={card} lang={lang} />

@@ -1,64 +1,103 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import type { LocalUserProfile } from '@safebite/domain';
+import { IdCard, MapPin, MessageCircle, UtensilsCrossed, Wifi, WifiOff } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useOnlineStatus } from '@/components/app-shell/use-online-status';
+import { SkeletonCard } from '@/components/common/skeleton-card';
 import { SafetyNotice } from '@/components/safety/safety-notice';
 import { Link } from '@/i18n/navigation';
-import { profileRepo } from '@/lib/local-repo';
+import { useProfileStore } from '@/lib/profile-store';
 
-// /home (§12.3): profile summary (or onboarding link), destination city, CTAs, offline
-// indicator, and a disabled "restaurant search — coming later" affordance.
+// /home (§12.3): greeting hero (destination + allergen chips + connection pill), primary
+// "browse dishes" CTA + icon-led quick actions, and a disabled restaurant-search affordance.
 export default function HomePage() {
   const t = useTranslations('home');
+  const tSev = useTranslations('severity');
+  const locale = useLocale() as 'en' | 'vi';
   const online = useOnlineStatus();
-  const [profile, setProfile] = useState<LocalUserProfile | null | undefined>(undefined);
+  const hydrated = useProfileStore((s) => s.hydrated);
+  const profile = useProfileStore((s) => s.profile);
+  const allergyCard = useProfileStore((s) => s.allergyCard);
 
-  useEffect(() => {
-    void profileRepo.loadActiveProfile().then((p) => setProfile(p ?? null));
-  }, []);
+  const primaryBtn =
+    'flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-sm bg-sb-primary px-4 text-sb-body font-bold text-sb-primary-foreground shadow-sb-e1 focus-visible:shadow-sb-focus';
+  const ghostBtn =
+    'flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-2 px-4 text-sb-body font-bold text-sb-fg focus-visible:shadow-sb-focus';
+  const metaChip =
+    'inline-flex items-center gap-1.5 rounded-full border border-sb-border bg-sb-surface-2 px-2.5 py-1 text-sb-caption text-sb-muted';
 
-  const linkBtn = 'rounded-sb-md border border-sb-border px-4 py-3 font-medium text-sb-fg focus-visible:shadow-sb-focus';
+  if (!hydrated)
+    return (
+      <div className="flex flex-col gap-4">
+        <SkeletonCard />
+      </div>
+    );
+
+  const connectionPill = (
+    <span className={`${metaChip} ${online ? 'text-sb-status-suitable-fg' : 'text-sb-status-ask-first-fg'}`}>
+      {online ? <Wifi aria-hidden className="size-3.5" /> : <WifiOff aria-hidden className="size-3.5" />}
+      {online ? t('online') : t('offline')}
+    </span>
+  );
 
   return (
-    <div className="flex flex-col gap-5">
-      {!online && <p className="text-sm text-sb-status-unknown-fg">{t('offlineIndicator')}</p>}
+    <div className="flex flex-col gap-4">
+      <section className="rounded-sb-md border border-sb-border bg-gradient-to-b from-sb-brand-soft to-sb-surface p-5 shadow-sb-e2">
+        <div className="flex items-start justify-between gap-3">
+          <h1 className="text-sb-title text-sb-fg">
+            {profile?.name ? t('greetingNamed', { name: profile.name }) : profile ? t('greeting') : t('welcome')}
+          </h1>
+          {connectionPill}
+        </div>
+        {profile ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {allergyCard?.entries
+              .filter((e) => !e.isConstraintOnly)
+              .map((e) => (
+                <span key={e.allergenId} className={metaChip}>
+                  {e.name[locale]}
+                  {e.severity ? ` · ${tSev(e.severity)}` : ''}
+                </span>
+              ))}
+            <span className={metaChip}>
+              <MapPin aria-hidden className="size-3.5 text-sb-faint" />
+              <span className="capitalize">{profile.destinationCity}</span>
+            </span>
+          </div>
+        ) : (
+          <p className="mt-2 text-sb-body-s text-sb-muted">{t('noProfile')}</p>
+        )}
+      </section>
 
-      {profile === null && (
-        <section className="rounded-sb-md border border-sb-border bg-sb-surface-2 p-4">
-          <p className="text-sm text-sb-muted">{t('noProfile')}</p>
-          <Link
-            href="/onboarding"
-            className="mt-2 inline-block rounded-sb-md bg-sb-primary px-4 py-2 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
-          >
+      <div className="flex flex-col gap-3">
+        {profile ? (
+          <>
+            <Link href="/dishes" className={primaryBtn}>
+              <UtensilsCrossed aria-hidden className="size-5" />
+              {t('browseDishes')}
+            </Link>
+            <Link href="/allergy-card" className={ghostBtn}>
+              <IdCard aria-hidden className="size-5" />
+              {t('showAllergyCard')}
+            </Link>
+            <Link href="/question-card" className={ghostBtn}>
+              <MessageCircle aria-hidden className="size-5" />
+              {t('generateQuestionCard')}
+            </Link>
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="flex min-h-sb-tap w-full cursor-not-allowed items-center justify-center gap-2 rounded-sb-sm bg-sb-primary px-4 text-sb-body font-bold text-sb-primary-foreground opacity-50"
+            >
+              <MapPin aria-hidden className="size-5" />
+              {t('restaurantSearchComingLater')}
+            </button>
+          </>
+        ) : (
+          <Link href="/onboarding" className={primaryBtn}>
             {t('startProfile')}
           </Link>
-        </section>
-      )}
-      {profile && (
-        <section className="rounded-sb-md border border-sb-border bg-sb-surface p-4 shadow-sb-e1">
-          <p className="text-xs uppercase tracking-wide text-sb-muted">{t('destinationCity')}</p>
-          <p className="text-lg font-semibold text-sb-fg">{profile.destinationCity}</p>
-        </section>
-      )}
-
-      <div className="flex flex-col gap-2">
-        <Link href="/dishes" className={linkBtn}>
-          {t('browseDishes')}
-        </Link>
-        <Link href="/allergy-card" className={linkBtn}>
-          {t('showAllergyCard')}
-        </Link>
-        <Link href="/question-card" className={linkBtn}>
-          {t('generateQuestionCard')}
-        </Link>
-        <button
-          type="button"
-          disabled
-          className="cursor-not-allowed rounded-sb-md border border-sb-border px-4 py-3 text-left font-medium text-sb-muted"
-        >
-          {t('restaurantSearchComingLater')}
-        </button>
+        )}
       </div>
 
       <SafetyNotice />

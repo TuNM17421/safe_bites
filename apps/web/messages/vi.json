@@ -7,7 +7,22 @@
     "positioning": "Trợ lý ẩm thực du lịch nhận biết dị ứng cho Hà Nội. Tạo hồ sơ dị ứng riêng tư, xem món ăn địa phương theo mức rủi ro, và tạo thẻ câu hỏi song ngữ cho nhân viên nhà hàng.",
     "noInstall": "Không cần cài đặt — chạy ngay trong trình duyệt.",
     "startProfile": "Tạo hồ sơ dị ứng",
-    "browseDishes": "Xem danh mục món ăn"
+    "browseDishes": "Xem danh mục món ăn",
+    "kicker": "Ẩm thực du lịch nhận biết dị ứng",
+    "legendTitle": "Cách chúng tôi đánh giá mỗi món",
+    "legend": {
+      "avoid": "Có thể chứa chất gây dị ứng của bạn",
+      "risky": "Có thể chứa — và hồ sơ của bạn ở mức nặng",
+      "askFirst": "Hỏi nhà hàng trước khi gọi món",
+      "unknown": "Chưa đủ thông tin",
+      "suitable": "Rủi ro thấp hơn — vẫn nên xác nhận với nhân viên"
+    },
+    "chips": {
+      "honest": "Cảnh báo rủi ro, không gây hoang mang",
+      "bilingual": "Tiếng Anh & Tiếng Việt",
+      "offline": "Hoạt động ngoại tuyến",
+      "private": "Riêng tư trên thiết bị của bạn"
+    }
   },
   "safety": {
     "disclaimer": "Ứng dụng giúp bạn hiểu các rủi ro dị ứng có thể có. Ứng dụng không thể đảm bảo an toàn thực phẩm. Luôn xác nhận thành phần và cách chế biến với nhân viên nhà hàng trước khi gọi món.",
@@ -16,7 +31,7 @@
   },
   "statuses": {
     "suitable": "Phù hợp hơn",
-    "askFirst": "Hỏi trước",
+    "ask_first": "Hỏi trước",
     "risky": "Rủi ro",
     "avoid": "Nên tránh",
     "unknown": "Chưa rõ"
@@ -36,7 +51,12 @@
     "showAllergyCard": "Xem thẻ dị ứng",
     "generateQuestionCard": "Tạo thẻ câu hỏi",
     "offlineIndicator": "Bạn đang ngoại tuyến — chỉ hiển thị thông tin đã lưu.",
-    "restaurantSearchComingLater": "Tìm nhà hàng — sắp có"
+    "restaurantSearchComingLater": "Tìm nhà hàng — sắp có",
+    "welcome": "Chào mừng đến với SafeBite",
+    "greeting": "Chào mừng trở lại",
+    "greetingNamed": "Chào {name}",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến"
   },
   "offline": {
     "title": "Bạn đang ngoại tuyến",
@@ -74,7 +94,17 @@
     "chooseCity": "Thành phố đến",
     "chooseLanguage": "Ngôn ngữ",
     "reviewDisclaimer": "Trước khi bắt đầu",
-    "acceptDisclaimer": "Tôi hiểu ứng dụng giúp giảm rủi ro nhưng không thể đảm bảo an toàn thực phẩm."
+    "acceptDisclaimer": "Tôi hiểu ứng dụng giúp giảm rủi ro nhưng không thể đảm bảo an toàn thực phẩm.",
+    "title": "Hồ sơ của bạn",
+    "allergensQuestion": "Bạn cần tránh những gì?",
+    "searchAllergens": "Tìm chất gây dị ứng…",
+    "allergensHint": "Nhận diện thay vì ghi nhớ — các chất gây dị ứng đã lưu luôn hiển thị trên mọi lần quét và bộ lọc.",
+    "noSearchResults": "Không có chất gây dị ứng nào khớp với tìm kiếm.",
+    "anaphylaxisNote": "Áp dụng cảnh báo rủi ro nghiêm ngặt hơn",
+    "continue": "Tiếp tục",
+    "saveCard": "Tôi hiểu — lưu thẻ của tôi",
+    "safetyFirst": "An toàn là trên hết",
+    "offlineSaveNotice": "Thẻ dị ứng của bạn sẽ được lưu trên thiết bị này để truy cập ngoại tuyến."
   },
   "allergyCard": {
     "offlineAvailable": "Có thể dùng ngoại tuyến",
@@ -82,7 +112,11 @@
     "crossContact": "Nhiễm chéo",
     "lastUpdated": "Cập nhật lần cuối",
     "noCard": "Chưa có thẻ dị ứng. Hãy tạo hồ sơ trước.",
-    "startProfile": "Tạo hồ sơ dị ứng"
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "offlineMeta": "Có thể dùng ngoại tuyến · Cập nhật lần cuối {date}",
+    "showToStaff": "Đưa thẻ này cho nhân viên nhà hàng.",
+    "crossContactAvoid": "Tránh dùng chung dụng cụ nấu",
+    "crossContactOk": "Dụng cụ dùng chung thường không sao"
   },
   "profile": {
     "destinationCity": "Thành phố đến",
@@ -91,7 +125,8 @@
     "restartOnboarding": "Làm lại onboarding",
     "clearData": "Xóa dữ liệu cục bộ + ngoại tuyến",
     "noProfile": "Chưa có hồ sơ.",
-    "startProfile": "Tạo hồ sơ dị ứng"
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "you": "Hồ sơ của bạn"
   },
   "dishes": {
     "reason": "Lý do",
@@ -115,7 +150,17 @@
     "hiddenIngredients": "Thành phần ẩn có thể có",
     "generateQuestionCard": "Tạo thẻ câu hỏi",
     "riskNotAvailable": "Chưa có đánh giá rủi ro cho hồ sơ của bạn.",
-    "back": "Về danh sách món"
+    "back": "Về danh sách món",
+    "screenTitle": "Món ăn địa phương",
+    "rankedReminder": "Được xếp theo mức rủi ro cho hồ sơ dị ứng của bạn. Luôn xác nhận với nhân viên trước khi gọi món.",
+    "savedOffline": "Đã lưu ngoại tuyến",
+    "risk": {
+      "contains": "Có chứa",
+      "likely_contains": "Nhiều khả năng có",
+      "possible": "Có thể có",
+      "unlikely": "Ít khả năng",
+      "unknown": "Chưa rõ"
+    }
   },
   "questionCard": {
     "title": "Thẻ câu hỏi",
@@ -130,6 +175,15 @@
     "fullscreen": "Đưa nhân viên xem",
     "exitFullscreen": "Thoát",
     "noProfile": "Tạo hồ sơ để tạo thẻ câu hỏi.",
-    "startProfile": "Tạo hồ sơ dị ứng"
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "askTitle": "Hỏi nhà hàng",
+    "copyText": "Sao chép nội dung",
+    "sourceNote": "Nguồn: {source} · Dùng được ngoại tuyến",
+    "sections": {
+      "severity_statement": "Mức độ dị ứng",
+      "ingredient_question": "Thành phần",
+      "cross_contact_question": "Lây nhiễm chéo",
+      "kitchen_check": "Hỏi bếp"
+    }
   }
 }

@@ -1,25 +1,29 @@
 'use client';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { AllergenChip } from '@/components/safety/allergen-chip';
 import { SafetyNotice } from '@/components/safety/safety-notice';
 import { Link } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
 
 // §12.7 — self-contained offline allergy card rendered from the Dexie-hydrated store.
+// Brand-tinted card; each entry is an AllergenChip (icon + name + severity colour) with the
+// VI name alongside, so EN and VI are always present for restaurant staff.
 export function AllergyCardDisplay() {
   const t = useTranslations('allergyCard');
   const tSev = useTranslations('severity');
   const tCross = useTranslations('onboarding');
+  const locale = useLocale();
   const hydrated = useProfileStore((s) => s.hydrated);
   const card = useProfileStore((s) => s.allergyCard);
 
-  if (!hydrated) return <p className="text-sm text-sb-muted">…</p>;
+  if (!hydrated) return <p className="text-sb-body-s text-sb-muted">…</p>;
   if (!card) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-sb-muted">{t('noCard')}</p>
+        <p className="text-sb-body-s text-sb-muted">{t('noCard')}</p>
         <Link
           href="/onboarding"
-          className="inline-block rounded-sb-md bg-sb-primary px-4 py-2 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
+          className="inline-flex min-h-sb-tap w-full items-center justify-center rounded-sb-md bg-sb-primary px-4 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
         >
           {t('startProfile')}
         </Link>
@@ -27,36 +31,40 @@ export function AllergyCardDisplay() {
     );
   }
 
-  const crossLabel = (v: boolean | 'not_sure') => (v === true ? tCross('yes') : v === false ? tCross('no') : tCross('notSure'));
+  const crossLabel = (v: boolean | 'not_sure') =>
+    v === true ? t('crossContactAvoid') : v === false ? t('crossContactOk') : tCross('notSure');
+  const formattedDate = new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(card.updatedAt));
 
   return (
     <div className="flex flex-col gap-4">
-      <span className="w-fit rounded-full bg-sb-brand-soft px-3 py-1 text-xs font-semibold text-sb-brand">
-        {t('offlineAvailable')}
-      </span>
-      <div className="flex flex-col gap-3">
-        {card.entries.map((e) => (
-          <div key={e.allergenId} className="rounded-sb-md border border-sb-border bg-sb-surface p-3 shadow-sb-e1">
-            <p className="font-semibold text-sb-fg">
-              {e.name.en} · {e.name.vi}
-            </p>
-            {e.severity && (
-              <p className="text-sm text-sb-muted">
-                {t('severity')}: {tSev(e.severity)}
-              </p>
-            )}
-            {!e.isConstraintOnly && (
-              <p className="text-sm text-sb-muted">
-                {t('crossContact')}: {crossLabel(e.crossContact)}
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
+      <section className="rounded-sb-lg border border-sb-border bg-sb-brand-soft p-4 shadow-sb-e1">
+        <ul className="flex flex-col divide-y divide-sb-border">
+          {card.entries.map((e) => (
+            <li key={e.allergenId} className="flex flex-col gap-1.5 py-3 first:pt-0 last:pb-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <AllergenChip name={e.name.en} severity={e.severity} />
+                <span className="text-sb-body-s text-sb-muted">{e.name.vi}</span>
+              </div>
+              {e.severity && (
+                <p className="text-sb-caption text-sb-muted">
+                  {t('severity')}: {tSev(e.severity)}
+                </p>
+              )}
+              {!e.isConstraintOnly && (
+                <p className="text-sb-caption text-sb-muted">
+                  {t('crossContact')}: {crossLabel(e.crossContact)}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
       <SafetyNotice />
-      <p className="text-xs text-sb-muted">
-        {t('lastUpdated')}: {new Date(card.updatedAt).toLocaleString()}
-      </p>
+      <p className="text-center text-sb-caption text-sb-muted tabular-nums">{t('offlineMeta', { date: formattedDate })}</p>
     </div>
   );
 }

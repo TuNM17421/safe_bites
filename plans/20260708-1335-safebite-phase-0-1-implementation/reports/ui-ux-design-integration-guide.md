@@ -7,7 +7,7 @@ Agents copy the snippets below into the component files their phase already owns
 **Status: ADR-UI-01/02/03 APPROVED & WIRED (2026-07-08).** The infra is already applied — build straight on it.
 
 **Sources of truth**
-- Visual reference: `plans/…/visuals/safebite-ui-ux-mockups.html` (24 screens, light/dark).
+- Visual reference: `docs/design/safebite-ui-ux-mockups.html` (24 screens, light/dark).
 - Verified tokens + rationale: `plans/…/reports/design-decisions-v2.md` (WCAG-checked 30-value status set).
 - Tokens/preset (wired): `apps/web/src/app/tokens.safebite.css` · `apps/web/tailwind.safebite-preset.ts` · `apps/web/DESIGN_TOKENS.md`.
 - Progress: `plans/…/reports/ui-ux-progress-tracker.md` — tick as you build.

@@ -1,8 +1,9 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import { CircleCheck } from 'lucide-react';
+import { CircleCheck, Copy } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { LanguageCode } from '@safebite/domain';
+import { LanguageToggle } from '@/components/common/language-toggle';
 import { SkeletonCard } from '@/components/common/skeleton-card';
 import { StateView } from '@/components/common/state-view';
 import { Toast } from '@/components/common/toast';
@@ -35,6 +36,13 @@ export function QuestionCardScreen({ dishId }: { dishId?: string }) {
 
   const qc = useQuestionCard({ profile, targetLanguage, dishId, includeDish });
 
+  const sectionLabels = {
+    severity_statement: t('sections.severity_statement'),
+    ingredient_question: t('sections.ingredient_question'),
+    cross_contact_question: t('sections.cross_contact_question'),
+    kitchen_check: t('sections.kitchen_check'),
+  } as const;
+
   const copy = useCallback(async () => {
     if (!qc.card) return;
     try {
@@ -63,7 +71,7 @@ export function QuestionCardScreen({ dishId }: { dishId?: string }) {
         action={
           <Link
             href="/onboarding"
-            className="inline-block rounded-sb-md bg-sb-primary px-4 py-2 font-semibold text-sb-primary-foreground"
+            className="inline-flex min-h-sb-tap items-center rounded-sb-md bg-sb-primary px-4 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
           >
             {t('startProfile')}
           </Link>
@@ -78,35 +86,50 @@ export function QuestionCardScreen({ dishId }: { dishId?: string }) {
         <button
           type="button"
           onClick={() => setPresentation(false)}
-          className="self-end rounded-sb-md border border-sb-border px-3 py-2 text-sm text-sb-fg"
+          className="min-h-sb-tap self-end rounded-sb-md border border-sb-border px-3 text-sb-body-s text-sb-fg focus-visible:shadow-sb-focus"
         >
           {t('exitFullscreen')}
         </button>
-        <QuestionCardDisplay card={qc.card} largeText />
+        <div className="mx-auto w-full max-w-md">
+          <QuestionCardDisplay card={qc.card} largeText sectionLabels={sectionLabels} />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
+      <header className="flex items-center justify-between gap-3">
+        <h1 className="text-sb-title text-sb-fg">{t('askTitle')}</h1>
+        <LanguageToggle value={targetLanguage} onChange={setTargetLanguage} />
+      </header>
       <QuestionCardToolbar
-        targetLanguage={targetLanguage}
-        onToggleLang={() => setTargetLanguage((l) => (l === 'vi' ? 'en' : 'vi'))}
         largeText={largeText}
         onToggleLargeText={() => setLargeText((v) => !v)}
-        presentation={presentation}
         onTogglePresentation={() => setPresentation(true)}
-        onCopy={copy}
         hasDish={Boolean(dishId)}
         includeDish={includeDish}
         onToggleDish={() => setIncludeDish((v) => !v)}
       />
       {qc.card ? (
-        <QuestionCardDisplay card={qc.card} largeText={largeText} />
+        <QuestionCardDisplay card={qc.card} largeText={largeText} sectionLabels={sectionLabels} />
       ) : qc.isGenerating ? (
         <SkeletonCard />
       ) : (
         <StateView title={t('generating')} />
+      )}
+      {qc.card && (
+        <>
+          <button
+            type="button"
+            onClick={copy}
+            className="inline-flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-md bg-sb-primary px-4 text-sb-body font-bold text-sb-primary-foreground focus-visible:shadow-sb-focus"
+          >
+            <Copy aria-hidden className="size-5" />
+            {t('copyText')}
+          </button>
+          <p className="text-center text-sb-caption text-sb-faint">{t('sourceNote', { source: qc.card.source })}</p>
+        </>
       )}
       {copied && <Toast icon={<CircleCheck className="size-5" />} message={t('copied')} />}
     </div>

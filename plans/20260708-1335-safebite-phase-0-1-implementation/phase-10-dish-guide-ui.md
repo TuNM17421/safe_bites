@@ -35,7 +35,7 @@ Build this UI to the verified design system. Infra is already applied: `@import 
 - **Components (ready-to-paste in `reports/ui-ux-design-integration-guide.md` §3):** `StatusBadge`,
   `ConfidenceMeter`, `SourceBadge`, `RecommendationCard` (Suitable caveat baked in), `LanguageToggle`.
   Loading → `@/components/common/skeleton-card`; empty/error/offline-no-saved → `@/components/common/state-view`.
-- **Mockup:** `visuals/safebite-ui-ux-mockups.html` → "Main flow · Dish guide" + "Foundations".
+- **Mockup:** `docs/design/safebite-ui-ux-mockups.html` → "Main flow · Dish guide" + "Foundations".
 - **Supersedes** the "To modify → add `status-*` tokens" note below: those tokens now come from the preset — do **not** add single-value `status-*`. Tick `reports/ui-ux-progress-tracker.md` (§B/§C) as you build.
 
 ## Key Insights

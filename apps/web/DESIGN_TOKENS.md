@@ -90,4 +90,4 @@ Status is **always** rendered as Lucide icon **+** i18n label **+** colour. Labe
 
 Full rationale, the 30-value contrast table, and the ~32 principle applications live in
 `plans/20260708-1335-safebite-phase-0-1-implementation/reports/design-decisions-v2.md`, with the
-visual reference at `plans/…/visuals/safebite-ui-ux-mockups.html`.
+visual reference at `docs/design/safebite-ui-ux-mockups.html`.

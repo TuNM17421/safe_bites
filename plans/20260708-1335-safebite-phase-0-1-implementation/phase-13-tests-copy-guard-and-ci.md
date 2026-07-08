@@ -42,7 +42,7 @@ Add these to the quality gates (design layer; complements the safety-copy gate):
   **legacy single-value `status-*`** usage (should be `sb-*`).
 - **Icons:** no emoji used as UI icons (grep the emoji range in `src/components`/`src/features`); status uses the
   lucide glyph map (CircleCheck / MessageCircleQuestion / TriangleAlert / OctagonX / CircleHelp).
-- Manual parity reference: `visuals/safebite-ui-ux-mockups.html`. Design tracker: `reports/ui-ux-progress-tracker.md`.
+- Manual parity reference: `docs/design/safebite-ui-ux-mockups.html`. Design tracker: `reports/ui-ux-progress-tracker.md`.
 
 ## Key Insights
 
