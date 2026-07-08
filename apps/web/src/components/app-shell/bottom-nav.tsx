@@ -1,24 +1,24 @@
 'use client';
-import { CircleUser, House, IdCard, MessageCircle, Store, UtensilsCrossed } from 'lucide-react';
+import { CircleUser, House, MapPin, UtensilsCrossed } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 
+// Mobile bottom navigation — 4 top-level DESTINATIONS only (Material 3 / iOS HIG: 3–5 max;
+// 6 crowds thumb targets). Actions/utilities live elsewhere, per destination-vs-action:
+//   • Allergy card → persistent quick-access button in the AppHeader + Home hub.
+//   • Question card → contextual CTA on dish/restaurant detail + Home hub.
 const TABS = [
   { href: '/home', key: 'home', Icon: House },
   { href: '/dishes', key: 'dishes', Icon: UtensilsCrossed },
-  { href: '/restaurants', key: 'restaurants', Icon: Store },
-  { href: '/allergy-card', key: 'allergyCard', Icon: IdCard },
-  { href: '/question-card', key: 'questionCard', Icon: MessageCircle },
+  { href: '/restaurants', key: 'restaurants', Icon: MapPin },
   { href: '/profile', key: 'profile', Icon: CircleUser },
 ] as const;
 
-// Mobile bottom navigation (Phase 07 adds the Restaurants tab). Locale-aware links via
-// @/i18n/navigation so URLs stay /en /vi prefixed.
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
   return (
-    <nav className="sticky bottom-0 z-10 grid grid-cols-6 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
+    <nav className="sticky bottom-0 z-10 grid grid-cols-4 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
       {TABS.map(({ href, key, Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
