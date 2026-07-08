@@ -14,12 +14,18 @@ bilingual allergy card, and generate an EN/VI "show-to-staff" question card.
 - **Dish guide** (`/dishes`) — per-profile recommendations grouped by status in priority order
   **Avoid → Risky → Ask First → Unknown → Suitable**; every card shows source, confidence, reason,
   action, and last-checked. EN/VI data toggle independent of the UI locale.
+- **Restaurant guide** (`/restaurants`) — per-profile restaurant readiness (class **A–E**),
+  source/confidence, status counts, distance when the user grants location, and menu-item
+  recommendations on the detail page. Discovery-only (OSM/OpenMap) rows are capped at readiness **C**
+  and labelled "Menu allergy data not available yet"; list-first with a map/list shell. Restaurant
+  detail's "Ask about this item" generates a question card naming the specific menu item.
 - **Question card** (`/question-card`) — a deterministic bilingual card for restaurant staff, with a
   target-language toggle, large-text + fullscreen presentation modes, copy-to-clipboard, and offline
-  regeneration.
+  regeneration. Accepts optional dish or menu-item context.
 - **Offline allergy card** (`/allergy-card`) — a self-contained EN+VI summary that works with no network.
-- **Admin console** (`/admin`) — cookie-authenticated CRUD for dishes, ingredients, and dish-allergen
-  risks, with a review workflow (`needs_review` → `approved`).
+- **Admin console** (`/admin`) — cookie-authenticated CRUD for dishes, ingredients, dish-allergen
+  risks, and **restaurants + menu items** (map menu items to dishes, maintain per-item allergen
+  statuses, approve/reject/flag imported rows), with a review workflow (`needs_review` → `approved`).
 - **PWA** — installable; a service worker + IndexedDB keep the allergy card and last question card
   reachable offline.
 
@@ -43,7 +49,7 @@ safe_bites/
 | Validation | Zod at every API boundary |
 | Client state | Zustand (profile store) + TanStack Query (server cache) |
 | Offline | Dexie (IndexedDB) + Serwist (service worker) |
-| Domain | `@safebite/domain` — pure `evaluateDishes` risk engine + `buildQuestionCard`, no framework, no LLM |
+| Domain | `@safebite/domain` — pure risk engine (`evaluateDishes`, `evaluateMenuItem`, `evaluateRestaurantReadiness`) + `buildQuestionCard`, no framework, no LLM |
 
 **Core principles**
 
@@ -51,22 +57,28 @@ safe_bites/
   unknown never becomes Suitable; every Suitable card carries the confirm-with-staff caveat. A CI copy
   guard (`copy:check`) blocks forbidden "safe" wording across code, i18n messages, prisma, and the offline shell.
 - **Deterministic** — recommendations and question cards are template logic (§15), identical online and offline.
-- **Discovery-only OSM/OpenMap** — restaurant rows import as `unverified` and are hidden from Phase-1 UX.
+- **Discovery-only OSM/OpenMap** — restaurant rows import as `unverified`; they surface publicly only
+  once `approved`, are always labelled by source/verification, and never count as allergy verification
+  (readiness capped at C). Distance uses Haversine (PostGIS installed but unused). Exact location is
+  kept in-memory/sessionStorage only — never in IndexedDB or analytics.
 
 ### Routes
 
 - **Public** (locale-prefixed `/en`, `/vi`): `/` landing · `/onboarding` · `/home` · `/dishes` +
-  `/dishes/[dishId]` · `/allergy-card` · `/question-card` · `/profile` · `/offline`.
+  `/dishes/[dishId]` · `/restaurants` + `/restaurants/[restaurantIdOrSlug]` · `/allergy-card` ·
+  `/question-card` · `/profile` · `/offline`.
 - **Admin** (cookie auth, not locale-prefixed): `/admin` · `/admin/login` · `/admin/dishes` ·
-  `/admin/ingredients` · `/admin/dish-risks`.
+  `/admin/ingredients` · `/admin/dish-risks` · `/admin/restaurants` + `/admin/restaurants/[restaurantId]`.
 
 ### API (`/api`)
 
 - `GET /api/health` → `{ status, db }`.
 - **Public `/api/v1`**: `allergens`, `client-config`, `profile-templates`, `dishes` (+ `/[dishId]`),
-  `recommendations/dishes` (POST — the profile is sent in the body, never the URL), `question-cards` (POST).
+  `restaurants` (+ `/[idOrSlug]`, approved-only browse), `recommendations/dishes` and
+  `recommendations/restaurants` (+ `/[idOrSlug]`) (POST — the profile is sent in the body, never the
+  URL), `question-cards` (POST).
 - **Admin `/api/v1/admin`** (`ADMIN_TOKEN` httpOnly cookie): `login`, and CRUD for `dishes`,
-  `ingredients`, `dish-risks`.
+  `ingredients`, `dish-risks`, `restaurants` (+ menu-items and per-item `allergen-statuses`).
 
 ## Requirements
 
@@ -105,14 +117,16 @@ Seeded dishes import as `needs_review`; the dish guide serves `approved` rows on
 | `pnpm db:seed` | Seed allergens + profile templates |
 | `pnpm seed:kit` | Import Hanoi dishes + generated risks from the seed kit |
 | `pnpm seed:openmap` | Opt-in OpenMap.vn restaurant import (discovery-only, off the critical path) |
+| `pnpm seed:restaurant-demo-menu` | Dev-only: approved demo restaurants + mapped menu items (never auto-runs in prod) |
 | `pnpm format` / `format:check` | Prettier write / check |
 
 ## Quality gates
 
 The merge gate (mirrors §21 DoD): `pnpm typecheck && pnpm lint && pnpm test && pnpm copy:check` all
 green, plus `pnpm test:e2e` against a seeded DB. CI (`.github/workflows/ci.yml`) runs the four
-unit/quality gates in a **quality** job and the Playwright happy path in an **e2e** job
-(PostGIS service → migrate → seed → seed:kit → approve → build → Playwright).
+unit/quality gates in a **quality** job and the Playwright happy paths (dish + restaurant) in an
+**e2e** job (PostGIS service → migrate → seed → seed:kit → approve → seed:restaurant-demo-menu →
+build → Playwright).
 
 ## Manual PWA QA (§17.3)
 
@@ -127,6 +141,17 @@ mobile emulation:
 - [ ] Every status shows icon + label + colour (not colour alone); Suitable cards show the confirm-with-staff caveat.
 - [ ] Light and dark both legible; `prefers-reduced-motion` disables shimmer/slide.
 
+### Restaurants (§17.4)
+
+- [ ] `/restaurants` works without granting location; the location prompt appears only after tapping "Use my location".
+- [ ] Location denied/unsupported still shows city/district browsing; "nearest" sort appears only once location is granted.
+- [ ] OSM/OpenMap rows show a source/attribution label and are never presented as verified (readiness capped at C).
+- [ ] Restaurant detail with no menu data shows an Unknown/C state and the "Menu allergy data not available yet" copy.
+- [ ] Menu-item cards show status, risk, reason, action, source, confidence, and last-checked; Suitable keeps the confirm-with-staff caveat.
+- [ ] Offline `/restaurants` (and a previously viewed detail) show the cached data behind a stale/offline warning; else the allergy-card CTA.
+- [ ] "Ask about this item" opens a question card naming that menu item (EN + VI).
+- [ ] Admin: approve/reject/flag restaurants; add a menu item + map it to a dish; add/edit per-item allergen statuses.
+
 ## Deployment
 
 Production runs on **Vercel** (Next.js app) + **Neon** (serverless Postgres + PostGIS), co-located in
@@ -136,7 +161,8 @@ seed, preview branches, rollback, and troubleshooting.
 
 ## Documentation
 
-- Spec: [`docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md`](docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md)
+- Spec (Phase 0/1): [`docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md`](docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md)
+- Spec (Phase 02): [`docs/SAFE_BITE_PHASE_02_IMPL_SPEC.md`](docs/SAFE_BITE_PHASE_02_IMPL_SPEC.md)
 - Deployment runbook: [`docs/deployment.md`](docs/deployment.md)
 - Design tokens: [`apps/web/DESIGN_TOKENS.md`](apps/web/DESIGN_TOKENS.md)
 - Implementation plan (phases 01–16): [`plans/`](plans/)
@@ -148,3 +174,9 @@ engine, public API, PWA shell, IndexedDB, onboarding/profile/allergy card, dish 
 and the test/copy-guard/CI quality layer — plus the additive admin CRUD (12), OpenMap discovery
 importer (14), the deployment runbook (15), and the design-system re-skin (16). Live cloud
 provisioning is a manual operator task (see the deployment runbook).
+
+**Phase 02 implemented** (Restaurant MVP): restaurant browse/detail, admin restaurant/menu management,
+restaurant recommendation API, menu-item risk classification, A–E readiness scoring,
+location-triggered distance sorting, an offline restaurant cache, question cards with menu-item
+context, and restaurant-source trust display. Restaurant data remains discovery/source-aware —
+OSM/OpenMap rows are never treated as allergy verification (readiness capped at C).
