@@ -53,6 +53,16 @@ All kit claims below were verified against the actual files (byte-level BOM chec
   - Introduces **R14** (OpenMap ToS ≠ ODbL) and **R15** (cross-source duplicates).
   - `fetch_openmap_restaurants.py` + the committed `restaurants.csv` sample were corrected to the verified field shape (30-col schema; `sid`-based id; discrete `housenumber/street`; `category[]`→cuisine; km radius; multi-city-safe admin parsing).
 
+### ADR-008 — Production hosting & cloud storage: Vercel (app) + Neon (Postgres + PostGIS)
+- **Context.** Spec/plan only fixed a **local Docker Postgres for dev** (`docker-compose` `postgis/postgis:16-3.4`, volume `safebite_pg`); no production host was chosen (deployment is outside the §21 local-run DoD). A provider decision is now made. The app is Next.js App Router **server-first (RSC + `/api` routes)** → needs a Node serverless/compute host, not static hosting. The prod DB is small, read-heavy, has **no server-side PII in Phase 1** (user profile is local-first in IndexedDB), and **must support the PostGIS extension** (phase-03 migration runs `CREATE EXTENSION postgis`).
+- **Decision.** **App → Vercel** (native Next.js RSC/serverless, monorepo-aware). **DB → Neon** (serverless Postgres with PostGIS, branch-per-preview). Standard Prisma-on-serverless wiring: **pooled** connection as `DATABASE_URL` (app runtime, `?sslmode=require&pgbouncer=true`) + **direct** connection as `DIRECT_URL` (migrations, `?sslmode=require`); the `datasource` declares both (baked into phase-03 now). Co-locate Vercel functions + Neon in a **Singapore region** (closest to the Hanoi pilot users). Operationalized in **phase-15** (additive, post-P0/1). Object storage (menu photos) stays deferred to Phase 2 — provider chosen then, not now (YAGNI).
+- **Consequences.**
+  - Zero rework: phase-03 (not yet built) authors the `datasource` with `directUrl` from the start; local dev sets `DIRECT_URL = DATABASE_URL` (same Docker) so it is inert locally, Neon sets the pooled/direct pair.
+  - Neon↔Vercel native integration auto-injects env vars + spins a **DB branch per preview deployment** (isolated preview data) — recommended.
+  - Serverless connection management (R16): use the **pooled** endpoint (`pgbouncer=true`); the `lib/db.ts` singleton stays (dev hot-reload) but is not the serverless-scaling mechanism.
+  - Migrations run via `prisma migrate deploy` against `DIRECT_URL` (Neon supports `CREATE EXTENSION postgis`); prod is seeded once (`db:seed` allergen catalog + `seed:kit` OSM content) against `DIRECT_URL`. `seed:openmap` stays manual/optional (ADR-007).
+  - No change to the Phase-1 data model or safety rails; IndexedDB/Dexie (client) and the OpenMap opt-in importer are unaffected. Strong `ADMIN_TOKEN` in prod env (ADR-005 / open-Q4).
+
 ---
 
 ## Spec ↔ Seed-kit gaps
@@ -134,6 +144,7 @@ Verified findings. The first five map to the cross-cutting audit notes; the rest
 | R13 | **Empty city / no dishes** and other empty/error states unhandled (§12.4) | 10 | Low-Medium | Implement explicit empty/offline/no-profile states per §12.4 acceptance |
 | R14 | **OpenMap.vn ToS ≠ ODbL** — storing/redisplaying POIs may need a specific plan/attribution (ADR-007) | 14, Phase 2 | Medium (legal) | Conservative `dataLicense="openmapvn-terms"`/`attributionRequired=true`; preserve `sourceUrl`; confirm plan before any Phase-2 display; import (private) ≠ display |
 | R15 | **Cross-source duplicates** (same place from OSM + OpenMap in the shared 3 districts) (ADR-007) | 14, Phase 2 | Low (P1) | Deferred by decision; both rows tagged `externalSource`/`externalId`; Phase-2 merge = name-normalize + haversine(<~50m); harmless while restaurants hidden |
+| R16 | **Serverless Prisma on Neon** — pooled-vs-direct URL mixup, connection exhaustion, PgBouncer-incompatible migrations (ADR-008) | 15, Phase 2 | Medium | `DATABASE_URL`=pooled (`pgbouncer=true`), `DIRECT_URL`=direct for `migrate`; `datasource.directUrl` declared in phase-03; run `migrate deploy` against the direct URL only; co-locate region (Singapore) |
 
 ---
 

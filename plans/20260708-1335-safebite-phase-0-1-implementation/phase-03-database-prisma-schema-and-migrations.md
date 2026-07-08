@@ -20,7 +20,7 @@
 ## Overview
 
 - **Priority:** P0 (blocks Phase 4 importer, Phase 5 risk engine, Phase 6 API).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08. `pnpm db:migrate` (PostGIS + 9 tables), `pnpm db:seed` ×2 idempotent (14 allergens incl. treenut/soy), `GET /api/health` → `{status:ok, db:ok}`; typecheck + copy-check clean. Deviations: (1) **ADR-008 baked in** — datasource declares `directUrl = env("DIRECT_URL")`; `.env.example` gains `DIRECT_URL` (local = DATABASE_URL). (2) The app `.env` lives in `apps/web/.env` (where Prisma CLI + Next load it), not repo root. (3) Local-only `docker-compose.override.yml` (gitignored) publishes the DB on host **5433** because this machine already runs a host PostgreSQL 17 on 5432; committed compose stays 5432.
 - **Brief description:** Author `prisma/schema.prisma` with every enum + model exactly per §5 (ProfileTemplate, Allergen, Ingredient, Dish, DishIngredient, DishAllergenRisk, Restaurant, MenuItem, ImportRun). Add a raw migration that enables PostGIS (`CREATE EXTENSION IF NOT EXISTS postgis`). Add `lib/db.ts` (Prisma singleton), a baseline `prisma/seed.ts` that seeds the canonical **Allergen catalog** (the fixed vocabulary the risk engine and every `DishAllergenRisk` FK depend on), and extend `/api/health` to verify DB connectivity. Deliver the acceptance in §18 P0-03: `docker compose up -d db` → `pnpm db:migrate` → `pnpm db:seed` → `GET /api/health` checks DB.
 
 ## Key Insights
@@ -33,6 +33,7 @@
 6. **BOM handling is a Phase 4 concern, not this phase (audit note #1).** The OSM fetch script writes `restaurants_osm_raw.csv` as `utf-8-sig` (BOM). The baseline `seed.ts` in THIS phase reads **no CSV files** (it seeds a hardcoded catalog), so BOM does not affect it. Recorded here so the Phase 4 importer strips the BOM.
 7. **`Suitable` never applies at the DB layer.** `RecommendationStatus` (`suitable|ask_first|risky|avoid|unknown`) is a *derived* engine output (Phase 5), not a stored column. The DB stores only `RiskLevel` facts + confidence + reason/action. No forbidden copy (§16) is introduced by schema field names.
 8. **Multi-source restaurant discovery is baked in now, not migrated later (ADR-007).** A second discovery source — **OpenMap.vn** (live API key in hand; field shape verified against a live Nearby response) — will feed the SAME `Restaurant` table in phase-14. To make that a zero-migration add, this phase already (a) includes `openmapvn` in the `SourceType` enum and (b) gives `Restaurant` a generic `externalId String?` column (OpenMap's stable `sid`; also reusable by `google_places`/`foursquare` later). OSM rows leave `externalId` null (they carry `osmType`/`osmId` instead). The discovery-only rails are **source-agnostic**: every restaurant row, regardless of source, defaults `verificationStatus="unverified"` and is hidden from all Phase-1 public UX. This is the ONLY deviation from §5.1/§5.3's verbatim column list — recorded as ADR-007.
+9. **Datasource is Vercel/Neon-ready now (ADR-008).** The `datasource` declares `directUrl` (Neon needs a **direct** connection for `migrate`, a **pooled** one for the app runtime). Local dev sets `DIRECT_URL = DATABASE_URL` (same Docker Postgres) so it is inert locally; production (phase-15) sets Neon's pooled/direct pair. Declaring it now avoids editing the datasource block later. `.env`/`.env.example` must include `DIRECT_URL`.
 
 ## Requirements
 
@@ -109,15 +110,19 @@ docker compose (postgis/postgis:16-3.4)  ──DATABASE_URL──►  Prisma mig
 ### To delete
 - None.
 
-*(Root `package.json` `db:migrate`/`db:seed`, `.env.example` `DATABASE_URL`, and `docker-compose.yml` `db` service already exist from Phase 1 per §4 — verify, do not recreate.)*
+*(Root `package.json` `db:migrate`/`db:seed`, `.env.example` `DATABASE_URL`, and `docker-compose.yml` `db` service already exist from Phase 1 per §4 — verify, do not recreate. **Add `DIRECT_URL` to `.env`/`.env.example`** (= `DATABASE_URL` locally) for the ADR-008 `directUrl` datasource.)*
 
 ## Implementation Steps
 
 1. **Confirm Phase 1 prerequisites.** Verify `apps/web` exists, `DATABASE_URL` is in `.env`/`.env.example` (§4.1), `docker-compose.yml` has the `postgis/postgis:16-3.4` `db` service (§4.2), and root scripts `db:migrate`/`db:seed`/`copy:check` are wired (§4.3). Start the DB: `docker compose up -d db`.
 2. **Add Prisma deps to `apps/web/package.json`.** `@prisma/client` (dependency), `prisma` + `tsx` (devDependencies). Add `"prisma": { "seed": "tsx prisma/seed.ts" }`. Ensure `postinstall`/`build` runs `prisma generate`.
-3. **Write `prisma/schema.prisma` datasource + generator.**
+3. **Write `prisma/schema.prisma` datasource + generator.** Declare `directUrl` for serverless/Neon migrations (ADR-008); local dev sets `DIRECT_URL = DATABASE_URL` (same Docker), so it is inert and zero-cost locally.
    ```prisma
-   datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+   datasource db {
+     provider  = "postgresql"
+     url       = env("DATABASE_URL")   // pooled at prod (Neon PgBouncer)
+     directUrl = env("DIRECT_URL")     // direct at prod (migrations); = DATABASE_URL locally
+   }
    generator client { provider = "prisma-client-js" }
    ```
 4. **Add the 8 enums verbatim from §5.1:** `LanguageCode`, `ReviewStatus`, `RiskLevel`, `RecommendationStatus`, `EvidenceType`, `SourceType`, `ProfileType`, `Strictness`. **One addition (ADR-007):** append `openmapvn` as a `SourceType` value (the second restaurant-discovery source, wired in phase-14) — the sole deviation from §5.1's list.
@@ -144,20 +149,20 @@ docker compose (postgis/postgis:16-3.4)  ──DATABASE_URL──►  Prisma mig
 
 ## Todo List
 
-- [ ] Verify Phase 1 prerequisites; `docker compose up -d db`
-- [ ] Add `@prisma/client`, `prisma`, `tsx` and `prisma.seed` config to `apps/web/package.json`
-- [ ] Write `schema.prisma` datasource + generator
-- [ ] Add all 8 enums from §5.1 verbatim
-- [ ] Add core models §5.2 (ProfileTemplate, Allergen, Ingredient, Dish, DishIngredient, DishAllergenRisk)
-- [ ] Add restaurant models §5.3 (Restaurant, MenuItem)
-- [ ] Add ImportRun §5.4
-- [ ] `migrate dev --create-only`; prepend `CREATE EXTENSION IF NOT EXISTS postgis;`
-- [ ] Apply migration (`pnpm db:migrate`) against PostGIS container
-- [ ] Write `lib/db.ts` singleton
-- [ ] Write baseline `seed.ts` with the 14-row Allergen catalog (idempotent upsert)
-- [ ] Extend `/api/health` with `SELECT 1` DB check
-- [ ] Run full acceptance chain (migrate → seed ×2 → health)
-- [ ] Pass `pnpm typecheck` and `pnpm copy:check`
+- [x] Verify Phase 1 prerequisites; `docker compose up -d db`
+- [x] Add `@prisma/client`, `prisma`, `tsx` and `prisma.seed` config to `apps/web/package.json`
+- [x] Write `schema.prisma` datasource + generator
+- [x] Add all 8 enums from §5.1 verbatim
+- [x] Add core models §5.2 (ProfileTemplate, Allergen, Ingredient, Dish, DishIngredient, DishAllergenRisk)
+- [x] Add restaurant models §5.3 (Restaurant, MenuItem)
+- [x] Add ImportRun §5.4
+- [x] `migrate dev --create-only`; prepend `CREATE EXTENSION IF NOT EXISTS postgis;`
+- [x] Apply migration (`pnpm db:migrate`) against PostGIS container
+- [x] Write `lib/db.ts` singleton
+- [x] Write baseline `seed.ts` with the 14-row Allergen catalog (idempotent upsert)
+- [x] Extend `/api/health` with `SELECT 1` DB check
+- [x] Run full acceptance chain (migrate → seed ×2 → health)
+- [x] Pass `pnpm typecheck` and `pnpm copy:check`
 
 ## Success Criteria
 

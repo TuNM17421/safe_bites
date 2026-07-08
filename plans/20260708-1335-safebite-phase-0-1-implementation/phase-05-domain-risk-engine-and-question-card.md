@@ -21,7 +21,7 @@
 ## Overview
 
 - **Priority:** P0 (blocks P0-06 API and all Phase 1 UX — every card/recommendation flows through this engine)
-- **Current status:** Not started
+- **Current status:** ✅ Done — verified 2026-07-08. `@safebite/domain` typecheck + 11 Vitest tests green (all §8.5 cases + unknown-never-suitable + suitable-caveat + multi-profile; exact EN/VI question card). Pure package (only `zod`; no framework/LLM import). `ALLERGEN_CATALOG` lives here as the SSOT and is imported by `prisma/seed.ts` (phase-03). No forbidden §16 copy.
 - **Brief description:** Implement the pure, framework-free `packages/domain` package: shared types, Zod schemas, the deterministic risk engine (allergy + religious/diet/preference mapping with conservative "unknown never suitable" handling and multi-profile highest-rank selection), the deterministic bilingual question-card builder, safety copy strings, and unit tests covering every §8.5 case plus the severe-peanut EN/VI card. **NO LLM. No Next/Prisma imports** — usable identically by API routes and client components.
 
 ## Key Insights
@@ -147,17 +147,17 @@ DishRecommendationCard  { status, riskLevel, confidence(label), reason, action, 
 
 ## Todo List
 
-- [ ] Scaffold `packages/domain` (package.json, tsconfig) and link in workspace
-- [ ] `types.ts` — §7 types + `QuestionCard` + `DishEvaluationInput`
-- [ ] `constants.ts` — STATUS_RANK, mapping tables, rule registry, severity labels, card fragments
-- [ ] `copy.ts` — §14 safety strings + status labels (forbidden-phrase clean)
-- [ ] `schemas.ts` — Zod mirrors; confidence as `z.number()` (Decimal rejected)
-- [ ] `risk-engine.ts` — allergy + religious/diet/preference rules, confidence map, highest-rank selector, unknown-never-suitable guard, suitable-caveat override
-- [ ] `question-card.ts` — deterministic EN/VI `buildQuestionCard`
-- [ ] `index.ts` — barrel exports
-- [ ] `risk-engine.test.ts` — all §8.5 cases + unknown-gap + caveat + multi-profile
-- [ ] `question-card.test.ts` — exact severe-peanut EN + VI
-- [ ] Run test + typecheck green; verify no forbidden copy in `packages/domain/src`
+- [x] Scaffold `packages/domain` (package.json, tsconfig) and link in workspace
+- [x] `types.ts` — §7 types + `QuestionCard` + `DishEvaluationInput`
+- [x] `constants.ts` — STATUS_RANK, mapping tables, rule registry, severity labels, card fragments
+- [x] `copy.ts` — §14 safety strings + status labels (forbidden-phrase clean)
+- [x] `schemas.ts` — Zod mirrors; confidence as `z.number()` (Decimal rejected)
+- [x] `risk-engine.ts` — allergy + religious/diet/preference rules, confidence map, highest-rank selector, unknown-never-suitable guard, suitable-caveat override
+- [x] `question-card.ts` — deterministic EN/VI `buildQuestionCard`
+- [x] `index.ts` — barrel exports
+- [x] `risk-engine.test.ts` — all §8.5 cases + unknown-gap + caveat + multi-profile
+- [x] `question-card.test.ts` — exact severe-peanut EN + VI
+- [x] Run test + typecheck green; verify no forbidden copy in `packages/domain/src`
 
 ## Success Criteria
 
