@@ -50,5 +50,47 @@
     "body": "Install the app for quick, offline access to your allergy card and question cards.",
     "install": "Install",
     "dismiss": "Not now"
+  },
+  "severity": {
+    "mild": "Mild",
+    "moderate": "Moderate",
+    "severe": "Severe",
+    "anaphylaxis_risk": "Anaphylaxis risk"
+  },
+  "onboarding": {
+    "stepOf": "Step {current} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "saving": "Saving…",
+    "chooseAllergens": "Select your allergens",
+    "chooseProfiles": "Select dietary profiles",
+    "setSeverity": "How severe is each allergy?",
+    "setCrossContact": "Cross-contact sensitivity",
+    "noAllergensSelected": "No allergens selected — you can go back to add some.",
+    "yes": "Yes",
+    "no": "No",
+    "notSure": "Not sure",
+    "chooseCity": "Destination city",
+    "chooseLanguage": "Language",
+    "reviewDisclaimer": "Before you start",
+    "acceptDisclaimer": "I understand this app helps reduce risk but cannot guarantee food safety."
+  },
+  "allergyCard": {
+    "offlineAvailable": "Available offline",
+    "severity": "Severity",
+    "crossContact": "Cross-contact",
+    "lastUpdated": "Last updated",
+    "noCard": "No allergy card yet. Create your profile first.",
+    "startProfile": "Start allergy profile"
+  },
+  "profile": {
+    "destinationCity": "Destination city",
+    "allergies": "Allergies",
+    "constraints": "Dietary profiles",
+    "restartOnboarding": "Restart onboarding",
+    "clearData": "Clear local + offline data",
+    "noProfile": "No profile yet.",
+    "startProfile": "Start allergy profile"
   }
 }

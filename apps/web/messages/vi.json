@@ -50,5 +50,47 @@
     "body": "Cài ứng dụng để truy cập nhanh, ngoại tuyến thẻ dị ứng và thẻ câu hỏi.",
     "install": "Cài đặt",
     "dismiss": "Để sau"
+  },
+  "severity": {
+    "mild": "Nhẹ",
+    "moderate": "Vừa",
+    "severe": "Nặng",
+    "anaphylaxis_risk": "Nguy cơ sốc phản vệ"
+  },
+  "onboarding": {
+    "stepOf": "Bước {current}/{total}",
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "finish": "Hoàn tất",
+    "saving": "Đang lưu…",
+    "chooseAllergens": "Chọn các chất gây dị ứng",
+    "chooseProfiles": "Chọn hồ sơ ăn kiêng",
+    "setSeverity": "Mức độ nghiêm trọng của mỗi dị ứng?",
+    "setCrossContact": "Mức nhạy cảm với nhiễm chéo",
+    "noAllergensSelected": "Chưa chọn chất gây dị ứng — quay lại để thêm.",
+    "yes": "Có",
+    "no": "Không",
+    "notSure": "Không chắc",
+    "chooseCity": "Thành phố đến",
+    "chooseLanguage": "Ngôn ngữ",
+    "reviewDisclaimer": "Trước khi bắt đầu",
+    "acceptDisclaimer": "Tôi hiểu ứng dụng giúp giảm rủi ro nhưng không thể đảm bảo an toàn thực phẩm."
+  },
+  "allergyCard": {
+    "offlineAvailable": "Có thể dùng ngoại tuyến",
+    "severity": "Mức độ",
+    "crossContact": "Nhiễm chéo",
+    "lastUpdated": "Cập nhật lần cuối",
+    "noCard": "Chưa có thẻ dị ứng. Hãy tạo hồ sơ trước.",
+    "startProfile": "Tạo hồ sơ dị ứng"
+  },
+  "profile": {
+    "destinationCity": "Thành phố đến",
+    "allergies": "Dị ứng",
+    "constraints": "Hồ sơ ăn kiêng",
+    "restartOnboarding": "Làm lại onboarding",
+    "clearData": "Xóa dữ liệu cục bộ + ngoại tuyến",
+    "noProfile": "Chưa có hồ sơ.",
+    "startProfile": "Tạo hồ sơ dị ứng"
   }
 }

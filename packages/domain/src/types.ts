@@ -105,3 +105,20 @@ export interface QuestionCardInput {
   targetLanguage: LanguageCode;
   dishName?: Bilingual;
 }
+
+export interface AllergyCardEntry {
+  allergenId: string;
+  name: Bilingual;
+  severity?: Severity;
+  crossContact: boolean | 'not_sure';
+  isConstraintOnly: boolean;
+}
+
+export interface AllergyCard {
+  id: string;
+  profileId: string;
+  language: LanguageCode;
+  entries: AllergyCardEntry[];
+  createdAt: string;
+  updatedAt: string;
+}

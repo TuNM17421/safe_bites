@@ -180,3 +180,9 @@ export const ALLERGEN_CATALOG = [
   { id: 'high_calorie', nameEn: 'High calorie', nameVi: 'Nhiều calo', kind: 'constraint', aliasesEn: [], aliasesVi: [] },
   { id: 'strong_smell', nameEn: 'Strong smell', nameVi: 'Mùi mạnh', kind: 'constraint', aliasesEn: [], aliasesVi: [] },
 ] as const;
+
+// Allergy-type allergen ids (the user-selectable allergies). Pseudo-allergen constraints
+// (pork/beef/alcohol/high_calorie/strong_smell) come from profile templates, not this list.
+export const ALLERGY_ALLERGEN_IDS: readonly string[] = ALLERGEN_CATALOG.filter(
+  (a) => a.kind === 'allergen',
+).map((a) => a.id);

@@ -21,7 +21,7 @@
 ## Overview
 
 - **Priority:** High (core Phase 1 user entry point; unblocks dish guide and question card UX).
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08 (typecheck/lint/test + production build; all `/onboarding`, `/allergy-card`, `/profile` routes SSG and SSR-render 200 with no crash). Built: TanStack Query `Providers`, Zustand `profile-store` + `ProfileHydrator` (hydrate + no-profile guard on profile-required routes), `SafetyNotice`, the 6-step wizard (templates/severity/cross-contact/city/language/disclaimer) with a transient draft store (never in the URL), `build-profile`/`build-allergy-card`, `AllergyCardDisplay` (offline, EN+VI + severity/cross-contact + last-updated), `ProfileView` (restart + clear-all), and onboarding/allergyCard/profile/severity i18n keys. Allergen picker renders the full allergy-type catalog incl. **tree-nut/soy** (via `ALLERGY_ALLERGEN_IDS`); finish saves profile + allergy card to Dexie and `router.replace('/home', {locale})` with no query params. Cross-phase: added `AllergyCard`/`AllergyCardEntry` + `ALLERGY_ALLERGEN_IDS` to `@safebite/domain`; Dexie `StoredAllergyCard` now = domain `AllergyCard` (structured `entries`). **Note:** the interactive click-through E2E (select → finish → Dexie write → redirect) is exercised by the Playwright happy path in phase 13, per this phase's validation plan.
 - **Brief description:** Build the local-first onboarding wizard (§12.2), the offline allergy card page (§12.7), and the profile management page (§12.8). Establish the app-wide Zustand active-profile store hydrated from Dexie, and the shared `SafetyNotice` component. Everything is account-free and offline-capable; no profile data ever touches the URL.
 
 ## Key Insights
@@ -136,23 +136,23 @@
 
 ## Todo List
 
-- [ ] Add `AllergyCard`/`AllergyCardEntry` types to domain (`types.ts`).
-- [ ] `profile-store.ts` Zustand store with `hydrate`/`setProfile`/`clearAll`.
-- [ ] `profile-hydrator.tsx` + mount in `(app)/layout.tsx` + no-profile guard.
-- [ ] `safety-notice.tsx` (`SafetyNotice`).
-- [ ] `use-onboarding-data.ts` (TanStack Query: templates/allergens/client-config).
-- [ ] `use-onboarding-draft.ts` (transient draft store).
-- [ ] `step-templates.tsx` (full allergen catalog, tree-nut/soy included, no coverage filter).
-- [ ] `step-severity.tsx` + `step-cross-contact.tsx` (allergy allergens only).
-- [ ] `step-city.tsx` + `step-language.tsx` (locale switch).
-- [ ] `step-disclaimer.tsx` (accept gate).
-- [ ] `build-profile.ts` (draft → `LocalUserProfile`).
-- [ ] `build-allergy-card.ts` (bilingual snapshot).
-- [ ] `onboarding-wizard.tsx` finish → save → `router.replace('/home')`.
-- [ ] `allergy-card-display.tsx` + `(app)/allergy-card/page.tsx`.
-- [ ] `profile-view.tsx` + `(app)/profile/page.tsx`.
-- [ ] i18n keys in `messages/en.json` + `vi.json`.
-- [ ] typecheck / lint / copy:check pass.
+- [x] Add `AllergyCard`/`AllergyCardEntry` types to domain (`types.ts`).
+- [x] `profile-store.ts` Zustand store with `hydrate`/`setProfile`/`clearAll`.
+- [x] `profile-hydrator.tsx` + mount in `(app)/layout.tsx` + no-profile guard.
+- [x] `safety-notice.tsx` (`SafetyNotice`).
+- [x] `use-onboarding-data.ts` (TanStack Query: templates/allergens/client-config).
+- [x] `use-onboarding-draft.ts` (transient draft store).
+- [x] `step-templates.tsx` (full allergen catalog, tree-nut/soy included, no coverage filter).
+- [x] `step-severity.tsx` + `step-cross-contact.tsx` (allergy allergens only).
+- [x] `step-city.tsx` + `step-language.tsx` (locale switch).
+- [x] `step-disclaimer.tsx` (accept gate).
+- [x] `build-profile.ts` (draft → `LocalUserProfile`).
+- [x] `build-allergy-card.ts` (bilingual snapshot).
+- [x] `onboarding-wizard.tsx` finish → save → `router.replace('/home')`.
+- [x] `allergy-card-display.tsx` + `(app)/allergy-card/page.tsx`.
+- [x] `profile-view.tsx` + `(app)/profile/page.tsx`.
+- [x] i18n keys in `messages/en.json` + `vi.json`.
+- [x] typecheck / lint / copy:check pass.
 
 ## Success Criteria
 

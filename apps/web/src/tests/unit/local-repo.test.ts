@@ -60,7 +60,7 @@ describe('profileRepo', () => {
 
 describe('allergyCardRepo', () => {
   it('saves and loads by profile', async () => {
-    await allergyCardRepo.saveAllergyCard({ id: 'ac1', profileId: 'p1', language: 'en', text: { en: 'e', vi: 'v' }, updatedAt: '1' });
+    await allergyCardRepo.saveAllergyCard({ id: 'ac1', profileId: 'p1', language: 'en', entries: [], createdAt: '1', updatedAt: '1' });
     expect((await allergyCardRepo.loadAllergyCard('p1'))?.id).toBe('ac1');
   });
 });
@@ -98,7 +98,7 @@ describe('clearAllLocalData', () => {
   it('empties every table', async () => {
     await profileRepo.saveProfile(profile());
     await savedDishRepo.saveDish(unknownCard());
-    await allergyCardRepo.saveAllergyCard({ id: 'ac', profileId: 'p1', language: 'en', text: { en: 'e', vi: 'v' }, updatedAt: '1' });
+    await allergyCardRepo.saveAllergyCard({ id: 'ac', profileId: 'p1', language: 'en', entries: [], createdAt: '1', updatedAt: '1' });
     await clearAllLocalData();
     expect(await db.profiles.count()).toBe(0);
     expect(await db.savedDishes.count()).toBe(0);

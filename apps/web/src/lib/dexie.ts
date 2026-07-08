@@ -1,14 +1,9 @@
 import 'client-only';
 import Dexie, { type Table } from 'dexie';
-import type { DishRecommendationCard, LanguageCode, LocalUserProfile, QuestionCard } from '@safebite/domain';
+import type { AllergyCard, DishRecommendationCard, LocalUserProfile, QuestionCard } from '@safebite/domain';
 
-export interface StoredAllergyCard {
-  id: string;
-  profileId: string;
-  language: LanguageCode;
-  text: Record<LanguageCode, string>;
-  updatedAt: string;
-}
+// Structured allergy-card snapshot (bilingual entries resolved at save time for offline).
+export type StoredAllergyCard = AllergyCard;
 
 export interface StoredQuestionCard extends QuestionCard {
   id: string;

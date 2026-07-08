@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
+import { Providers } from '@/components/providers';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
 
@@ -37,7 +38,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
