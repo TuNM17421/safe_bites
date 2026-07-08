@@ -15,17 +15,17 @@ export const evidenceTypeSchema = z.enum([
 
 const bilingualSchema = z.object({ en: z.string(), vi: z.string() });
 
+export const allergyEntrySchema = z.object({
+  allergenId: z.string(),
+  severity: severitySchema,
+  crossContactSensitive: z.union([z.boolean(), z.literal('not_sure')]),
+});
+
 export const localUserProfileSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
   selectedProfileIds: z.array(z.string()),
-  allergies: z.array(
-    z.object({
-      allergenId: z.string(),
-      severity: severitySchema,
-      crossContactSensitive: z.union([z.boolean(), z.literal('not_sure')]),
-    }),
-  ),
+  allergies: z.array(allergyEntrySchema),
   language: languageCodeSchema,
   destinationCity: z.string(),
   safetyAcceptedAt: z.string(),
@@ -69,4 +69,30 @@ export const questionCardInputSchema = z.object({
   ),
   targetLanguage: languageCodeSchema,
   dishName: bilingualSchema.optional(),
+});
+
+// HTTP request bodies (§9.5 / §9.6). The `profile` is a partial LocalUserProfile — the
+// route fills the remaining fields. Array caps bound the recommendation/card work.
+export const recommendationRequestSchema = z.object({
+  city: z.string().min(1),
+  language: languageCodeSchema.default('en'),
+  profile: z.object({
+    id: z.string().default('local'),
+    selectedProfileIds: z.array(z.string()).max(50).default([]),
+    allergies: z.array(allergyEntrySchema).max(50).default([]),
+    destinationCity: z.string().optional(),
+  }),
+});
+
+export const questionCardRequestSchema = z.object({
+  profile: z.object({
+    id: z.string().default('local'),
+    selectedProfileIds: z.array(z.string()).max(50).default([]),
+    allergies: z.array(allergyEntrySchema).max(50).default([]),
+    language: languageCodeSchema.default('en'),
+    destinationCity: z.string().optional(),
+  }),
+  dishId: z.string().optional(),
+  targetLanguage: languageCodeSchema,
+  offlineCache: z.boolean().optional(),
 });

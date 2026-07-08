@@ -39,6 +39,9 @@ __pycache__/
 # local-only docker overrides
 docker-compose.override.yml
 
+# stray OSM fetch output written to repo root (kit outputs are tracked separately)
+/outputs/
+
 # misc
 *.log
 .DS_Store

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { z } from 'zod';
 
 /** Uniform API envelope for every `/api` response (spec §9). */
 export interface ApiResponse<T> {
@@ -43,4 +44,37 @@ export function apiError(
     },
   };
   return NextResponse.json(body, { status: opts?.status ?? 400 });
+}
+
+export type Parsed<T> = { ok: true; data: T } | { ok: false; response: NextResponse };
+
+/** Validate a JSON request body against a Zod schema; returns a 400 envelope on failure. */
+export async function parseBody<S extends z.ZodTypeAny>(req: Request, schema: S): Promise<Parsed<z.infer<S>>> {
+  let json: unknown;
+  try {
+    json = await req.json();
+  } catch {
+    return { ok: false, response: apiError('VALIDATION_ERROR', 'Invalid JSON body.', { status: 400 }) };
+  }
+  const result = schema.safeParse(json);
+  if (!result.success) {
+    return {
+      ok: false,
+      response: apiError('VALIDATION_ERROR', 'Invalid request body.', { status: 400, details: result.error.flatten() }),
+    };
+  }
+  return { ok: true, data: result.data };
+}
+
+/** Validate URL query params against a Zod schema; returns a 400 envelope on failure. */
+export function parseQuery<S extends z.ZodTypeAny>(url: string, schema: S): Parsed<z.infer<S>> {
+  const params = Object.fromEntries(new URL(url).searchParams);
+  const result = schema.safeParse(params);
+  if (!result.success) {
+    return {
+      ok: false,
+      response: apiError('VALIDATION_ERROR', 'Invalid query parameters.', { status: 400, details: result.error.flatten() }),
+    };
+  }
+  return { ok: true, data: result.data };
 }

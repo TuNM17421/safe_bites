@@ -21,7 +21,7 @@
 ## Overview
 
 - **Priority:** P0 (blocks all Phase 1 UI data fetching)
-- **Current status:** Not started
+- **Current status:** ✅ Done — verified 2026-07-08 with a full curl matrix against the seeded DB. All 7 routes return the envelope; `/dishes` confidence serializes as a number; missing `city` → 400, missing dish → 404. Recommendations group + summary (sum == total); the **soy** coverage-gap test returns 29× `unknown`, 0× `suitable` (invariant holds end-to-end). Question card matches §15 byte-for-byte (EN/VI). typecheck + lint + copy-check clean. Deviations/notes: (1) engine fn is `evaluateDishes` (not `assessDish`); (2) added `recommendationRequestSchema`/`questionCardRequestSchema` + `allergyEntrySchema` to `@safebite/domain`; (3) **enriched `ALLERGEN_CATALOG` with bilingual aliases** + lowercase allergen names in the question card so the API card is useful and matches §15 — seed now writes `Allergen.aliases*`; (4) `parseBody`/`parseQuery` use `z.infer<S>` so Zod `.default()` output types resolve. **Operational:** seed dishes are `needs_review`; recommendations/`GET dishes` (default `approved`) return empty until an operator/admin approves them (Phase 12) — approved manually for the smoke test.
 - **Brief description:** Implement the seven public read/compute route handlers under `apps/web/src/app/api/v1/` plus `/api/health` glue. Every handler validates input with Zod, returns the `ApiResponse<T>` envelope, serializes Prisma `Decimal` to plain numbers, and delegates all safety logic to `@safebite/domain`. Server-first (route handlers are server code; no `'use client'`). Admin routes are explicitly excluded (Phase 12).
 
 ## Key Insights
@@ -129,18 +129,18 @@ Route handler (server)
 
 ## Todo List
 
-- [ ] `lib/api-response.ts`: `ok` / `fail` / `parseJson` / `parseQuery` helpers finalized
-- [ ] `lib/serializers.ts`: dish/allergen/template DTO mappers + `mapRisksToFacts` (Decimal→number) + `statusToGroupKey`
-- [ ] `GET /api/v1/client-config` from env
-- [ ] `GET /api/v1/profile-templates`
-- [ ] `GET /api/v1/allergens`
-- [ ] `GET /api/v1/dishes` with `city` + `review_status` Zod query validation
-- [ ] `GET /api/v1/dishes/[dishId]` with 404
-- [ ] `POST /api/v1/recommendations/dishes` calling risk engine, grouped + summary
-- [ ] `POST /api/v1/question-cards` calling `buildQuestionCard` (deterministic EN/VI)
-- [ ] Confirm domain Zod request schemas exist/exported (`packages/domain/src/schemas.ts`)
-- [ ] All routes `runtime='nodejs'` where DB-touching; envelope on success + error
-- [ ] `pnpm copy:check` passes on new files; `pnpm typecheck` clean
+- [x] `lib/api-response.ts`: `ok` / `fail` / `parseJson` / `parseQuery` helpers finalized
+- [x] `lib/serializers.ts`: dish/allergen/template DTO mappers + `mapRisksToFacts` (Decimal→number) + `statusToGroupKey`
+- [x] `GET /api/v1/client-config` from env
+- [x] `GET /api/v1/profile-templates`
+- [x] `GET /api/v1/allergens`
+- [x] `GET /api/v1/dishes` with `city` + `review_status` Zod query validation
+- [x] `GET /api/v1/dishes/[dishId]` with 404
+- [x] `POST /api/v1/recommendations/dishes` calling risk engine, grouped + summary
+- [x] `POST /api/v1/question-cards` calling `buildQuestionCard` (deterministic EN/VI)
+- [x] Confirm domain Zod request schemas exist/exported (`packages/domain/src/schemas.ts`)
+- [x] All routes `runtime='nodejs'` where DB-touching; envelope on success + error
+- [x] `pnpm copy:check` passes on new files; `pnpm typecheck` clean
 
 ## Success Criteria
 

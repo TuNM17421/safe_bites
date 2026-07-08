@@ -5,6 +5,8 @@ export interface AllergenRow {
   id: string;
   nameEn: string;
   nameVi: string;
+  aliasesEn: string[];
+  aliasesVi: string[];
 }
 
 // Reuse the canonical catalog (single source of truth in @safebite/domain) rather than
@@ -22,12 +24,18 @@ function titleCase(id: string): string {
 
 /** Canonical catalog unioned with any extra allergen tags observed in ingredients. */
 export function deriveAllergenRows(extraTags: string[]): AllergenRow[] {
-  const rows: AllergenRow[] = ALLERGEN_CATALOG.map((a) => ({ id: a.id, nameEn: a.nameEn, nameVi: a.nameVi }));
+  const rows: AllergenRow[] = ALLERGEN_CATALOG.map((a) => ({
+    id: a.id,
+    nameEn: a.nameEn,
+    nameVi: a.nameVi,
+    aliasesEn: [...a.aliasesEn],
+    aliasesVi: [...a.aliasesVi],
+  }));
   const known = new Set(rows.map((r) => r.id));
   for (const tag of extraTags) {
     if (tag && !known.has(tag)) {
       known.add(tag);
-      rows.push({ id: tag, nameEn: titleCase(tag), nameVi: titleCase(tag) });
+      rows.push({ id: tag, nameEn: titleCase(tag), nameVi: titleCase(tag), aliasesEn: [], aliasesVi: [] });
     }
   }
   return rows;
@@ -35,11 +43,8 @@ export function deriveAllergenRows(extraTags: string[]): AllergenRow[] {
 
 export async function upsertAllergens(db: Prisma.TransactionClient, rows: AllergenRow[]): Promise<number> {
   for (const a of rows) {
-    await db.allergen.upsert({
-      where: { id: a.id },
-      update: { nameEn: a.nameEn, nameVi: a.nameVi },
-      create: { id: a.id, nameEn: a.nameEn, nameVi: a.nameVi },
-    });
+    const data = { nameEn: a.nameEn, nameVi: a.nameVi, aliasesEn: a.aliasesEn, aliasesVi: a.aliasesVi };
+    await db.allergen.upsert({ where: { id: a.id }, update: data, create: { id: a.id, ...data } });
   }
   return rows.length;
 }

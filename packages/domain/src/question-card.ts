@@ -45,7 +45,8 @@ export function buildQuestionCard(input: QuestionCardInput): QuestionCard {
       Boolean(x.detail),
     );
 
-  const names = selected.map((s) => (lang === 'vi' ? s.detail.nameVi : s.detail.nameEn));
+  // Allergen names are common nouns used mid-sentence -> lowercase for grammatical copy.
+  const names = selected.map((s) => (lang === 'vi' ? s.detail.nameVi : s.detail.nameEn).toLowerCase());
   const containsTerms = distinct(
     selected.flatMap((s) => {
       const aliases = lang === 'vi' ? s.detail.aliasesVi : s.detail.aliasesEn;

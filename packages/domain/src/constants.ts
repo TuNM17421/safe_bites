@@ -113,21 +113,70 @@ export const NO_CONSTRAINT_COPY: Copy = {
 };
 
 // Canonical allergen catalog — the single source of truth for the Allergen table
-// (imported by prisma/seed.ts) and onboarding. Includes tree-nut/soy even though no
-// seed dish carries their risk columns, so those resolve to an honest Unknown.
+// (imported by prisma/seed.ts + the seed importer) and onboarding. Includes tree-nut/soy
+// even though no seed dish carries their risk columns, so those resolve to an honest
+// Unknown. Aliases drive the bilingual question-card "contains" question.
 export const ALLERGEN_CATALOG = [
-  { id: 'peanut', nameEn: 'Peanut', nameVi: 'Đậu phộng', kind: 'allergen' },
-  { id: 'treenut', nameEn: 'Tree nut', nameVi: 'Hạt cây', kind: 'allergen' },
-  { id: 'shellfish', nameEn: 'Shellfish', nameVi: 'Hải sản giáp xác', kind: 'allergen' },
-  { id: 'fish', nameEn: 'Fish', nameVi: 'Cá', kind: 'allergen' },
-  { id: 'wheat', nameEn: 'Wheat (gluten)', nameVi: 'Lúa mì (gluten)', kind: 'allergen' },
-  { id: 'milk', nameEn: 'Milk', nameVi: 'Sữa', kind: 'allergen' },
-  { id: 'egg', nameEn: 'Egg', nameVi: 'Trứng', kind: 'allergen' },
-  { id: 'soy', nameEn: 'Soy', nameVi: 'Đậu nành', kind: 'allergen' },
-  { id: 'sesame', nameEn: 'Sesame', nameVi: 'Vừng (mè)', kind: 'allergen' },
-  { id: 'pork', nameEn: 'Pork', nameVi: 'Thịt heo', kind: 'constraint' },
-  { id: 'beef', nameEn: 'Beef', nameVi: 'Thịt bò', kind: 'constraint' },
-  { id: 'alcohol', nameEn: 'Alcohol', nameVi: 'Rượu/cồn', kind: 'constraint' },
-  { id: 'high_calorie', nameEn: 'High calorie', nameVi: 'Nhiều calo', kind: 'constraint' },
-  { id: 'strong_smell', nameEn: 'Strong smell', nameVi: 'Mùi mạnh', kind: 'constraint' },
+  {
+    id: 'peanut', nameEn: 'Peanut', nameVi: 'Đậu phộng', kind: 'allergen',
+    aliasesEn: ['peanuts', 'peanut oil', 'peanut butter', 'peanut sauce'],
+    aliasesVi: ['đậu phộng', 'dầu đậu phộng', 'bơ đậu phộng', 'sốt đậu phộng'],
+  },
+  {
+    id: 'treenut', nameEn: 'Tree nut', nameVi: 'Hạt cây', kind: 'allergen',
+    aliasesEn: ['tree nuts', 'cashew', 'almond', 'walnut'],
+    aliasesVi: ['hạt cây', 'hạt điều', 'hạnh nhân', 'óc chó'],
+  },
+  {
+    id: 'shellfish', nameEn: 'Shellfish', nameVi: 'Hải sản giáp xác', kind: 'allergen',
+    aliasesEn: ['shrimp', 'crab', 'prawn', 'shrimp paste'],
+    aliasesVi: ['tôm', 'cua', 'ghẹ', 'mắm tôm'],
+  },
+  {
+    id: 'fish', nameEn: 'Fish', nameVi: 'Cá', kind: 'allergen',
+    aliasesEn: ['fish', 'fish sauce', 'anchovy'],
+    aliasesVi: ['cá', 'nước mắm', 'cá cơm'],
+  },
+  {
+    id: 'wheat', nameEn: 'Wheat (gluten)', nameVi: 'Lúa mì (gluten)', kind: 'allergen',
+    aliasesEn: ['wheat', 'gluten', 'flour', 'bread'],
+    aliasesVi: ['lúa mì', 'gluten', 'bột mì', 'bánh mì'],
+  },
+  {
+    id: 'milk', nameEn: 'Milk', nameVi: 'Sữa', kind: 'allergen',
+    aliasesEn: ['milk', 'dairy', 'butter', 'cheese'],
+    aliasesVi: ['sữa', 'bơ', 'phô mai'],
+  },
+  {
+    id: 'egg', nameEn: 'Egg', nameVi: 'Trứng', kind: 'allergen',
+    aliasesEn: ['egg', 'eggs', 'mayonnaise'],
+    aliasesVi: ['trứng', 'sốt mayonnaise'],
+  },
+  {
+    id: 'soy', nameEn: 'Soy', nameVi: 'Đậu nành', kind: 'allergen',
+    aliasesEn: ['soy', 'soybean', 'soy sauce', 'tofu'],
+    aliasesVi: ['đậu nành', 'nước tương', 'đậu phụ'],
+  },
+  {
+    id: 'sesame', nameEn: 'Sesame', nameVi: 'Vừng (mè)', kind: 'allergen',
+    aliasesEn: ['sesame', 'sesame oil', 'sesame seeds'],
+    aliasesVi: ['vừng', 'mè', 'dầu mè'],
+  },
+  {
+    id: 'pork', nameEn: 'Pork', nameVi: 'Thịt heo', kind: 'constraint',
+    aliasesEn: ['pork', 'lard', 'ham'],
+    aliasesVi: ['thịt heo', 'mỡ heo', 'giăm bông'],
+  },
+  {
+    id: 'beef', nameEn: 'Beef', nameVi: 'Thịt bò', kind: 'constraint',
+    aliasesEn: ['beef', 'beef broth'],
+    aliasesVi: ['thịt bò', 'nước dùng bò'],
+  },
+  {
+    id: 'alcohol', nameEn: 'Alcohol', nameVi: 'Rượu/cồn', kind: 'constraint',
+    aliasesEn: ['alcohol', 'wine', 'beer', 'rice wine'],
+    aliasesVi: ['rượu', 'bia', 'cồn'],
+  },
+  { id: 'high_calorie', nameEn: 'High calorie', nameVi: 'Nhiều calo', kind: 'constraint', aliasesEn: [], aliasesVi: [] },
+  { id: 'strong_smell', nameEn: 'Strong smell', nameVi: 'Mùi mạnh', kind: 'constraint', aliasesEn: [], aliasesVi: [] },
 ] as const;
