@@ -126,7 +126,12 @@ export const restaurantCacheRepo = {
     });
   },
   async loadSearch(city: string, profileFingerprint: string): Promise<CachedRestaurantSearch | undefined> {
-    return db.lastRestaurantSearch.get(`${city}:${profileFingerprint}`);
+    const row = await db.lastRestaurantSearch.get(`${city}:${profileFingerprint}`);
+    if (row && Date.parse(row.expiresAt) < Date.now()) {
+      await db.lastRestaurantSearch.delete(row.cacheKey);
+      return undefined;
+    }
+    return row;
   },
   async saveDetail(idOrSlug: string, profileFingerprint: string, restaurantId: string, payload: unknown): Promise<void> {
     const now = Date.now();
@@ -140,7 +145,12 @@ export const restaurantCacheRepo = {
     });
   },
   async loadDetail(idOrSlug: string, profileFingerprint: string): Promise<CachedRestaurantDetail | undefined> {
-    return db.lastRestaurantDetail.get(`${idOrSlug}:${profileFingerprint}`);
+    const row = await db.lastRestaurantDetail.get(`${idOrSlug}:${profileFingerprint}`);
+    if (row && Date.parse(row.expiresAt) < Date.now()) {
+      await db.lastRestaurantDetail.delete(row.cacheKey);
+      return undefined;
+    }
+    return row;
   },
 };
 

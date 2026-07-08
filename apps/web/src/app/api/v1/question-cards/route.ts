@@ -39,7 +39,11 @@ export async function POST(req: Request) {
   // precedence over a mapped dish (§15 menu context). Name lookup only — no allergy data.
   let dishName: { en: string; vi: string } | undefined;
   if (menuItemId) {
-    const item = await prisma.menuItem.findUnique({ where: { id: menuItemId } });
+    // Only resolve names from menu items on APPROVED restaurants (never surface scraped names
+    // from unreviewed rows).
+    const item = await prisma.menuItem.findFirst({
+      where: { id: menuItemId, restaurant: { reviewStatus: 'approved' } },
+    });
     if (item) dishName = { en: item.nameEn ?? item.rawName, vi: item.nameVi ?? item.rawName };
   }
   if (!dishName && dishId) {

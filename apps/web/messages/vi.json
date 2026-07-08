@@ -213,6 +213,7 @@
     "showAllergyCard": "Xem thẻ dị ứng",
     "loading": "Đang tải nhà hàng…",
     "resultCount": "{count, plural, other {# nhà hàng}}",
+    "viewToggle": "Chế độ xem",
     "viewList": "Danh sách",
     "viewMap": "Bản đồ",
     "mapComingSoon": "Chế độ bản đồ sắp có",

@@ -213,6 +213,7 @@
     "showAllergyCard": "Show allergy card",
     "loading": "Loading restaurants…",
     "resultCount": "{count, plural, one {# restaurant} other {# restaurants}}",
+    "viewToggle": "View mode",
     "viewList": "List",
     "viewMap": "Map",
     "mapComingSoon": "Map view is coming",

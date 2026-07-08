@@ -80,7 +80,7 @@ export function RestaurantGuide() {
       </p>
       <LocationPermissionPanel status={geo.status} onRequest={geo.request} onClear={geo.clear} />
       <RestaurantFilterBar filters={filters} onChange={setFilters} showNearest={Boolean(geo.location)} />
-      <div className="inline-flex self-start rounded-full border border-sb-border p-0.5">
+      <div role="group" aria-label={t('viewToggle')} className="inline-flex self-start rounded-full border border-sb-border p-0.5">
         {(['list', 'map'] as const).map((v) => (
           <button
             key={v}

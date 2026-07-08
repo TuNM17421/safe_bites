@@ -37,8 +37,8 @@ export function LocationPermissionPanel({
   return (
     <div className="rounded-sb-md border border-sb-border bg-sb-surface-2 p-3">
       <p className="text-sb-body-s text-sb-muted">{t('explanation')}</p>
-      {status === 'denied' ? <p className="mt-1 text-xs text-sb-status-ask-first-fg">{t('denied')}</p> : null}
-      {status === 'unsupported' ? <p className="mt-1 text-xs text-sb-muted">{t('unsupported')}</p> : null}
+      {status === 'denied' ? <p role="alert" className="mt-1 text-xs text-sb-status-ask-first-fg">{t('denied')}</p> : null}
+      {status === 'unsupported' ? <p role="alert" className="mt-1 text-xs text-sb-muted">{t('unsupported')}</p> : null}
       <button
         type="button"
         onClick={onRequest}
