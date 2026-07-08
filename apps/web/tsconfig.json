@@ -14,5 +14,6 @@
     }
   },
   "include": ["next-env.d.ts", "src", "scripts", "prisma", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "comment": "service-worker.ts targets the WebWorker lib (not DOM) and is compiled separately by @serwist/next.",
+  "exclude": ["node_modules", "src/lib/service-worker.ts"]
 }

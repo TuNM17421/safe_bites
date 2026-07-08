@@ -30,8 +30,8 @@ Allowed statuses only: `Suitable · Ask First · Risky · Avoid · Unknown`. **U
 | 04 | [Seed-kit importer](phase-04-seed-kit-importer.md) | 03 | BOM-safe upsert profiles/ingredients/dishes/restaurants; derive allergens; 10 risk cols → DishAllergenRisk; ImportRun | ✅ Done (2026-07-08) |
 | 05 | [Domain: risk engine + question card](phase-05-domain-risk-engine-and-question-card.md) | 01 | Pure `@safebite/domain`: types, Zod, deterministic engine (unknown-never-suitable), bilingual card, §8.5 tests | ✅ Done (2026-07-08) |
 | 06 | [API endpoints `/api/v1`](phase-06-api-endpoints.md) | 03, 05 | 7 Zod-validated route handlers delegating to domain; envelope; Decimal→number | ✅ Done (2026-07-08) |
-| 07 | [PWA shell & offline](phase-07-pwa-shell-and-offline.md) | 02 | Manifest, Serwist SW (never-cache recommendations), offline.html, app-shell chrome, `/home` | ☐ |
-| 08 | [IndexedDB local storage (Dexie)](phase-08-indexeddb-local-storage.md) | 02 | `safebite_pwa_v1` 5 tables + save/load/delete/clear repos; do-not-store guard | ☐ |
+| 07 | [PWA shell & offline](phase-07-pwa-shell-and-offline.md) | 02 | Manifest, Serwist SW (never-cache recommendations), offline.html, app-shell chrome, `/home` | ✅ Done (2026-07-08) |
+| 08 | [IndexedDB local storage (Dexie)](phase-08-indexeddb-local-storage.md) | 02 | `safebite_pwa_v1` 5 tables + save/load/delete/clear repos; do-not-store guard | ✅ Done (2026-07-08) |
 | 09 | [Onboarding, profile & allergy card](phase-09-onboarding-profile-and-allergy-card.md) | 05, 06, 08 | Local-first wizard + offline allergy card + profile; honest Unknown; no profile in URL | ☐ |
 | 10 | [Dish guide UI](phase-10-dish-guide-ui.md) | 06, 08, 09 | `/dishes` + detail; grouped status cards; EN/VI toggle; offline saved-dishes fallback | ☐ |
 | 11 | [Question card UI](phase-11-question-card-ui.md) | 05, 06, 08, 09 | `/question-card`; target-lang toggle; large-text/fullscreen; copy; save + offline | ☐ |

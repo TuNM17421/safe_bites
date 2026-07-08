@@ -20,5 +20,35 @@
     "risky": "Risky",
     "avoid": "Avoid",
     "unknown": "Unknown"
+  },
+  "nav": {
+    "home": "Home",
+    "dishes": "Dishes",
+    "allergyCard": "Allergy card",
+    "questionCard": "Question card",
+    "profile": "Profile"
+  },
+  "home": {
+    "destinationCity": "Destination city",
+    "noProfile": "No profile yet. Create one to see dish risks for your allergies.",
+    "startProfile": "Start allergy profile",
+    "browseDishes": "Browse local dishes",
+    "showAllergyCard": "Show allergy card",
+    "generateQuestionCard": "Generate question card",
+    "offlineIndicator": "You are offline — showing saved information only.",
+    "restaurantSearchComingLater": "Restaurant search — coming later"
+  },
+  "offline": {
+    "title": "You are offline",
+    "notice": "You are offline. Showing saved information only. Please confirm with restaurant staff before ordering.",
+    "retry": "Retry",
+    "savedAllergyCard": "Open saved allergy card",
+    "lastQuestionCard": "Open last question card"
+  },
+  "install": {
+    "title": "Add SafeBite to your home screen",
+    "body": "Install the app for quick, offline access to your allergy card and question cards.",
+    "install": "Install",
+    "dismiss": "Not now"
   }
 }

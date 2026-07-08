@@ -5,6 +5,9 @@ node_modules/
 # builds / caches
 .next/
 next-env.d.ts
+# Serwist build output
+apps/web/public/sw.js
+apps/web/public/sw*.js.map
 dist/
 build/
 out/

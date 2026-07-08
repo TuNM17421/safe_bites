@@ -20,5 +20,35 @@
     "risky": "Rủi ro",
     "avoid": "Nên tránh",
     "unknown": "Chưa rõ"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "dishes": "Món ăn",
+    "allergyCard": "Thẻ dị ứng",
+    "questionCard": "Thẻ câu hỏi",
+    "profile": "Hồ sơ"
+  },
+  "home": {
+    "destinationCity": "Thành phố đến",
+    "noProfile": "Chưa có hồ sơ. Tạo hồ sơ để xem rủi ro món ăn theo dị ứng của bạn.",
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "browseDishes": "Xem món ăn địa phương",
+    "showAllergyCard": "Xem thẻ dị ứng",
+    "generateQuestionCard": "Tạo thẻ câu hỏi",
+    "offlineIndicator": "Bạn đang ngoại tuyến — chỉ hiển thị thông tin đã lưu.",
+    "restaurantSearchComingLater": "Tìm nhà hàng — sắp có"
+  },
+  "offline": {
+    "title": "Bạn đang ngoại tuyến",
+    "notice": "Bạn đang ngoại tuyến. Chỉ hiển thị thông tin đã lưu. Vui lòng xác nhận với nhân viên nhà hàng trước khi gọi món.",
+    "retry": "Thử lại",
+    "savedAllergyCard": "Mở thẻ dị ứng đã lưu",
+    "lastQuestionCard": "Mở thẻ câu hỏi gần nhất"
+  },
+  "install": {
+    "title": "Thêm SafeBite vào màn hình chính",
+    "body": "Cài ứng dụng để truy cập nhanh, ngoại tuyến thẻ dị ứng và thẻ câu hỏi.",
+    "install": "Cài đặt",
+    "dismiss": "Để sau"
   }
 }

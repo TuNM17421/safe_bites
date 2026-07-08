@@ -12,6 +12,7 @@ export default [
       'docs/**',
       '.claude/**',
       '.idea/**',
+      'apps/web/public/**',
     ],
   },
   ...base,

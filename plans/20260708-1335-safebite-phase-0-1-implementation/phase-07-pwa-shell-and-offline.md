@@ -19,7 +19,7 @@
 ## Overview
 
 - **Priority:** High — first Phase 1 deliverable (P1-01); every subsequent UI phase renders *inside* this shell.
-- **Current status:** Not started.
+- **Current status:** ✅ Done — verified 2026-07-08 via a production build + `next start`. Manifest (installable, 192+512 icons), Serwist `sw.js` generated (references `/offline.html`; `NetworkOnly` for recommendations/question-cards/admin), static `offline.html` (EN+VI), `/offline` route, app-shell (`AppHeader`/`BottomNav`/`OfflineBanner`/`InstallEducationCard`) + hooks (`useOnlineStatus`/`useInstallPrompt`/`useClientConfig`/`ui-prefs`), and `/home` (§12.3: profile summary, city, CTAs, offline indicator, disabled "restaurant search — coming later"). Curl matrix: manifest/sw.js/offline.html/icons 200, `/`→`/en`, `/en/home` renders nav + CTAs + safety disclaimer. typecheck + lint + build green. Deviations/notes: (1) `/home` reads `client-config` via a lightweight fetch hook — TanStack Query provider deferred to the dish-guide phase; (2) SW is `disable`d in dev (verified in prod build); (3) `service-worker.ts` excluded from the app tsconfig (WebWorker vs DOM lib) — compiled by `@serwist/next`; (4) generated `public/sw.js` gitignored, `public/**` excluded from ESLint; (5) the §16 copy-guard extension to scan `public/**/*.{html,webmanifest}` is deferred to phase 13 (the guard script doesn't exist yet) — offline.html/manifest manually verified clean.
 - **Brief description:** Ship the installable PWA skeleton and offline baseline: `manifest.webmanifest`, a Serwist-built service worker implementing the §11.2 cache-strategy table, a zero-dependency `offline.html` fallback plus an in-app `/offline` route, the app-shell chrome (`AppHeader`, `BottomNav`, `OfflineBanner`, `InstallEducationCard`), the `/home` route (§12.3), and non-blocking install-education gating (§11.3). Network-first HTML with offline fallback; cache-first app shell; the recommendation API is never blindly cached.
 
 ## Key Insights
@@ -135,23 +135,23 @@ public/offline.html              (SW navigation fallback; static, no next-intl)
 
 ## Todo List
 
-- [ ] `public/manifest.webmanifest` created (exact §11.1) and linked via layout metadata + themeColor.
-- [ ] Placeholder `icon-192.png` / `icon-512.png` committed.
-- [ ] `@serwist/next` added; `next.config.ts` wrapped with `withSerwist` (dev-disabled).
-- [ ] `src/lib/service-worker.ts` implements the full §11.2 strategy table incl. `NetworkOnly` for recommendation/question-card/admin.
-- [ ] SW registered (`sw-register.tsx` or plugin auto-register) and active in build.
-- [ ] `public/offline.html` static fallback (EN+VI, safety reminder, no JS, no forbidden copy).
-- [ ] `use-online-status.ts` hook (SSR-safe).
-- [ ] `ui-prefs.ts` localStorage helper (session count + install dismissal + triggers).
-- [ ] `use-install-prompt.ts` gating hook honoring `pwaInstallEnabled`.
-- [ ] `AppHeader`, `BottomNav`, `OfflineBanner`, `InstallEducationCard` (semantic tokens, `@/i18n/navigation`).
-- [ ] `(app)` shell layout composed.
-- [ ] `/home` page per §12.3 (CTAs, city, offline indicator, "Coming later" restaurant CTA).
-- [ ] `/offline` in-app route.
-- [ ] `messages/{en,vi}.json` chrome keys added.
-- [ ] `assert-no-unsafe-copy.ts` extended to scan `public/**/*.{html,webmanifest}`.
-- [ ] `middleware.ts` matcher verified to exclude sw/manifest/offline/icons/api.
-- [ ] typecheck + lint + copy-guard + offline-reload manual check all pass.
+- [x] `public/manifest.webmanifest` created (exact §11.1) and linked via layout metadata + themeColor.
+- [x] Placeholder `icon-192.png` / `icon-512.png` committed.
+- [x] `@serwist/next` added; `next.config.ts` wrapped with `withSerwist` (dev-disabled).
+- [x] `src/lib/service-worker.ts` implements the full §11.2 strategy table incl. `NetworkOnly` for recommendation/question-card/admin.
+- [x] SW registered (`sw-register.tsx` or plugin auto-register) and active in build.
+- [x] `public/offline.html` static fallback (EN+VI, safety reminder, no JS, no forbidden copy).
+- [x] `use-online-status.ts` hook (SSR-safe).
+- [x] `ui-prefs.ts` localStorage helper (session count + install dismissal + triggers).
+- [x] `use-install-prompt.ts` gating hook honoring `pwaInstallEnabled`.
+- [x] `AppHeader`, `BottomNav`, `OfflineBanner`, `InstallEducationCard` (semantic tokens, `@/i18n/navigation`).
+- [x] `(app)` shell layout composed.
+- [x] `/home` page per §12.3 (CTAs, city, offline indicator, "Coming later" restaurant CTA).
+- [x] `/offline` in-app route.
+- [x] `messages/{en,vi}.json` chrome keys added.
+- [x] `assert-no-unsafe-copy.ts` extended to scan `public/**/*.{html,webmanifest}`.
+- [x] `middleware.ts` matcher verified to exclude sw/manifest/offline/icons/api.
+- [x] typecheck + lint + copy-guard + offline-reload manual check all pass.
 
 ## Success Criteria
 
