@@ -39,6 +39,7 @@
   "nav": {
     "home": "Home",
     "dishes": "Dishes",
+    "restaurants": "Restaurants",
     "allergyCard": "Allergy card",
     "questionCard": "Question card",
     "profile": "Profile"
@@ -51,7 +52,8 @@
     "showAllergyCard": "Show allergy card",
     "generateQuestionCard": "Generate question card",
     "offlineIndicator": "You are offline — showing saved information only.",
-    "restaurantSearchComingLater": "Restaurant search — coming later",
+    "findFoodNearMe": "Find food near me",
+    "browseRestaurants": "Browse restaurants",
     "welcome": "Welcome to SafeBite",
     "greeting": "Welcome back",
     "greetingNamed": "Hi {name}",
@@ -184,6 +186,121 @@
       "ingredient_question": "Ingredient",
       "cross_contact_question": "Cross-contact",
       "kitchen_check": "Kitchen check"
+    }
+  },
+  "restaurants": {
+    "screenTitle": "Restaurants",
+    "rankedReminder": "Ranked by allergy readiness for your profile. Always confirm with staff before ordering.",
+    "searchPlaceholder": "Search by name",
+    "filterDistrict": "District",
+    "filterCuisine": "Cuisine",
+    "filterSort": "Sort",
+    "allDistricts": "All districts",
+    "allCuisines": "All cuisines",
+    "sort": {
+      "recommended": "Recommended",
+      "nearest": "Nearest",
+      "last_checked": "Last checked",
+      "name": "Name"
+    },
+    "emptyNoProfile": "Create a profile to see restaurant readiness for your allergies.",
+    "startProfile": "Start allergy profile",
+    "emptyNoResults": "No restaurants match your filters yet.",
+    "error": "Could not load restaurants.",
+    "retry": "Retry",
+    "offlineNoSaved": "You are offline and have no saved restaurants.",
+    "showAllergyCard": "Show allergy card",
+    "loading": "Loading restaurants…",
+    "resultCount": "{count, plural, one {# restaurant} other {# restaurants}}"
+  },
+  "restaurantCard": {
+    "viewDetails": "View details",
+    "readinessLabel": "Allergy readiness",
+    "confidenceLabel": "Confidence",
+    "menuDataNotAvailable": "Menu allergy data not available yet",
+    "menuItems": "{count, plural, one {# menu item} other {# menu items}}",
+    "stale": "May be out of date",
+    "distanceMeters": "{meters} m",
+    "distanceKm": "{km} km",
+    "readiness": {
+      "A": "Ready",
+      "B": "Some options",
+      "C": "Not enough data",
+      "D": "Higher risk",
+      "E": "Avoid"
+    },
+    "verification": {
+      "unverified": "Unverified",
+      "restaurant_contacted": "Restaurant contacted",
+      "restaurant_confirmed": "Restaurant confirmed",
+      "admin_verified": "Verified by admin",
+      "expired": "Verification expired",
+      "flagged": "Flagged"
+    },
+    "menuStatus": {
+      "not_observed": "No menu observed",
+      "menu_url_available": "Menu link available",
+      "observed_not_verified": "Menu observed, not verified",
+      "restaurant_submitted": "Restaurant-submitted menu",
+      "admin_verified": "Menu verified by admin"
+    },
+    "source": {
+      "openstreetmap": "Discovery data only",
+      "openmapvn": "Discovery data only",
+      "manual_seed": "Curated",
+      "admin_manual": "Admin",
+      "restaurant_submitted": "Restaurant",
+      "menu_observed": "Observed",
+      "user_submitted": "User report",
+      "expert_review": "Expert review",
+      "admin_verified": "Admin verified",
+      "google_places": "Google",
+      "foursquare": "Foursquare",
+      "dish_inferred": "Based on a similar dish",
+      "official_menu": "Official menu",
+      "user_report": "User report",
+      "engine": "Not enough data"
+    }
+  },
+  "restaurantDetail": {
+    "back": "Back to restaurants",
+    "emptyNoProfile": "Create a profile to see this restaurant's readiness for your allergies.",
+    "startProfile": "Start allergy profile",
+    "offline": "You are offline. Restaurant details need a connection.",
+    "readinessTitle": "Allergy readiness for your profile",
+    "menuTitle": "Menu items",
+    "noMenu": "This restaurant has no menu items yet. Ask staff about ingredients and cross-contact before ordering.",
+    "metadataTitle": "Details",
+    "phone": "Phone",
+    "website": "Website",
+    "menuLink": "Menu",
+    "openingHours": "Opening hours",
+    "locationTitle": "Location",
+    "openInMap": "Open in OpenStreetMap",
+    "sourceTitle": "Source & verification",
+    "loading": "Loading restaurant…",
+    "notFound": "Restaurant not found.",
+    "error": "Could not load this restaurant.",
+    "back2list": "Browse restaurants"
+  },
+  "menuItemCard": {
+    "matchedDish": "Matched dish",
+    "reason": "Reason",
+    "action": "Action",
+    "sharedCookware": "Shared cookware",
+    "sharedFryer": "Shared fryer",
+    "canCustomize": "Can customize",
+    "askAboutItem": "Ask about this item",
+    "lastVerified": "Verified {date}",
+    "stale": "May be out of date",
+    "sharedValue": {
+      "unknown": "Unknown",
+      "no": "No",
+      "yes": "Yes",
+      "possible": "Possible",
+      "not_applicable": "Not applicable",
+      "true": "Yes",
+      "false": "No"
     }
   }
 }

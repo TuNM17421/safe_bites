@@ -1,5 +1,5 @@
 'use client';
-import { IdCard, MapPin, MessageCircle, UtensilsCrossed, Wifi, WifiOff } from 'lucide-react';
+import { IdCard, MapPin, MessageCircle, Store, UtensilsCrossed, Wifi, WifiOff } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useOnlineStatus } from '@/components/app-shell/use-online-status';
 import { SkeletonCard } from '@/components/common/skeleton-card';
@@ -71,7 +71,15 @@ export default function HomePage() {
       <div className="flex flex-col gap-3">
         {profile ? (
           <>
-            <Link href="/dishes" className={primaryBtn}>
+            <Link href="/restaurants" className={primaryBtn}>
+              <MapPin aria-hidden className="size-5" />
+              {t('findFoodNearMe')}
+            </Link>
+            <Link href="/restaurants" className={ghostBtn}>
+              <Store aria-hidden className="size-5" />
+              {t('browseRestaurants')}
+            </Link>
+            <Link href="/dishes" className={ghostBtn}>
               <UtensilsCrossed aria-hidden className="size-5" />
               {t('browseDishes')}
             </Link>
@@ -83,15 +91,6 @@ export default function HomePage() {
               <MessageCircle aria-hidden className="size-5" />
               {t('generateQuestionCard')}
             </Link>
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              className="flex min-h-sb-tap w-full cursor-not-allowed items-center justify-center gap-2 rounded-sb-sm bg-sb-primary px-4 text-sb-body font-bold text-sb-primary-foreground opacity-50"
-            >
-              <MapPin aria-hidden className="size-5" />
-              {t('restaurantSearchComingLater')}
-            </button>
           </>
         ) : (
           <Link href="/onboarding" className={primaryBtn}>

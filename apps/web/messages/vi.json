@@ -39,6 +39,7 @@
   "nav": {
     "home": "Trang chủ",
     "dishes": "Món ăn",
+    "restaurants": "Nhà hàng",
     "allergyCard": "Thẻ dị ứng",
     "questionCard": "Thẻ câu hỏi",
     "profile": "Hồ sơ"
@@ -51,7 +52,8 @@
     "showAllergyCard": "Xem thẻ dị ứng",
     "generateQuestionCard": "Tạo thẻ câu hỏi",
     "offlineIndicator": "Bạn đang ngoại tuyến — chỉ hiển thị thông tin đã lưu.",
-    "restaurantSearchComingLater": "Tìm nhà hàng — sắp có",
+    "findFoodNearMe": "Tìm đồ ăn gần đây",
+    "browseRestaurants": "Xem nhà hàng",
     "welcome": "Chào mừng đến với SafeBite",
     "greeting": "Chào mừng trở lại",
     "greetingNamed": "Chào {name}",
@@ -184,6 +186,121 @@
       "ingredient_question": "Thành phần",
       "cross_contact_question": "Lây nhiễm chéo",
       "kitchen_check": "Hỏi bếp"
+    }
+  },
+  "restaurants": {
+    "screenTitle": "Nhà hàng",
+    "rankedReminder": "Xếp hạng theo mức độ sẵn sàng cho hồ sơ dị ứng của bạn. Luôn xác nhận với nhân viên trước khi gọi món.",
+    "searchPlaceholder": "Tìm theo tên",
+    "filterDistrict": "Quận",
+    "filterCuisine": "Ẩm thực",
+    "filterSort": "Sắp xếp",
+    "allDistricts": "Tất cả quận",
+    "allCuisines": "Tất cả ẩm thực",
+    "sort": {
+      "recommended": "Đề xuất",
+      "nearest": "Gần nhất",
+      "last_checked": "Kiểm tra gần đây",
+      "name": "Tên"
+    },
+    "emptyNoProfile": "Tạo hồ sơ để xem mức độ sẵn sàng của nhà hàng theo dị ứng của bạn.",
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "emptyNoResults": "Chưa có nhà hàng nào khớp với bộ lọc của bạn.",
+    "error": "Không thể tải danh sách nhà hàng.",
+    "retry": "Thử lại",
+    "offlineNoSaved": "Bạn đang ngoại tuyến và chưa có nhà hàng đã lưu.",
+    "showAllergyCard": "Xem thẻ dị ứng",
+    "loading": "Đang tải nhà hàng…",
+    "resultCount": "{count, plural, other {# nhà hàng}}"
+  },
+  "restaurantCard": {
+    "viewDetails": "Xem chi tiết",
+    "readinessLabel": "Mức độ sẵn sàng",
+    "confidenceLabel": "Độ tin cậy",
+    "menuDataNotAvailable": "Chưa có dữ liệu dị ứng từ thực đơn",
+    "menuItems": "{count, plural, other {# món}}",
+    "stale": "Có thể đã lỗi thời",
+    "distanceMeters": "{meters} m",
+    "distanceKm": "{km} km",
+    "readiness": {
+      "A": "Sẵn sàng",
+      "B": "Có lựa chọn",
+      "C": "Chưa đủ dữ liệu",
+      "D": "Rủi ro cao hơn",
+      "E": "Nên tránh"
+    },
+    "verification": {
+      "unverified": "Chưa xác minh",
+      "restaurant_contacted": "Đã liên hệ nhà hàng",
+      "restaurant_confirmed": "Nhà hàng xác nhận",
+      "admin_verified": "Quản trị viên xác minh",
+      "expired": "Xác minh hết hạn",
+      "flagged": "Đã gắn cờ"
+    },
+    "menuStatus": {
+      "not_observed": "Chưa ghi nhận thực đơn",
+      "menu_url_available": "Có liên kết thực đơn",
+      "observed_not_verified": "Đã ghi nhận, chưa xác minh",
+      "restaurant_submitted": "Thực đơn do nhà hàng cung cấp",
+      "admin_verified": "Thực đơn được quản trị viên xác minh"
+    },
+    "source": {
+      "openstreetmap": "Chỉ là dữ liệu tham khảo",
+      "openmapvn": "Chỉ là dữ liệu tham khảo",
+      "manual_seed": "Tuyển chọn",
+      "admin_manual": "Quản trị viên",
+      "restaurant_submitted": "Nhà hàng",
+      "menu_observed": "Đã ghi nhận",
+      "user_submitted": "Người dùng",
+      "expert_review": "Chuyên gia",
+      "admin_verified": "Quản trị viên xác minh",
+      "google_places": "Google",
+      "foursquare": "Foursquare",
+      "dish_inferred": "Dựa trên món tương tự",
+      "official_menu": "Thực đơn chính thức",
+      "user_report": "Người dùng báo cáo",
+      "engine": "Chưa đủ dữ liệu"
+    }
+  },
+  "restaurantDetail": {
+    "back": "Quay lại nhà hàng",
+    "emptyNoProfile": "Tạo hồ sơ để xem mức độ sẵn sàng của nhà hàng này theo dị ứng của bạn.",
+    "startProfile": "Tạo hồ sơ dị ứng",
+    "offline": "Bạn đang ngoại tuyến. Chi tiết nhà hàng cần có kết nối.",
+    "readinessTitle": "Mức độ sẵn sàng cho hồ sơ của bạn",
+    "menuTitle": "Món trong thực đơn",
+    "noMenu": "Nhà hàng này chưa có món nào trong thực đơn. Hãy hỏi nhân viên về thành phần và nguy cơ dùng chung dụng cụ trước khi gọi món.",
+    "metadataTitle": "Thông tin",
+    "phone": "Điện thoại",
+    "website": "Trang web",
+    "menuLink": "Thực đơn",
+    "openingHours": "Giờ mở cửa",
+    "locationTitle": "Vị trí",
+    "openInMap": "Mở trong OpenStreetMap",
+    "sourceTitle": "Nguồn & xác minh",
+    "loading": "Đang tải nhà hàng…",
+    "notFound": "Không tìm thấy nhà hàng.",
+    "error": "Không thể tải nhà hàng này.",
+    "back2list": "Xem nhà hàng"
+  },
+  "menuItemCard": {
+    "matchedDish": "Món được khớp",
+    "reason": "Lý do",
+    "action": "Hành động",
+    "sharedCookware": "Dùng chung dụng cụ",
+    "sharedFryer": "Dùng chung chảo chiên",
+    "canCustomize": "Có thể điều chỉnh",
+    "askAboutItem": "Hỏi về món này",
+    "lastVerified": "Xác minh {date}",
+    "stale": "Có thể đã lỗi thời",
+    "sharedValue": {
+      "unknown": "Chưa rõ",
+      "no": "Không",
+      "yes": "Có",
+      "possible": "Có thể",
+      "not_applicable": "Không áp dụng",
+      "true": "Có",
+      "false": "Không"
     }
   }
 }
