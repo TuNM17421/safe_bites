@@ -75,7 +75,7 @@ export function AdminResourcePage<T extends { id: string }>({
 
       {editing ? (
         <div className="rounded-sb-md border border-sb-border bg-sb-surface p-4 shadow-sb-e1">
-          {error ? <p className="mb-3 text-sm text-sb-status-avoid-fg">{error}</p> : null}
+          {error ? <p role="alert" className="mb-3 text-sm text-sb-status-avoid-fg">{error}</p> : null}
           {renderForm({
             initial: editing === 'new' ? undefined : editing,
             onSubmit,
