@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+build
+coverage
+pnpm-lock.yaml
+**/prisma/migrations
+osm_overpass_seed_kit
+plans
+docs
+.idea

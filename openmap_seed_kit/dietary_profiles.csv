@@ -1,0 +1,7 @@
+﻿profile_id,profile_type,profile_name,avoid_ingredients,warning_ingredients,strictness,cross_contact_sensitive,description_vi,description_en
+profile_peanut_allergy,allergy,Peanut allergy,ing_peanut,,strict,yes,"Tránh đậu phộng/lạc, dầu đậu phộng, sốt đậu phộng, nhiễm chéo.","Avoid peanut/groundnut, peanut oil, peanut sauce, and cross-contact."
+profile_shellfish_allergy,allergy,Shellfish allergy,ing_shrimp_paste,,strict,yes,Tránh tôm/cua/ghẹ/mắm tôm/mắm ruốc và nguy cơ nhiễm chéo.,"Avoid shrimp/crab/shellfish, shrimp paste, and cross-contact."
+profile_muslim_halal,religious,Muslim / halal-aware,ing_pork,"alcohol,non_halal_meat",strict,yes,"Tránh thịt heo/mỡ heo; cần xác minh halal, rượu, quy trình bếp.","Avoid pork/lard; verify halal status, alcohol, and kitchen practice."
+profile_hindu_no_beef,religious,Hindu / no beef,ing_beef,,medium,optional,Tránh thịt bò/nước dùng bò tùy mức độ thực hành cá nhân.,Avoid beef/beef broth depending on personal practice.
+profile_weight_loss,diet,Weight-loss / calorie-aware,,"fried_food,sugary_drinks,high_fat",flexible,no,"Ưu tiên món ít chiên, ít đường, nhiều rau/protein nạc.","Prefer less fried, lower sugar, more vegetables and lean protein."
+profile_picky_eater,preference,Picky eater,,"spicy,strong_smell,organ_meat,fermented_sauce",flexible,no,"Cảnh báo món có mùi mạnh, cay, nội tạng, sốt lên men.","Warn about strong smell, spicy food, offal, fermented sauces."

@@ -1,0 +1,32 @@
+{
+  "name": "safebite-travel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SafeBite Travel — allergy-aware travel food PWA (Phase 0/1 monorepo)",
+  "packageManager": "pnpm@11.3.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @safebite/web dev",
+    "build": "pnpm --filter @safebite/web build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:migrate": "pnpm --filter @safebite/web prisma migrate dev",
+    "db:seed": "pnpm --filter @safebite/web prisma db seed",
+    "seed:kit": "pnpm --filter @safebite/web seed:kit",
+    "copy:check": "pnpm --filter @safebite/web copy:check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^2.1.8"
+  }
+}

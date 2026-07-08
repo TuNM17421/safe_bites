@@ -1,0 +1,33 @@
+field,type,required,description,example
+dish_id,string,yes,Internal canonical dish id,dish_bun_cha
+canonical_name_vi,string,yes,Vietnamese dish name,Bún chả
+canonical_name_en,string,yes,English dish name,Grilled pork with rice noodles
+aliases_vi,string,no,Comma-separated Vietnamese aliases,
+aliases_en,string,no,Comma-separated English aliases,"bun cha, grilled pork noodles"
+dish_category,enum,yes,noodle/rice/street_food/dessert/drink/hotpot/grill/bakery/other,noodle
+cuisine,string,yes,Cuisine tag,vietnamese
+region_tags,string,no,City/region tags,"hanoi,northern_vietnam"
+meal_type,string,no,breakfast/lunch/dinner/snack/drink,"lunch,dinner"
+description_vi,text,no,Short Vietnamese explanation,Bún ăn với chả thịt heo nướng và nước chấm.
+description_en,text,no,Short English explanation,Rice noodles served with grilled pork and dipping sauce.
+common_ingredients_vi,text,no,"Common ingredients, Vietnamese","bún, thịt heo, nước mắm, rau sống"
+common_ingredients_en,text,no,"Common ingredients, English","rice noodles, pork, fish sauce, herbs"
+possible_hidden_ingredients_vi,text,no,Hidden/variable ingredients,"đậu phộng, mắm tôm, bột mì trong nem ăn kèm"
+possible_hidden_ingredients_en,text,no,Hidden/variable ingredients,"peanut, shrimp paste, wheat in fried spring roll"
+default_peanut_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,possible
+default_shellfish_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,possible
+default_fish_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,likely_contains
+default_pork_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,contains
+default_beef_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unlikely
+default_gluten_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unknown
+default_egg_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unknown
+default_dairy_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unlikely
+default_sesame_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unknown
+default_alcohol_risk,enum,yes,contains/likely_contains/possible/unlikely/unknown,unknown
+calorie_class,enum,no,low/medium/high/unknown,medium
+spicy_level,enum,no,none/mild/medium/high/unknown,mild
+picky_eater_flags,string,no,"Strong smell, texture, spicy, raw herbs etc.","strong_fish_sauce,herbs"
+source_type,enum,yes,manual_seed / menu_observed / restaurant_submitted / expert_review,manual_seed
+source_url,url,no,Source if any,
+review_status,enum,yes,needs_review / approved,needs_review
+notes,text,no,Internal notes,

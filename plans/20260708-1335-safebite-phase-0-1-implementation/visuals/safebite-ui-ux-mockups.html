@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SafeBite Travel — UI/UX Design</title>
+<style>
+/* ============================================================
+   SafeBite Travel — UI/UX visual design showcase
+   Self-contained. Mobile-first PWA allergy-aware food assistant.
+   Tone: calm · transparent · conservative · non-alarmist.
+   Status ladder: Suitable / Ask First / Risky / Avoid / Unknown
+   ============================================================ */
+
+:root{
+  --font: "Atkinson Hyperlegible", ui-sans-serif, system-ui, -apple-system,
+          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* neutral surfaces */
+  --bg:#eef2f6; --surface:#ffffff; --surface-2:#f8fafc; --surface-3:#f1f5f9;
+  --border:#e2e8f0; --border-strong:#cbd5e1;
+  --text:#0f172a; --muted:#475569; --faint:#64748b;
+
+  /* brand: ocean blue (Zalo / Facebook / VS Code family) */
+  --brand:#0b6bd6; --brand-600:#2f86f0; --brand-soft:#e7f1ff; --brand-ink:#0a4da0;
+  --accent:#f97316; /* warm, used sparingly */
+  --map-base1:#dbeafe; --map-base2:#eff6ff; --map-road:rgba(100,116,139,.28); --map-water:#bfdbfe;
+
+  /* status tokens (light) */
+  --su-bg:#ecfdf5; --su-bd:#a7f3d0; --su-fg:#047857;
+  --ask-bg:#fffbeb; --ask-bd:#fde68a; --ask-fg:#b45309;
+  --risk-bg:#fff7ed; --risk-bd:#fed7aa; --risk-fg:#c2410c;
+  --avoid-bg:#fef2f2; --avoid-bd:#fecaca; --avoid-fg:#b91c1c;
+  --unk-bg:#f1f5f9; --unk-bd:#cbd5e1; --unk-fg:#475569;
+
+  --shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.14);
+  --r:16px; --r-sm:10px; --r-lg:26px;
+}
+:root[data-theme="dark"]{
+  --bg:#070b14; --surface:#0f172a; --surface-2:#131c2e; --surface-3:#1e293b;
+  --border:#1e293b; --border-strong:#334155;
+  --text:#e2e8f0; --muted:#94a3b8; --faint:#7c8aa0;
+  --brand:#5aa2ff; --brand-600:#3b82f6; --brand-soft:#0d2b52; --brand-ink:#bcd7ff;
+  --accent:#fb923c;
+  --su-bg:rgba(16,185,129,.13); --su-bd:rgba(16,185,129,.34); --su-fg:#6ee7b7;
+  --ask-bg:rgba(245,158,11,.13); --ask-bd:rgba(245,158,11,.34); --ask-fg:#fcd34d;
+  --risk-bg:rgba(249,115,22,.13); --risk-bd:rgba(249,115,22,.34); --risk-fg:#fdba74;
+  --avoid-bg:rgba(239,68,68,.15); --avoid-bd:rgba(239,68,68,.4); --avoid-fg:#fca5a5;
+  --unk-bg:rgba(148,163,184,.13); --unk-bd:rgba(148,163,184,.32); --unk-fg:#cbd5e1;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.5);
+  --shadow-lg:0 16px 50px rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070b14; --surface:#0f172a; --surface-2:#131c2e; --surface-3:#1e293b;
+    --border:#1e293b; --border-strong:#334155;
+    --text:#e2e8f0; --muted:#94a3b8; --faint:#7c8aa0;
+    --brand:#5aa2ff; --brand-600:#3b82f6; --brand-soft:#0d2b52; --brand-ink:#bcd7ff;
+    --accent:#fb923c; --map-base1:#0e1a2e; --map-base2:#0b1424; --map-road:rgba(148,163,184,.14); --map-water:#12233d;
+    --su-bg:rgba(16,185,129,.13); --su-bd:rgba(16,185,129,.34); --su-fg:#6ee7b7;
+    --ask-bg:rgba(245,158,11,.13); --ask-bd:rgba(245,158,11,.34); --ask-fg:#fcd34d;
+    --risk-bg:rgba(249,115,22,.13); --risk-bd:rgba(249,115,22,.34); --risk-fg:#fdba74;
+    --avoid-bg:rgba(239,68,68,.15); --avoid-bd:rgba(239,68,68,.4); --avoid-fg:#fca5a5;
+    --unk-bg:rgba(148,163,184,.13); --unk-bd:rgba(148,163,184,.32); --unk-fg:#cbd5e1;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.5);
+    --shadow-lg:0 16px 50px rgba(0,0,0,.6);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+  line-height:1.5;font-size:16px;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- page chrome ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;
+  padding:14px clamp(16px,4vw,40px);background:color-mix(in srgb,var(--surface) 82%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em}
+.topbar .logo svg{width:26px;height:26px}
+.topbar .sp{flex:1}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--border);
+  padding:4px 10px;border-radius:999px}
+.tbtn{cursor:pointer;border:1px solid var(--border-strong);background:var(--surface);
+  color:var(--text);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;
+  display:inline-flex;gap:8px;align-items:center}
+.tbtn:hover{border-color:var(--brand)}
+.tbtn svg{width:16px;height:16px}
+
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,48px) clamp(16px,4vw,40px) 96px}
+.lede{max-width:760px}
+.lede h1{font-size:clamp(26px,4.2vw,40px);line-height:1.12;letter-spacing:-.02em;margin:.2em 0 .4em}
+.lede p{color:var(--muted);font-size:17px;margin:.2em 0}
+.kicker{color:var(--brand);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+
+.section{margin-top:56px}
+.section > h2{font-size:22px;letter-spacing:-.01em;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+.section > .sub{color:var(--muted);margin:0 0 22px;font-size:15px}
+.rule{height:1px;background:var(--border);margin:8px 0 0}
+
+/* ---------- design-system panels ---------- */
+.grid{display:grid;gap:16px}
+.cards-3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px;box-shadow:var(--shadow)}
+.panel h3{margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
+
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+.sw i{width:64px;height:44px;border-radius:10px;border:1px solid var(--border);display:block}
+.sw b{color:var(--text);font-weight:600}
+
+.legend{display:grid;gap:10px}
+.legend .row{display:flex;align-items:center;gap:12px}
+.legend .row .badge{min-width:104px;justify-content:center}
+.legend .row small{color:var(--muted);font-size:13px}
+
+.type-row{display:flex;align-items:baseline;gap:14px;padding:6px 0;border-bottom:1px dashed var(--border)}
+.type-row:last-child{border:0}
+.type-row span{color:var(--faint);font-size:12px;width:120px;flex:none}
+
+/* ---------- badges ---------- */
+.badge{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12.5px;
+  padding:5px 10px;border-radius:999px;border:1px solid;line-height:1;white-space:nowrap}
+.badge svg{width:14px;height:14px;flex:none}
+.badge--suitable{background:var(--su-bg);border-color:var(--su-bd);color:var(--su-fg)}
+.badge--ask{background:var(--ask-bg);border-color:var(--ask-bd);color:var(--ask-fg)}
+.badge--risky{background:var(--risk-bg);border-color:var(--risk-bd);color:var(--risk-fg)}
+.badge--avoid{background:var(--avoid-bg);border-color:var(--avoid-bd);color:var(--avoid-fg)}
+.badge--unknown{background:var(--unk-bg);border-color:var(--unk-bd);color:var(--unk-fg)}
+.meta{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);
+  border:1px solid var(--border);border-radius:999px;padding:3px 9px;background:var(--surface-2)}
+.meta svg{width:12px;height:12px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.conf{font-weight:700}
+.conf--high{color:var(--su-fg)} .conf--med{color:var(--ask-fg)} .conf--low{color:var(--faint)}
+
+/* ---------- device frames ---------- */
+.gallery{display:flex;flex-wrap:wrap;gap:30px 26px;align-items:flex-start}
+.device{width:344px;flex:none}
+.device .cap{display:flex;align-items:center;gap:8px;margin:0 0 10px 4px;font-size:13px}
+.device .cap b{font-weight:800;font-size:14px}
+.device .cap code{font-size:11.5px;color:var(--brand);background:var(--brand-soft);
+  border-radius:6px;padding:2px 7px}
+:root[data-theme="dark"] .device .cap code{background:var(--surface-3)}
+.phone{border:10px solid #0b1220;background:var(--surface);border-radius:40px;
+  overflow:hidden;box-shadow:var(--shadow-lg);position:relative}
+:root[data-theme="dark"] .phone{border-color:#000}
+.notch{height:26px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;font-size:11px;color:var(--muted);position:relative}
+.notch::after{content:"";position:absolute;left:50%;top:6px;transform:translateX(-50%);
+  width:78px;height:16px;background:#0b1220;border-radius:0 0 12px 12px}
+:root[data-theme="dark"] .notch::after{background:#000}
+.notch .r{display:flex;gap:5px;align-items:center}
+.notch .r svg{width:14px;height:11px}
+.screen{padding:14px 14px 0;min-height:200px;background:var(--surface)}
+.screen.pad-b{padding-bottom:70px}
+
+/* app header inside screen */
+.appbar{display:flex;align-items:center;gap:10px;padding:4px 2px 12px}
+.appbar .back{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);
+  display:grid;place-items:center;color:var(--muted)}
+.appbar .ttl{font-weight:800;font-size:16px}
+.appbar .sp{flex:1}
+.appbar svg{width:18px;height:18px}
+
+/* bottom nav */
+.bottomnav{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--surface) 90%,transparent);
+  backdrop-filter:blur(10px);border-top:1px solid var(--border)}
+.bottomnav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;
+  color:var(--faint);text-decoration:none;min-width:56px;padding:2px}
+.bottomnav a svg{width:22px;height:22px}
+.bottomnav a.on{color:var(--brand)}
+
+/* generic UI atoms in screens */
+.h1{font-size:22px;line-height:1.18;letter-spacing:-.01em;margin:6px 2px 8px;font-weight:800}
+.h2{font-size:18px;margin:2px 2px 10px;font-weight:800}
+.p{color:var(--muted);font-size:14px;margin:0 2px 12px}
+.small{font-size:12.5px;color:var(--faint)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  border:0;border-radius:14px;padding:14px;font:inherit;font-weight:700;font-size:15px;
+  cursor:pointer;min-height:48px}
+.btn svg{width:18px;height:18px}
+.btn--primary{background:var(--brand);color:#fff}
+.btn--ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.btn--disabled{background:var(--surface-3);color:var(--faint);border:1px dashed var(--border-strong);cursor:not-allowed}
+.btn + .btn{margin-top:10px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:0 2px 12px}
+.chip{font-size:13px;padding:9px 12px;border-radius:12px;border:1px solid var(--border);
+  background:var(--surface-2);color:var(--text);display:inline-flex;align-items:center;gap:7px;min-height:40px}
+.chip.sel{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-ink);font-weight:700}
+.chip svg{width:15px;height:15px}
+.pill{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--surface-3);color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px;box-shadow:var(--shadow);margin:0 2px 12px}
+.card.tint-brand{background:linear-gradient(180deg,var(--brand-soft),var(--surface));border-color:var(--brand-bd,var(--border))}
+:root[data-theme="dark"] .card.tint-brand{background:linear-gradient(180deg,rgba(45,212,191,.1),var(--surface))}
+.card h4{margin:0 0 2px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.card .vi{color:var(--muted);font-size:13px;margin:0 0 8px}
+.trust{display:grid;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.trust .t{display:flex;gap:8px;font-size:12.5px}
+.trust .t b{color:var(--faint);font-weight:700;width:78px;flex:none}
+.trust .t span{color:var(--text)}
+.metarow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+/* notices */
+.notice{display:flex;gap:10px;border-radius:12px;padding:11px 12px;font-size:12.5px;margin:0 2px 12px;line-height:1.4}
+.notice svg{width:16px;height:16px;flex:none;margin-top:1px}
+.notice--safety{background:var(--surface-3);color:var(--muted);border:1px solid var(--border)}
+.notice--offline{background:var(--ask-bg);color:var(--ask-fg);border:1px solid var(--ask-bd)}
+.notice--stale{background:var(--unk-bg);color:var(--unk-fg);border:1px solid var(--unk-bd)}
+.notice--severe{background:var(--avoid-bg);color:var(--avoid-fg);border:1px solid var(--avoid-bd)}
+
+/* progress */
+.steps{display:flex;gap:6px;margin:2px 2px 14px}
+.steps i{height:5px;border-radius:3px;flex:1;background:var(--border)}
+.steps i.on{background:var(--brand)}
+.stepno{font-size:12px;color:var(--faint);margin:0 2px 6px;font-weight:700;letter-spacing:.05em}
+
+/* toggles */
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface-2)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12.5px;
+  font-weight:700;padding:7px 12px;cursor:pointer}
+.seg button.on{background:var(--brand);color:#fff}
+
+/* radio list */
+.radio{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);
+  border-radius:12px;margin:0 2px 8px;background:var(--surface-2)}
+.radio.sel{border-color:var(--brand);background:var(--brand-soft)}
+.radio .rc{width:20px;height:20px;border-radius:50%;border:2px solid var(--border-strong);flex:none;display:grid;place-items:center}
+.radio.sel .rc{border-color:var(--brand)}
+.radio.sel .rc::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--brand)}
+.radio b{font-size:14px}.radio small{display:block;color:var(--muted);font-size:12px}
+
+/* question card display */
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin:0 2px 12px;box-shadow:var(--shadow)}
+.qcard .qs{padding:12px 0;border-bottom:1px dashed var(--border)}
+.qcard .qs:last-child{border:0;padding-bottom:2px}
+.qcard .qs .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);font-weight:800}
+.qcard .qs p{margin:4px 0 0;font-size:16px;line-height:1.45}
+.qcard.big .qs p{font-size:20px;font-weight:600}
+
+/* stat tiles / admin */
+.desk{width:100%;max-width:760px}
+.deskframe{border:1px solid var(--border-strong);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-lg);background:var(--surface)}
+.deskbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.deskbar .dots{display:flex;gap:6px}.deskbar .dots i{width:11px;height:11px;border-radius:50%;background:var(--border-strong)}
+.deskbody{display:grid;grid-template-columns:180px 1fr;min-height:360px}
+.side{border-right:1px solid var(--border);padding:14px 10px;background:var(--surface-2)}
+.side a{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;color:var(--muted);
+  text-decoration:none;font-size:13.5px;font-weight:600}
+.side a svg{width:16px;height:16px}
+.side a.on{background:var(--brand-soft);color:var(--brand-ink)}
+:root[data-theme="dark"] .side a.on{background:var(--surface-3);color:var(--brand-ink)}
+.main{padding:16px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.tile{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface)}
+.tile .n{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.tile .l{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+td .badge{font-size:11px;padding:3px 8px}
+.rev-need{color:var(--ask-fg)} .rev-ok{color:var(--su-fg)}
+
+/* ---------- restaurants / map (PRD Phase 2 preview) ---------- */
+.map{position:relative;height:206px;border-radius:14px;overflow:hidden;margin:0 2px 12px;border:1px solid var(--border);
+  background:
+    repeating-linear-gradient(90deg,transparent 0 44px,var(--map-road) 44px 46px),
+    repeating-linear-gradient(0deg,transparent 0 40px,var(--map-road) 40px 42px),
+    linear-gradient(160deg,var(--map-base1),var(--map-base2))}
+.map .water{position:absolute;right:-34px;top:-24px;width:150px;height:120px;background:var(--map-water);
+  border-radius:42% 52% 46% 56%;transform:rotate(12deg);opacity:.85}
+.map .road{position:absolute;left:-10%;top:58%;width:130%;height:15px;background:var(--surface);transform:rotate(-8deg);opacity:.55}
+.pin{position:absolute;transform:translate(-50%,-100%)}
+.pin b{display:grid;place-items:center;width:30px;height:30px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);
+  border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.35);color:#fff;font-weight:800;font-size:12px}
+.pin b span{transform:rotate(-45deg)}
+.here{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--brand);border:3px solid #fff;
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--brand) 30%,transparent);transform:translate(-50%,-50%)}
+.attrib{position:absolute;right:6px;bottom:6px;font-size:9px;color:var(--muted);
+  background:color-mix(in srgb,var(--surface) 82%,transparent);padding:2px 6px;border-radius:6px}
+.rclass{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;flex:none}
+.rcard .rc-head{display:flex;align-items:center;gap:10px}
+.rcard .rc-name{flex:1;min-width:0}
+.rc-stats{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;font-weight:700;margin-top:10px}
+.rc-stats span{display:inline-flex;align-items:center;gap:5px}
+.rc-stats span::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.summ-list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:7px}
+.summ-list li{display:flex;gap:8px;font-size:13px;color:var(--text);line-height:1.4}
+.summ-list li svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--muted)}
+.mi{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.mi:last-child{border:0}.mi .mi-n{flex:1;font-size:14px}
+
+.foot{margin-top:64px;color:var(--faint);font-size:13px;border-top:1px solid var(--border);padding-top:18px}
+.foot code{background:var(--surface-3);padding:2px 6px;border-radius:6px}
+.note-inline{font-size:12px;color:var(--faint);margin:8px 4px 0;max-width:344px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c4.5 1.5 7 4 7 9 0 5.5-4 10-7 10s-7-4.5-7-10c0-5 2.5-7.5 7-9Z"/><path d="M12 6c-2 2-2 6 0 9"/></svg>
+    SafeBite Travel
+  </span>
+  <span class="tag">UI/UX Design · PWA</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="themeBtn" aria-label="Toggle color theme">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6 6 4.5 4.5M19.5 19.5 18 18M18 6l1.5-1.5M4.5 19.5 6 18"/><circle cx="12" cy="12" r="4"/></svg>
+    <span id="themeLbl">Theme</span>
+  </button>
+</div>
+
+<div class="wrap">
+
+  <header class="lede">
+    <div class="kicker">Allergy-aware travel food assistant</div>
+    <h1>A calm, trustworthy PWA that helps allergic travelers understand local food and ask the right questions.</h1>
+    <p>This is a visual design system + screen showcase built from <b>PRD v0.2</b> and the Phase&nbsp;0/1 spec.
+    The product's promise is <b>risk reduction, not risk elimination</b> — so the UI never claims a dish is
+    risk-free. Every recommendation shows <b>source, confidence, reason, action</b> and <b>last checked</b>.</p>
+  </header>
+
+  <!-- ============ DESIGN SYSTEM ============ -->
+  <section class="section">
+    <h2>Design system</h2>
+    <p class="sub">Foundations shared across every screen. Colour never carries meaning alone — each status pairs an icon + label.</p>
+
+    <div class="grid cards-3">
+      <div class="panel">
+        <h3>Brand & neutrals</h3>
+        <div class="swatches">
+          <div class="sw"><i style="background:#0b6bd6"></i><b>Brand</b>Ocean 600</div>
+          <div class="sw"><i style="background:#2f86f0"></i><b>Brand 500</b>Actions</div>
+          <div class="sw"><i style="background:#e7f1ff;border-color:#cbd5e1"></i><b>Soft</b>Fills</div>
+          <div class="sw"><i style="background:#f97316"></i><b>Accent</b>Sparing</div>
+          <div class="sw"><i style="background:#0f172a"></i><b>Ink</b>Text</div>
+          <div class="sw"><i style="background:#f1f5f9;border-color:#cbd5e1"></i><b>Surface</b>Slate</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Status ladder <span class="small">(Avoid → Suitable)</span></h3>
+        <div class="legend">
+          <div class="row"><span class="badge badge--avoid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8 8 8 8"/></svg>Avoid</span><small>Likely contains allergen</small></div>
+          <div class="row"><span class="badge badge--risky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg>Risky</span><small>May contain + severe profile</small></div>
+          <div class="row"><span class="badge badge--ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7M12 17v.5"/></svg>Ask First</span><small>Confirm with staff</small></div>
+          <div class="row"><span class="badge badge--unknown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>Unknown</span><small>Insufficient data — never “safe”</small></div>
+          <div class="row"><span class="badge badge--suitable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Suitable</span><small>Lower risk — still ask staff</small></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Trust badges</h3>
+        <div class="metarow" style="margin-top:0">
+          <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l7-5 7 5"/></svg>Source: manual_seed</span>
+          <span class="meta"><span class="conf conf--med">Confidence: Medium</span></span>
+          <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Checked 12d ago</span>
+          <span class="meta"><span class="dot" style="background:var(--su-fg)"></span>Online</span>
+          <span class="meta"><span class="dot" style="background:var(--ask-fg)"></span>Offline · stale</span>
+        </div>
+        <div style="margin-top:14px" class="type-row"><span>Confidence map</span>
+          <small class="small">≥0.80 <b class="conf conf--high">High</b> · ≥0.55 <b class="conf conf--med">Medium</b> · &lt;0.55 <b class="conf conf--low">Low</b></small>
+        </div>
+      </div>
+
+      <div class="panel" style="grid-column:1/-1">
+        <h3>Typography — Atkinson Hyperlegible (accessibility-first) · fallback system UI</h3>
+        <div class="type-row"><span>Display / H1 · 800</span><div style="font-size:30px;font-weight:800;letter-spacing:-.02em">Find food that matches your profile</div></div>
+        <div class="type-row"><span>Title / H2 · 800</span><div style="font-size:20px;font-weight:800">Restaurant allergy summary</div></div>
+        <div class="type-row"><span>Body · 400 · 16px</span><div style="font-size:16px;color:var(--muted)">Mì Quảng is often served with roasted peanuts. Ask whether the topping and oil can be removed.</div></div>
+        <div class="type-row"><span>Label / meta · 700</span><div style="font-size:12.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em">Last checked · Source · Confidence</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREENS: ONBOARDING JOURNEY ============ -->
+  <section class="section">
+    <h2>First-time journey · Landing → Onboarding</h2>
+    <p class="sub">URL-first. No install required. Local-first profile, saved to the device for offline access.</p>
+
+    <div class="gallery">
+
+      <!-- Landing -->
+      <div class="device">
+        <div class="cap"><b>Landing</b><code>/</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 20 14" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="5" y="2" width="3" height="10" rx="1"/><rect x="10" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div style="display:grid;place-items:center;margin:18px 0 6px">
+              <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c4.5 1.5 7 4 7 9 0 5.5-4 10-7 10s-7-4.5-7-10c0-5 2.5-7.5 7-9Z"/><path d="M12 6c-2 2-2 6 0 9"/></svg>
+            </div>
+            <div class="chiprow" style="justify-content:center"><span class="pill">No install required</span></div>
+            <div class="h1" style="text-align:center">Welcome to SafeBite Travel</div>
+            <p class="p" style="text-align:center">Find food options that better match your allergy profile while traveling.</p>
+            <button class="btn btn--primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Start allergy profile</button>
+            <button class="btn btn--ghost">Browse city dish guide</button>
+            <div class="notice notice--safety" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span>This app helps you understand allergy risks. It cannot guarantee food safety.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onboarding step 1 -->
+      <div class="device">
+        <div class="cap"><b>Onboarding · Allergens</b><code>/onboarding</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ttl">Your profile</div></div>
+            <div class="stepno">STEP 1 OF 5</div>
+            <div class="steps"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <div class="h2">What do you need to avoid?</div>
+            <div class="chiprow">
+              <span class="chip sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Peanut</span>
+              <span class="chip">Tree nuts</span>
+              <span class="chip">Shellfish</span>
+              <span class="chip">Fish</span>
+              <span class="chip">Milk</span>
+              <span class="chip">Egg</span>
+              <span class="chip">Soy</span>
+              <span class="chip">Wheat / Gluten</span>
+              <span class="chip">Sesame</span>
+              <span class="chip">+ Other</span>
+            </div>
+            <p class="small" style="margin:0 2px 14px">You can also pick a ready-made profile: Halal, Hindu (no beef), Weight-loss, Picky eater.</p>
+            <button class="btn btn--primary">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onboarding step 2 severity -->
+      <div class="device">
+        <div class="cap"><b>Onboarding · Severity</b><code>/onboarding</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ttl">Peanut</div></div>
+            <div class="stepno">STEP 2 OF 5</div>
+            <div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+            <div class="h2">How severe is your allergy?</div>
+            <div class="radio"><div class="rc"></div><div><b>Mild</b></div></div>
+            <div class="radio"><div class="rc"></div><div><b>Moderate</b></div></div>
+            <div class="radio"><div class="rc"></div><div><b>Severe</b></div></div>
+            <div class="radio sel"><div class="rc"></div><div><b>Anaphylaxis risk</b><small>Applies stricter risk wording</small></div></div>
+            <div class="h2" style="margin-top:14px">Avoid cross-contact?</div>
+            <div class="chiprow"><span class="chip sel">Yes</span><span class="chip">No</span><span class="chip">Not sure</span></div>
+            <button class="btn btn--primary">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onboarding disclaimer -->
+      <div class="device">
+        <div class="cap"><b>Onboarding · Safety</b><code>/onboarding</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ttl">Before you start</div></div>
+            <div class="stepno">STEP 5 OF 5</div>
+            <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+            <div class="card tint-brand">
+              <h4 style="justify-content:flex-start;gap:8px"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z"/></svg>Safety first</h4>
+              <p class="p" style="margin:8px 0 0">This app helps you understand possible allergy risks. It cannot guarantee food safety. Always confirm ingredients and preparation with restaurant staff before ordering.</p>
+            </div>
+            <div class="notice notice--safety"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg><span>Your allergy card will be saved on this device for offline access.</span></div>
+            <button class="btn btn--primary">I understand — save my card</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SCREENS: MAIN FLOW ============ -->
+  <section class="section">
+    <h2>Main flow · “I'm hungry”</h2>
+    <p class="sub">Home → dish guide → dish detail → question card. One-hand mobile use; each card carries its full trust context.</p>
+
+    <div class="gallery">
+
+      <!-- Home -->
+      <div class="device">
+        <div class="cap"><b>Home</b><code>/home</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">SafeBite</div><div class="sp"></div><span class="meta"><span class="dot" style="background:var(--su-fg)"></span>Online</span></div>
+            <div class="card tint-brand">
+              <h4 style="justify-content:flex-start">Hi Anna 👋</h4>
+              <div class="metarow" style="margin-top:8px">
+                <span class="badge badge--avoid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8 8 8 8"/></svg>Peanut · Anaphylaxis</span>
+                <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Da Nang</span>
+              </div>
+            </div>
+            <button class="btn btn--primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Browse local dishes</button>
+            <button class="btn btn--ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6M7 13h4"/></svg>Show allergy card</button>
+            <button class="btn btn--ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>Generate question card</button>
+            <button class="btn btn--disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Find food near me · Coming later</button>
+          </div>
+          <nav class="bottomnav">
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Dish guide -->
+      <div class="device">
+        <div class="cap"><b>Dish guide</b><code>/dishes</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">Da Nang dishes</div><div class="sp"></div>
+              <div class="seg"><button class="on">EN</button><button>VI</button></div>
+            </div>
+            <div class="chiprow" style="margin-bottom:8px">
+              <span class="chip sel">All</span><span class="chip">Ask First</span><span class="chip">Risky</span><span class="chip">Avoid</span><span class="chip">Suitable</span>
+            </div>
+            <div class="notice notice--safety"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span>Ranked by risk for your peanut profile. Always confirm with staff before ordering.</span></div>
+
+            <div class="card">
+              <h4>Cơm gà <span class="badge badge--ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7M12 17v.5"/></svg>Ask First</span></h4>
+              <div class="vi">Chicken rice</div>
+              <div class="trust">
+                <div class="t"><b>Reason</b><span>No known peanut ingredients, but cross-contact is unknown.</span></div>
+                <div class="t"><b>Action</b><span>Ask staff before ordering due to severe allergy.</span></div>
+              </div>
+              <div class="metarow"><span class="meta">Peanut: unlikely</span><span class="meta conf conf--med">Medium</span><span class="meta">manual_seed</span><span class="meta">Checked 9d ago</span></div>
+            </div>
+
+            <div class="card">
+              <h4>Mì Quảng <span class="badge badge--risky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg>Risky</span></h4>
+              <div class="vi">Quảng-style turmeric noodles</div>
+              <div class="trust">
+                <div class="t"><b>Reason</b><span>Often served with roasted peanuts on top.</span></div>
+                <div class="t"><b>Action</b><span>Ask whether peanut topping / oil can be removed.</span></div>
+              </div>
+              <div class="metarow"><span class="meta">Peanut: possible</span><span class="meta conf conf--med">Medium</span><span class="meta">manual_seed</span><span class="meta">Checked 12d ago</span></div>
+            </div>
+
+            <div class="card">
+              <h4>Gỏi cuốn <span class="badge badge--avoid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8 8 8 8"/></svg>Avoid</span></h4>
+              <div class="vi">Fresh spring rolls</div>
+              <div class="trust">
+                <div class="t"><b>Reason</b><span>Peanut dipping sauce is commonly served with it.</span></div>
+                <div class="t"><b>Action</b><span>Avoid unless the sauce and prep are fully confirmed.</span></div>
+              </div>
+              <div class="metarow"><span class="meta">Peanut: likely_contains</span><span class="meta conf conf--high">High</span><span class="meta">manual_seed</span><span class="meta">Checked 6d ago</span></div>
+            </div>
+          </div>
+          <nav class="bottomnav">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Dish detail -->
+      <div class="device">
+        <div class="cap"><b>Dish detail</b><code>/dishes/mi_quang</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ttl">Mì Quảng gà</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px">
+              <div class="small">Quảng-style turmeric noodles</div>
+              <span class="badge badge--risky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg>Risky</span>
+            </div>
+            <p class="p">Chicken turmeric noodles with herbs, rice crackers, and a peanut topping added by default.</p>
+            <div class="h2" style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)">Common ingredients</div>
+            <div class="chiprow"><span class="chip">Rice noodles</span><span class="chip">Chicken</span><span class="chip">Turmeric</span><span class="chip">Herbs</span></div>
+            <div class="h2" style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)">Possible hidden ingredients</div>
+            <div class="chiprow"><span class="chip" style="border-color:var(--risk-bd);color:var(--risk-fg)">Roasted peanut</span><span class="chip" style="border-color:var(--ask-bd);color:var(--ask-fg)">Fish sauce</span></div>
+            <div class="card" style="margin-top:4px">
+              <div class="trust" style="border:0;padding:0;margin:0">
+                <div class="t"><b>Risk</b><span>Peanut — possible (topping / oil)</span></div>
+                <div class="t"><b>Confidence</b><span class="conf conf--med">Medium</span></div>
+                <div class="t"><b>Reason</b><span>Mì Quảng is often served with roasted peanuts.</span></div>
+                <div class="t"><b>Action</b><span>Ask whether peanut topping / oil can be removed.</span></div>
+                <div class="t"><b>Source</b><span>manual_seed · needs review</span></div>
+                <div class="t"><b>Checked</b><span>12 days ago</span></div>
+              </div>
+            </div>
+            <button class="btn btn--primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>Generate question card</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question card -->
+      <div class="device">
+        <div class="cap"><b>Question card</b><code>/question-card</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="ttl">Ask the restaurant</div><div class="sp"></div>
+              <div class="seg"><button>EN</button><button class="on">VI</button></div>
+            </div>
+            <div class="metarow" style="margin:0 2px 12px">
+              <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 20h6M12 5v15"/></svg>Large text</span>
+              <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>Full screen</span>
+              <span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5 9 16l10-9"/></svg>Saved offline</span>
+            </div>
+            <div class="qcard big">
+              <div class="qs"><div class="k">Severity</div><p>Tôi bị dị ứng nặng với đậu phộng.</p></div>
+              <div class="qs"><div class="k">Ingredient</div><p>Món này có đậu phộng, dầu đậu phộng, bơ đậu phộng, hoặc sốt đậu phộng không?</p></div>
+              <div class="qs"><div class="k">Cross-contact</div><p>Món này có dùng chung chảo, dao thớt, hoặc dầu chiên với món có đậu phộng không?</p></div>
+              <div class="qs"><div class="k">Kitchen check</div><p>Nếu không chắc, anh/chị có thể hỏi bếp giúp tôi không?</p></div>
+            </div>
+            <button class="btn btn--primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy text</button>
+            <div class="small" style="text-align:center;margin-top:8px">Source: template_generated · Available offline</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SCREENS: TRUST / OFFLINE / PROFILE ============ -->
+  <section class="section">
+    <h2>Trust, offline & profile</h2>
+    <p class="sub">Offline is conservative and clearly labelled — saved data always carries a “confirm with staff” reminder.</p>
+
+    <div class="gallery">
+
+      <!-- Allergy card -->
+      <div class="device">
+        <div class="cap"><b>Allergy card</b><code>/allergy-card</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="ttl">Allergy card</div><div class="sp"></div><span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5 9 16l10-9"/></svg>Offline</span></div>
+            <div class="card tint-brand">
+              <div class="metarow" style="margin:0 0 10px">
+                <span class="badge badge--avoid">Peanut</span>
+                <span class="meta">Severity: Anaphylaxis</span>
+                <span class="meta">Cross-contact: Avoid</span>
+              </div>
+              <div class="trust" style="border-top:0;padding-top:0">
+                <div class="t"><b>English</b><span>I have a severe peanut allergy. Please avoid peanut, peanut oil, and shared cookware.</span></div>
+                <div class="t"><b>Tiếng Việt</b><span>Tôi bị dị ứng nặng với đậu phộng. Vui lòng tránh đậu phộng, dầu đậu phộng và dụng cụ dùng chung.</span></div>
+              </div>
+            </div>
+            <div class="notice notice--safety"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span>This card cannot guarantee food safety. Always confirm with staff before ordering.</span></div>
+            <div class="small" style="text-align:center">Available offline · Last updated 08 Jul 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offline state -->
+      <div class="device">
+        <div class="cap"><b>Offline mode</b><code>/dishes (offline)</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 24" width="14" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 4-2.5M19 13a10 10 0 0 0-4-2.5"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">SafeBite</div><div class="sp"></div><span class="meta"><span class="dot" style="background:var(--ask-fg)"></span>Offline</span></div>
+            <div class="notice notice--offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M12 20h.01"/></svg><span>You are offline. Showing saved information only. Please confirm with restaurant staff before ordering.</span></div>
+            <div class="h2" style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)">Available offline</div>
+            <div class="chiprow"><span class="chip">Allergy card</span><span class="chip">Last question card</span><span class="chip">Saved dishes</span></div>
+            <div class="card">
+              <h4>Gỏi cuốn <span class="badge badge--avoid">Avoid</span></h4>
+              <div class="vi">Fresh spring rolls</div>
+              <div class="notice notice--stale" style="margin:10px 0 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Saved data. Last updated 05 Jul 2026.</span></div>
+            </div>
+            <div class="h2" style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)">Not available offline</div>
+            <div class="chiprow"><span class="chip" style="opacity:.55">New search</span><span class="chip" style="opacity:.55">Menu scan</span><span class="chip" style="opacity:.55">AI analysis</span><span class="chip" style="opacity:.55">Live updates</span></div>
+          </div>
+          <nav class="bottomnav">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Profile + install education -->
+      <div class="device">
+        <div class="cap"><b>Profile & install</b><code>/profile</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">Profile</div></div>
+            <div class="card">
+              <h4 style="justify-content:flex-start;gap:10px"><span style="width:40px;height:40px;border-radius:50%;background:var(--brand-soft);display:grid;place-items:center;color:var(--brand-ink);font-weight:800">A</span>Anna</h4>
+              <div class="metarow"><span class="badge badge--avoid">Peanut · Anaphylaxis</span><span class="meta">Cross-contact: Avoid</span><span class="meta">Da Nang · EN</span></div>
+            </div>
+            <div class="card" style="background:linear-gradient(180deg,var(--brand-soft),var(--surface))">
+              <h4 style="justify-content:flex-start;gap:8px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Add to home screen</h4>
+              <p class="p" style="margin:6px 0 10px">Faster access during your trip. You can still use SafeBite without installing.</p>
+              <div class="metarow"><span class="chip sel">Show me how</span><span class="chip">Maybe later</span></div>
+            </div>
+            <button class="btn btn--ghost">Edit profile (restart onboarding)</button>
+            <button class="btn btn--ghost" style="color:var(--avoid-fg);border-color:var(--avoid-bd)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Clear local profile & offline data</button>
+          </div>
+          <nav class="bottomnav">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+    </div>
+    <p class="note-inline">Note: with a severe peanut profile the engine rarely returns <b>Suitable</b> (unknown never becomes suitable; unlikely+severe → Ask First). The full ladder is shown in the design system for reference; the guide above reflects realistic engine output.</p>
+  </section>
+
+  <!-- ============ RESTAURANTS / MAP (PHASE 2 PREVIEW) ============ -->
+  <section class="section">
+    <h2>Restaurants &amp; map · “Find food near me” <span class="pill" style="font-size:11px">PRD Phase 2 preview</span></h2>
+    <p class="sub">This is in the PRD (§11.4, §16.4, Phase 2 “Restaurant MVP” + “basic map view”) but intentionally out of the Phase 0/1 build — the Home screen shows it as “Coming later”. Mocked here as the next-step vision.</p>
+
+    <div class="gallery">
+
+      <!-- Map + nearby list -->
+      <div class="device">
+        <div class="cap"><b>Find food near me</b><code>/restaurants</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">Nearby</div><div class="sp"></div><span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Da Nang</span></div>
+            <div class="map">
+              <div class="water"></div><div class="road"></div>
+              <div class="here" style="left:50%;top:56%"></div>
+              <div class="pin" style="left:60%;top:32%"><b style="background:#059669"><span>A</span></b></div>
+              <div class="pin" style="left:32%;top:45%"><b style="background:#0d9488"><span>B</span></b></div>
+              <div class="pin" style="left:45%;top:72%"><b style="background:#64748b"><span>C</span></b></div>
+              <div class="pin" style="left:74%;top:63%"><b style="background:#ea580c"><span>D</span></b></div>
+              <div class="attrib">Map data © OpenStreetMap</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin:0 2px 10px">
+              <span class="small" style="flex:1">4 places match your peanut profile</span>
+              <div class="seg"><button class="on">Nearest</button><button>Readiness</button></div>
+            </div>
+            <div class="card rcard">
+              <div class="rc-head">
+                <span class="rclass" style="background:#0d9488">B</span>
+                <div class="rc-name"><b>Bếp Việt A</b><div class="small">Vietnamese · 320 m</div></div>
+                <span class="badge badge--ask">Ask First</span>
+              </div>
+              <div class="rc-stats"><span style="color:var(--su-fg)">4 suitable</span><span style="color:var(--ask-fg)">6 ask-first</span><span style="color:var(--avoid-fg)">2 avoid</span></div>
+              <div class="metarow"><span class="meta">Verified menu</span><span class="meta">Checked 12d ago</span><span class="meta">osm + admin</span></div>
+            </div>
+            <div class="card rcard">
+              <div class="rc-head">
+                <span class="rclass" style="background:#059669">A</span>
+                <div class="rc-name"><b>Nhà hàng An</b><div class="small">Vegetarian · 540 m</div></div>
+                <span class="badge badge--suitable">Suitable</span>
+              </div>
+              <div class="rc-stats"><span style="color:var(--su-fg)">8 suitable</span><span style="color:var(--ask-fg)">2 ask-first</span><span style="color:var(--avoid-fg)">0 avoid</span></div>
+              <div class="metarow"><span class="meta">Admin verified</span><span class="meta">Checked 3d ago</span></div>
+            </div>
+          </div>
+          <nav class="bottomnav">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Nearby</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Restaurant list sorted by readiness -->
+      <div class="device">
+        <div class="cap"><b>Restaurant list</b><code>/restaurants</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">Restaurants</div><div class="sp"></div><div class="seg"><button>Nearest</button><button class="on">Readiness</button></div></div>
+            <div class="small" style="margin:0 2px 10px">Allergy-readiness: <b style="color:#059669">A</b> verified · <b style="color:#0d9488">B</b> ask first · <b style="color:#64748b">C</b> unknown · <b style="color:#ea580c">D</b> risky · <b style="color:#dc2626">E</b> avoid</div>
+
+            <div class="card rcard">
+              <div class="rc-head"><span class="rclass" style="background:#059669">A</span><div class="rc-name"><b>Nhà hàng An</b><div class="small">Vegetarian · 540 m · Admin verified</div></div></div>
+              <div class="rc-stats"><span style="color:var(--su-fg)">8 suitable</span><span style="color:var(--ask-fg)">2 ask-first</span><span style="color:var(--avoid-fg)">0 avoid</span></div>
+            </div>
+            <div class="card rcard">
+              <div class="rc-head"><span class="rclass" style="background:#0d9488">B</span><div class="rc-name"><b>Bếp Việt A</b><div class="small">Vietnamese · 320 m · Verified menu</div></div></div>
+              <div class="rc-stats"><span style="color:var(--su-fg)">4 suitable</span><span style="color:var(--ask-fg)">6 ask-first</span><span style="color:var(--avoid-fg)">2 avoid</span></div>
+            </div>
+            <div class="card rcard">
+              <div class="rc-head"><span class="rclass" style="background:#64748b">C</span><div class="rc-name"><b>Quán Nhỏ Ẩm</b><div class="small">Street food · 210 m · Unverified (osm)</div></div></div>
+              <div class="notice notice--stale" style="margin:10px 0 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span>Insufficient allergy data. Ask staff directly.</span></div>
+            </div>
+            <div class="card rcard">
+              <div class="rc-head"><span class="rclass" style="background:#dc2626">E</span><div class="rc-name"><b>Bún Đậu 88</b><div class="small">Vietnamese · 780 m</div></div><span class="badge badge--avoid">Avoid</span></div>
+              <div class="rc-stats"><span style="color:var(--su-fg)">0 suitable</span><span style="color:var(--ask-fg)">1 ask-first</span><span style="color:var(--avoid-fg)">7 avoid</span></div>
+            </div>
+          </div>
+          <nav class="bottomnav">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Nearby</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6"/></svg>Card</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Restaurant detail -->
+      <div class="device">
+        <div class="cap"><b>Restaurant detail</b><code>/restaurants/rest_001</code></div>
+        <div class="phone">
+          <div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="18" height="8" rx="2"/><rect x="20" y="5" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div class="ttl">Bếp Việt A</div></div>
+            <div class="card tint-brand">
+              <div class="rc-head"><span class="rclass" style="background:#0d9488">B</span>
+                <div class="rc-name"><b>Likely suitable — ask first</b><div class="small">Vietnamese · 320 m · Verified menu</div></div>
+              </div>
+              <div class="metarow"><span class="meta conf conf--med">Confidence: Medium</span><span class="meta">Checked 12d ago</span></div>
+            </div>
+            <div class="card">
+              <h4 style="justify-content:flex-start;gap:8px"><span class="badge badge--avoid">Peanut</span>allergy summary</h4>
+              <ul class="summ-list">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 2 20h20L12 3Z"/></svg>Some dishes contain peanut topping.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Staff confirmed selected dishes can remove peanut.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>Shared cookware: unknown.</li>
+              </ul>
+            </div>
+            <div class="h2" style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)">Menu items</div>
+            <div class="card" style="padding:6px 14px">
+              <div class="mi"><div class="mi-n">Cơm gà</div><span class="badge badge--ask">Ask First</span></div>
+              <div class="mi"><div class="mi-n">Mì Quảng</div><span class="badge badge--risky">Risky</span></div>
+              <div class="mi"><div class="mi-n">Gỏi cuốn</div><span class="badge badge--avoid">Avoid</span></div>
+            </div>
+            <div class="small" style="margin:0 2px 12px">Source: OpenStreetMap (discovery) + admin menu · location only, allergy data from our DB.</div>
+            <button class="btn btn--primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>Ask restaurant</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note-inline">Map is used for <b>discovery / location only</b> (OSM attribution kept). Allergy-readiness A–E and menu risk come from verified DB data — never from map photos or reviews (PRD §20).</p>
+  </section>
+
+  <!-- ============ ADMIN (DESKTOP) ============ -->
+  <section class="section">
+    <h2>Admin dashboard · desktop-first</h2>
+    <p class="sub">Data management for dishes, ingredients and dish-allergen risks. Every risk must have reason + action in EN and VI before it can be saved.</p>
+
+    <div class="desk">
+      <div class="deskframe">
+        <div class="deskbar"><div class="dots"><i></i><i></i><i></i></div><span class="small">SafeBite Admin · /admin/dishes</span></div>
+        <div class="deskbody">
+          <aside class="side">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg>Dashboard</a>
+            <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Dishes</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg>Ingredients</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/></svg>Dish risks</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5"/></svg>Reports</a>
+          </aside>
+          <div class="main">
+            <div class="tiles">
+              <div class="tile"><div class="n">58</div><div class="l">Dishes</div></div>
+              <div class="tile"><div class="n">120</div><div class="l">Ingredients</div></div>
+              <div class="tile"><div class="n">240</div><div class="l">Dish risks</div></div>
+              <div class="tile"><div class="n" style="color:var(--ask-fg)">14</div><div class="l">Needs review</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <div class="seg"><button class="on">All</button><button>Needs review</button><button>Approved</button></div>
+              <span class="sp" style="flex:1"></span>
+              <span class="chip sel" style="min-height:34px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New dish</span>
+            </div>
+            <table>
+              <thead><tr><th>Dish</th><th>Cuisine</th><th>Peanut risk</th><th>Review</th><th>Checked</th></tr></thead>
+              <tbody>
+                <tr><td><b>Mì Quảng gà</b><br><span class="small">mi_quang</span></td><td>Vietnamese</td><td><span class="badge badge--risky">possible</span></td><td class="rev-need">needs_review</td><td>12d ago</td></tr>
+                <tr><td><b>Gỏi cuốn</b><br><span class="small">goi_cuon</span></td><td>Vietnamese</td><td><span class="badge badge--avoid">likely</span></td><td class="rev-ok">approved</td><td>6d ago</td></tr>
+                <tr><td><b>Cơm gà</b><br><span class="small">com_ga</span></td><td>Vietnamese</td><td><span class="badge badge--ask">unlikely</span></td><td class="rev-ok">approved</td><td>9d ago</td></tr>
+                <tr><td><b>Bún chả</b><br><span class="small">bun_cha</span></td><td>Vietnamese</td><td><span class="badge badge--unknown">unknown</span></td><td class="rev-need">needs_review</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p><b>SafeBite Travel</b> — UI/UX design showcase · generated with Claude Design from <code>docs/PRD.md</code> and
+    <code>docs/SAFE_BITE_PHASE_0_1_IMPL_SPEC.md</code>. Self-contained, theme-aware, mobile-first.
+    No forbidden safety copy used. Status labels limited to Suitable / Ask First / Risky / Avoid / Unknown.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn'), lbl=document.getElementById('themeLbl');
+  function sysDark(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;}
+  function cur(){return root.getAttribute('data-theme')||(sysDark()?'dark':'light');}
+  function set(t){root.setAttribute('data-theme',t);lbl.textContent=t==='dark'?'Dark':'Light';}
+  set(cur());
+  btn.addEventListener('click',function(){set(cur()==='dark'?'light':'dark');});
+})();
+</script>
+</body>
+</html>

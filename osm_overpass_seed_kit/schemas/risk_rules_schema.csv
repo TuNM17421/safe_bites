@@ -1,0 +1,14 @@
+field,type,required,description,example
+risk_rule_id,string,yes,Internal rule id,rr_bun_cha_muslim
+target_type,enum,yes,dish / ingredient / menu_item / restaurant,dish
+target_id,string,yes,Target id,dish_bun_cha
+profile_id,string,yes,Profile id,profile_muslim_halal
+risk_level,enum,yes,suitable / ask_first / risky / avoid / unknown,avoid
+confidence,decimal,yes,0-1 confidence,0.9
+reason_vi,text,yes,Vietnamese reason,Món truyền thống thường có thịt heo.
+reason_en,text,yes,English reason,The traditional dish usually contains pork.
+recommended_action_vi,text,yes,Vietnamese action,Tránh nếu không có phiên bản không thịt heo được xác nhận.
+recommended_action_en,text,yes,English action,Avoid unless a pork-free version is confirmed.
+evidence_type,enum,yes,manual_seed / canonical_recipe / menu_observed / restaurant_verified / user_report / llm_inferred,manual_seed
+source_url,url,no,Source if any,
+review_status,enum,yes,needs_review / approved,needs_review

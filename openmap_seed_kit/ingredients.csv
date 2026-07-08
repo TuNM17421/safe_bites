@@ -1,0 +1,9 @@
+﻿ingredient_id,canonical_name_vi,canonical_name_en,ingredient_category,allergen_tags,dietary_flags,aliases_vi,aliases_en,is_major_allergen,risk_notes
+ing_peanut,Đậu phộng,Peanut,legume/nut,peanut,avoid_for_peanut_allergy,"lạc,dầu đậu phộng,sốt đậu phộng,bơ đậu phộng","groundnut,peanut oil,peanut sauce,peanut butter",yes,"Can appear as topping, sauce, oil, or hidden garnish."
+ing_shrimp_paste,Mắm tôm,Shrimp paste,fermented_seafood,"shellfish,crustacean","avoid_for_shellfish_allergy,not_halal_unless_verified","mắm ruốc,tôm lên men","shrimp paste,fermented shrimp paste",yes,Hidden in dipping sauces or broths; high-risk for shellfish allergy.
+ing_fish_sauce,Nước mắm,Fish sauce,fermented_fish,fish,"avoid_for_fish_allergy,not_vegetarian,not_vegan","nước mắm nhĩ,mắm cá",fish sauce,yes,"Common in Vietnamese dipping sauces, marinades, and broths."
+ing_pork,Thịt heo,Pork,meat,,"avoid_for_muslim,avoid_for_some_diets","thịt lợn,mỡ heo,pate heo,giò,chả","pork,lard,pork fat,pork pate",no,"Can appear in broth, pate, sausage, or cooking fat."
+ing_beef,Thịt bò,Beef,meat,,avoid_for_some_hindu_users,"nước dùng bò,xương bò,mỡ bò","beef,beef broth,beef bone broth",no,Important for Hindu-related restrictions; broth may contain beef even if meat is removed.
+ing_wheat_flour,Bột mì,Wheat flour,grain,"wheat,gluten","avoid_for_wheat_allergy,avoid_for_celiac","lúa mì,bánh mì,bột chiên","wheat flour,gluten,bread flour",yes,"Appears in bread, noodles, batter, and fried coating."
+ing_egg,Trứng,Egg,animal_product,egg,"avoid_for_egg_allergy,not_vegan","lòng đỏ,lòng trắng,trứng gà","egg,egg yolk,egg white",yes,"Used in drinks, sauces, desserts, cakes, noodles, and coatings."
+ing_milk,Sữa,Milk,dairy,milk,"avoid_for_milk_allergy,not_vegan","sữa đặc,bơ,kem,phô mai","milk,condensed milk,butter,cream,cheese",yes,"Often hidden in desserts, coffee, bread, sauces."

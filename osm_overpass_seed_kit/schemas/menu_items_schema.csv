@@ -1,0 +1,19 @@
+field,type,required,description,example
+menu_item_id,string,yes,Internal id,mi_rest_001_001
+restaurant_id,string,yes,FK to restaurants,rest_osm_node_123
+dish_id,string,no,FK to canonical dish if matched,dish_bun_cha
+raw_name,string,yes,Original menu item text,Bún chả nem cua bể
+name_vi,string,no,Vietnamese name,Bún chả nem cua bể
+name_en,string,no,English translation,Grilled pork noodles with crab spring roll
+section,string,no,Menu section,Món chính
+description_vi,text,no,Description from menu/OCR,
+description_en,text,no,English description,
+price_amount,decimal,no,Price amount,65000
+currency,string,no,Currency,VND
+menu_source_type,enum,yes,official_website / website_menu_tag / user_upload / restaurant_upload / admin_manual / ocr_scan,website_menu_tag
+menu_source_url,url,no,Menu URL if available,https://example.com/menu
+observed_at,date,yes,Date observed,2026-07-08
+parsed_by,enum,yes,manual / ocr / llm / ocr_llm_admin_review,manual
+mapping_confidence,decimal,no,0-1 dish match confidence,0.8
+menu_status,enum,yes,observed_not_verified / restaurant_submitted / admin_verified,observed_not_verified
+notes,text,no,Internal notes,

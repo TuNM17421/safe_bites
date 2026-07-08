@@ -1,0 +1,8 @@
+﻿dish_id,ingredient_id,ingredient_role,probability_level,evidence_type,confidence,notes
+dish_bun_dau_mam_tom,ing_shrimp_paste,sauce,likely,canonical_recipe,0.90,"Mắm tôm is central to the dish, though some places may offer fish sauce alternative."
+dish_bun_dau_mam_tom,ing_pork,protein/side,possible,canonical_recipe,0.70,"Many versions include pork, chả cốm, sausage, or pork offal."
+dish_pho_bo,ing_beef,broth/protein,contains,canonical_recipe,0.95,Beef broth and beef are core ingredients.
+dish_bun_cha,ing_pork,protein,contains,canonical_recipe,0.95,Grilled pork is core to bún chả.
+dish_banh_mi,ing_wheat_flour,bread,contains,canonical_recipe,0.98,Baguette contains wheat/gluten by default.
+dish_egg_coffee,ing_egg,cream topping,contains,canonical_recipe,0.95,Egg is core to egg coffee.
+dish_egg_coffee,ing_milk,cream topping,likely,canonical_recipe,0.90,Condensed milk is commonly used.

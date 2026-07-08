@@ -1,0 +1,3 @@
+﻿source_name,source_type,primary_use,can_seed_restaurants,can_seed_menu,requires_api_key,notes,source_url
+OpenMap.vn Nearby API,poi_api,"Seed restaurant discovery: name, coordinates, category, phone, website if available",yes,no,yes,Best first source for Hà Nội POI. Requires apikey for live pull.,https://docs.openmap.vn/en/docs/rest-apis/nearby/
+OpenMap.vn Place Detail API,poi_api,Enrich known place by id,yes,no,yes,Use after Nearby API to enrich selected restaurant details.,https://docs.openmap.vn/en/docs/rest-apis/place-detail/

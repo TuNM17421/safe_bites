@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds / caches
+.next/
+dist/
+build/
+out/
+coverage/
+*.tsbuildinfo
+.turbo/
+
+# env (keep the example)
+.env
+.env.*
+!.env.example
+
+# prisma generated client
+**/generated/prisma/
+**/prisma/*.db
+
+# test artifacts
+playwright-report/
+test-results/
+
+# python bytecode (seed kit scripts)
+__pycache__/
+*.pyc
+
+# IDE / editor
+.idea/
+.vscode/
+
+# Claude Code local settings (shared .claude/settings.json may be committed)
+.claude/settings.local.json
+
+# misc
+*.log
+.DS_Store

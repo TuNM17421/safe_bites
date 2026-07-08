@@ -1,0 +1,7 @@
+profile_id,profile_name_vi,profile_name_en,profile_type,strictness_default,description_vi,description_en
+profile_peanut_allergy,Dị ứng đậu phộng,Peanut allergy,allergy,strict,"Tránh đậu phộng, dầu/sốt đậu phộng, và hỏi về dùng chung dụng cụ.","Avoid peanut, peanut oil/sauce, and ask about shared cookware."
+profile_shellfish_allergy,Dị ứng hải sản giáp xác,Shellfish allergy,allergy,strict,Tránh tôm/cua/ghẹ/mắm tôm/tôm khô; hỏi về nước dùng và dùng chung dụng cụ.,Avoid shrimp/crab/shrimp paste/dried shrimp; ask about broth and shared cookware.
+profile_muslim_halal,Hồi giáo / Halal-aware,Muslim / halal-aware,religious,strict,"Tránh thịt heo, mỡ heo, rượu; halal cần xác nhận thêm chứng nhận/quy trình.","Avoid pork, lard, alcohol; halal requires further certification/process confirmation."
+profile_hindu_no_beef,Hindu / không bò,Hindu / no beef,religious,medium,Tránh bò và nước dùng từ bò; tùy cá nhân có thể có thêm hạn chế.,Avoid beef and beef broth; individual rules may vary.
+profile_weight_loss,Ăn kiêng giảm cân,Weight-loss diet,diet,medium,"Ưu tiên món ít calo hơn, ít chiên/rán, ít đường/sữa đặc.","Prefer lower-calorie, less fried, less sugary/condensed milk dishes."
+profile_picky_eater,Kén ăn,Picky eater,preference,low,"Giảm rủi ro về mùi mạnh, texture lạ, cay, nội tạng, rau sống.","Reduce risk from strong smells, unfamiliar texture, spicy food, offal, raw herbs."

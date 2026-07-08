@@ -1,0 +1,9 @@
+field,type,required,description,example
+dish_id,string,yes,FK to dishes,dish_bun_cha
+ingredient_id,string,yes,FK to ingredients,ing_pork
+ingredient_role,enum,yes,main_protein/base/sauce/topping/garnish/oil/possible_hidden/side,main_protein
+probability_level,enum,yes,contains/likely/possible/unlikely/unknown,contains
+confidence,decimal,yes,0-1 confidence,0.9
+evidence_type,enum,yes,manual_seed / canonical_recipe / menu_observed / restaurant_verified / user_report / llm_inferred,manual_seed
+source_url,url,no,Source if any,
+notes,text,no,Internal notes,

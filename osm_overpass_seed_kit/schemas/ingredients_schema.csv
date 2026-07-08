@@ -1,0 +1,16 @@
+field,type,required,description,example
+ingredient_id,string,yes,Internal ingredient id,ing_peanut
+canonical_name_vi,string,yes,Vietnamese name,Đậu phộng
+canonical_name_en,string,yes,English name,Peanut
+ingredient_category,enum,yes,protein/grain/vegetable/sauce/spice/dairy/nut/seafood/oil/other,nut
+aliases_vi,string,no,Vietnamese aliases,"lạc,dầu đậu phộng,sốt đậu phộng"
+aliases_en,string,no,English aliases,"groundnut,peanut oil,peanut sauce"
+major_allergen_tags,string,no,peanut/tree_nut/shellfish/fish/milk/egg/soy/wheat/sesame,peanut
+dietary_flags,string,no,pork/beef/alcohol/animal_product/high_calorie/strong_smell,high_calorie
+halal_relevance,enum,no,safe/avoid/ask_first/unknown,ask_first
+hindu_relevance,enum,no,safe/avoid/ask_first/unknown,safe
+vegan_relevance,enum,no,safe/avoid/ask_first/unknown,safe
+calorie_relevance,enum,no,low/medium/high/unknown,high
+risk_notes_vi,text,no,Vietnamese risk notes,Có thể xuất hiện trong topping hoặc nước chấm.
+risk_notes_en,text,no,English risk notes,May appear in toppings or dipping sauces.
+review_status,enum,yes,needs_review / approved,needs_review

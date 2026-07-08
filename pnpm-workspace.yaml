@@ -1,0 +1,10 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# esbuild (pulled in transitively by vitest/vite) ships a prebuilt binary and needs
+# its install script approved under pnpm's secure-by-default build policy.
+allowBuilds:
+  esbuild: true
+onlyBuiltDependencies:
+  - esbuild
