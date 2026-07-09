@@ -5,6 +5,18 @@
 > **delta** is called out. Read this before touching code — the spec
 > (`docs/SAFE_BITE_PHASE_03_IMPL_SPEC.md`) has several inaccurate assumptions.
 
+## 0a. Stack update — Next 16 / next-intl 4 (applied 2026-07-09, PR #3)
+
+The repo was upgraded **Next 15.5 → Next 16.2.10 · next-intl 3.26 → 4.13.1 · Serwist 9.5.11 · React 19.2.7**
+(View Transitions enabled). Ref: `docs/NEXT16_MIGRATION.md`. Deltas that affect Phase 03:
+
+- **Network boundary is `apps/web/src/proxy.ts`** (default export `proxy` + `config.matcher`), NOT `middleware.ts`. The admin perimeter (`createMiddleware(routing)` + `ADMIN_COOKIE`/`verifyAdminCookie`, admin paths first) lives there, unchanged in behavior. Anywhere this doc/plan says "middleware", read **proxy.ts**. `requireAdmin(req)` in each handler is still the authoritative second layer.
+- **Request APIs stay async** (`params`/`searchParams`/`cookies`/`headers` are Promises) — already handled app-wide; `await ctx.params` still correct.
+- **Build uses Webpack** (`"build": "prisma generate && next build --webpack"`) because the Serwist SW needs Webpack; dev may use Turbopack. CI's `pnpm build` already resolves to this — **never drop `--webpack`** (offline is core). No change needed in Phase 03 code.
+- **next-intl v4, same house APIs**: navigation still via `@/i18n/navigation` (`Link`/`useRouter`/`usePathname`/`redirect`), copy via `useTranslations`/`getTranslations`, EN+VI parity. v4 nuance: `NextIntlClientProvider` takes an explicit `locale` prop (the admin island already passes `locale="en"`), `getRequestConfig` returns `{ locale, messages }`. Route-handler conventions (`runtime='nodejs'`, `dynamic='force-dynamic'`, `parseBody`/`apiOk`) are unchanged.
+- **View Transitions**: `experimental.viewTransition: true`; `(app)` layout wraps swapping content in React `<ViewTransition>`; the old CSS fade (`(app)/template.tsx`, `sb-page-enter`) is removed. Phase 03's public feedback routes live under `(app)`, so they inherit VT + the app shell automatically — do not add a page `template.tsx` or reintroduce the CSS fade.
+- **Prisma/DB: unchanged** — the upgrade made no schema changes. **Phase 02 is entirely unaffected.**
+
 ## 0. Spec-assumption deltas (the important corrections)
 
 | Spec assumed | Reality | Consequence |
@@ -52,8 +64,8 @@
 
 ## 4. Admin subsystem
 
-- **Auth:** `requireAdmin(req): Promise<NextResponse|null>` (`lib/admin-auth.ts:75`). Idiom: `const denied = await requireAdmin(req); if (denied) return denied;`. Middleware (`middleware.ts`) already 401s `/admin` API (login exempt). Cookie `sbt_admin` (httpOnly digest). `ADMIN_TOKEN` via `serverEnv().ADMIN_TOKEN`.
-- **API convention:** `runtime='nodejs'`, `dynamic='force-dynamic'`; `parseBody`/`parseQuery`; `apiOk`/`apiError`; Next 15 `ctx.params` is a **Promise** (`await ctx.params`). Prisma error map: `P2025→404`, `P2002→409`. Error codes seen: `UNAUTHORIZED, INVALID_TOKEN, VALIDATION_ERROR, NOT_FOUND, CONFLICT`.
+- **Auth:** `requireAdmin(req): Promise<NextResponse|null>` (`lib/admin-auth.ts:75`). Idiom: `const denied = await requireAdmin(req); if (denied) return denied;`. The proxy boundary (`proxy.ts`, Next 16 — formerly `middleware.ts`) already 401s `/admin` API (login exempt). Cookie `sbt_admin` (httpOnly digest). `ADMIN_TOKEN` via `serverEnv().ADMIN_TOKEN`.
+- **API convention:** `runtime='nodejs'`, `dynamic='force-dynamic'`; `parseBody`/`parseQuery`; `apiOk`/`apiError`; `ctx.params` is a **Promise** (`await ctx.params`) — unchanged in Next 16. Prisma error map: `P2025→404`, `P2002→409`. Error codes seen: `UNAUTHORIZED, INVALID_TOKEN, VALIDATION_ERROR, NOT_FOUND, CONFLICT`.
 - **Admin is a separate tree `app/admin/*`, NOT locale-prefixed**; uses `next/link` + `next/navigation` deliberately; fixed-locale `NextIntlClientProvider locale="en"` with `adminMessages` (English-only, in `app/admin/admin-messages.ts` — **NOT** in `messages/*.json`).
 - **Nav:** `const NAV` in `app/admin/layout.tsx:17-23` (add `{href:'/admin/feedback', key:'feedback'}` + `adminMessages.nav.feedback`).
 - **Admin pages are client components** using TanStack Query via `useAdminResource<T>(basePath, query)` / `adminFetch<T>(url, init)` (`features/admin/use-admin-resource.ts`) — the `sbt_admin` cookie rides along. **No server-component+Prisma admin page pattern.** Bespoke hooks (`menu-admin-hooks.ts`) exist where the API is asymmetric.

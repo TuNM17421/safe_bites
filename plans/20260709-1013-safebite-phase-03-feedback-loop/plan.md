@@ -21,8 +21,8 @@ CI job has no DB** so feedback logic must be unit-testable without Prisma (DB in
 
 | # | Phase | Depends on | Status |
 |---|---|---|---|
-| 01 | [Domain feedback core (schemas, signals, apply-logic) + unit tests](phase-01-domain-feedback-core.md) | — | ✅ Done (37 tests; quality gate green) |
-| 02 | [Prisma models, enums, migration, relations](phase-02-prisma-persistence.md) | 01 | ☐ Not started |
+| 01 | [Domain feedback core (schemas, signals, apply-logic) + unit tests](phase-01-domain-feedback-core.md) | — | ✅ Done — merged to `main` (41 tests; gate green under Next 16) |
+| 02 | [Prisma models, enums, migration, relations](phase-02-prisma-persistence.md) | 01 | ✅ Done (schema + additive migration; gate green; CI applies it) |
 | 03 | [Public feedback API (submit + options) + server services](phase-03-public-feedback-api.md) | 01, 02 | ☐ Not started |
 | 04 | [Recommendation integration (flags → signals → apply → feedbackSummary)](phase-04-recommendation-integration.md) | 01, 02, 03 | ☐ Not started |
 | 05 | [Admin feedback API (list/detail/patch/actions + audit)](phase-05-admin-feedback-api.md) | 02, 03 | ☐ Not started |

@@ -76,6 +76,89 @@ enum Strictness {
   strict
 }
 
+// ---------- Feedback enums — Phase 03 (§7.1) ----------
+
+enum FeedbackReportStatus {
+  needs_review
+  in_review
+  resolved
+  dismissed
+  spam
+}
+
+enum FeedbackPriority {
+  low
+  normal
+  high
+  urgent
+}
+
+enum FeedbackReaction {
+  none
+  mild
+  moderate
+  severe
+  anaphylaxis_or_emergency
+  not_sure
+  prefer_not_to_say
+}
+
+enum FeedbackReactionTiming {
+  during_meal
+  within_2_hours
+  later_same_day
+  next_day_or_later
+  not_sure
+  not_applicable
+}
+
+enum StaffAnswer {
+  confirmed_no_allergen
+  confirmed_contains_allergen
+  confirmed_can_remove
+  confirmed_cannot_remove
+  kitchen_checked
+  not_sure
+  language_barrier
+  no_answer
+  other
+}
+
+enum FeedbackFlagStatus {
+  active
+  resolved
+  dismissed
+  expired
+}
+
+enum FeedbackFlagEffect {
+  flag_for_review
+  downgrade_confidence
+  suppress_suitable
+  cap_restaurant_readiness
+  hide_recommendation
+}
+
+enum FeedbackEntityType {
+  restaurant
+  menu_item
+  dish
+}
+
+enum FeedbackAdminActionType {
+  start_review
+  resolve_no_change
+  dismiss_report
+  mark_spam
+  confirm_feedback_flag
+  clear_feedback_flag
+  request_reverification
+  apply_confidence_downgrade
+  suppress_suitable_until_review
+  hide_menu_item_temporarily
+  add_note
+}
+
 // ---------- Core models (§5.2) ----------
 
 model ProfileTemplate {
@@ -151,8 +234,9 @@ model Dish {
   createdAt                   DateTime     @default(now())
   updatedAt                   DateTime     @updatedAt
 
-  ingredients   DishIngredient[]
-  allergenRisks DishAllergenRisk[]
+  ingredients     DishIngredient[]
+  allergenRisks   DishAllergenRisk[]
+  feedbackReports FeedbackReport[]
 }
 
 model DishIngredient {
@@ -239,7 +323,8 @@ model Restaurant {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  menuItems MenuItem[]
+  menuItems       MenuItem[]
+  feedbackReports FeedbackReport[]
 
   @@index([externalSource, externalId])
   @@index([city])
@@ -278,6 +363,7 @@ model MenuItem {
 
   restaurant       Restaurant               @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   allergenStatuses MenuItemAllergenStatus[]
+  feedbackReports  FeedbackReport[]
 
   @@index([restaurantId])
   @@index([dishId])
@@ -326,4 +412,109 @@ model ImportRun {
   errors       Json?
   startedAt    DateTime  @default(now())
   finishedAt   DateTime?
+}
+
+// ---------- Feedback loop — Phase 03 (§7.2–§7.4) ----------
+
+model FeedbackReport {
+  id                     String                  @id @default(cuid())
+  clientReportId         String                  @unique @map("client_report_id")
+  city                   String
+  locale                 String?
+  clientPlatform         String                  @default("pwa_web") @map("client_platform")
+  submissionSource       String                  @default("online") @map("submission_source") // online | offline_synced
+  offlineCreatedAt       DateTime?               @map("offline_created_at")
+
+  restaurantId           String                  @map("restaurant_id")
+  menuItemId             String?                 @map("menu_item_id")
+  dishId                 String?                 @map("dish_id")
+
+  allergenIds            String[]                @default([]) @map("allergen_ids")
+  profileSnapshot        Json                    @map("profile_snapshot")
+  recommendationSnapshot Json?                   @map("recommendation_snapshot")
+
+  ateHere                Boolean?                @map("ate_here")
+  visitedAt              DateTime?               @map("visited_at")
+  askedStaff             Boolean?                @map("asked_staff")
+  staffAnswer            StaffAnswer?            @map("staff_answer")
+  staffAnswerText        String?                 @map("staff_answer_text") @db.Text
+
+  reaction               FeedbackReaction
+  reactionTiming         FeedbackReactionTiming? @map("reaction_timing")
+  userTrustRating        Int?                    @map("user_trust_rating")
+  notes                  String?                 @db.Text
+
+  status                 FeedbackReportStatus    @default(needs_review)
+  priority               FeedbackPriority        @default(normal)
+  severeAutoFlagged      Boolean                 @default(false) @map("severe_auto_flagged")
+
+  reviewedAt             DateTime?               @map("reviewed_at")
+  reviewedBy             String?                 @map("reviewed_by")
+  reviewOutcome          String?                 @map("review_outcome")
+  adminSummary           String?                 @map("admin_summary") @db.Text
+
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+
+  restaurant             Restaurant              @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  menuItem               MenuItem?               @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  dish                   Dish?                   @relation(fields: [dishId], references: [id], onDelete: SetNull)
+  flags                  FeedbackFlag[]
+  actions                FeedbackAdminAction[]
+
+  @@index([restaurantId, createdAt])
+  @@index([menuItemId, createdAt])
+  @@index([dishId, createdAt])
+  @@index([status, priority, createdAt])
+}
+
+model FeedbackFlag {
+  id              String                @id @default(cuid())
+  reportId        String?               @map("report_id")
+  entityType      FeedbackEntityType    @map("entity_type")
+  entityId        String                @map("entity_id")
+  restaurantId    String?               @map("restaurant_id")
+  menuItemId      String?               @map("menu_item_id")
+  dishId          String?               @map("dish_id")
+  allergenId      String?               @map("allergen_id")
+  effect          FeedbackFlagEffect
+  status          FeedbackFlagStatus    @default(active)
+  priority        FeedbackPriority      @default(normal)
+  reason          String                @db.Text
+  publicReasonKey String?               @map("public_reason_key")
+  confidenceDelta Float?                @map("confidence_delta")
+  readinessCap    String?               @map("readiness_cap")
+  expiresAt       DateTime?             @map("expires_at")
+  resolvedAt      DateTime?             @map("resolved_at")
+  resolvedBy      String?               @map("resolved_by")
+  adminNote       String?               @map("admin_note") @db.Text
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  report          FeedbackReport?       @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  actions         FeedbackAdminAction[]
+
+  @@index([entityType, entityId, status])
+  @@index([restaurantId, status])
+  @@index([menuItemId, status])
+  @@index([dishId, status])
+  @@index([allergenId, status])
+}
+
+model FeedbackAdminAction {
+  id         String                  @id @default(cuid())
+  reportId   String                  @map("report_id")
+  flagId     String?                 @map("flag_id")
+  actionType FeedbackAdminActionType @map("action_type")
+  actor      String // "admin" | "system"
+  note       String?                 @db.Text
+  before     Json?
+  after      Json?
+  createdAt  DateTime                @default(now())
+
+  report     FeedbackReport          @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  flag       FeedbackFlag?           @relation(fields: [flagId], references: [id], onDelete: SetNull)
+
+  @@index([reportId, createdAt])
+  @@index([flagId, createdAt])
 }
