@@ -7,6 +7,12 @@ PostGIS). Co-locate both in **Singapore (`ap-southeast-1`)** — closest to the 
 > Phase 1 is **local-first**: the production DB holds only the content catalog (allergens,
 > dishes, risks) and hidden restaurant rows — **no user PII**. Profiles live in the browser.
 
+> **Next 16 migration (planned).** A Next.js 15.5 → 16 upgrade is planned
+> (`plans/20260709-1058-nextjs-16-upgrade/`, ref `docs/NEXT16_MIGRATION.md`). It **changes the build
+> command** to `next build --webpack` — Turbopack is Next 16's default but the Serwist service worker
+> needs Webpack (offline is a core feature). Once executed, section 2/4 below and `vercel.json`
+> `buildCommand` become `prisma generate && prisma migrate deploy && next build --webpack`.
+
 ---
 
 ## 0. Prerequisites

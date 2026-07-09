@@ -2,6 +2,8 @@
 
 **This folder is the single source of truth for how SafeBite looks and behaves. Every phase — current and future — builds toward the mockups here.**
 
+> **Motion / page transitions:** screen-to-screen navigation uses React **View Transitions** (cross-fade + shared-element morph), enabled by the Next 16 upgrade — see `docs/NEXT16_MIGRATION.md` (§ "Page transitions"). Until that upgrade lands, a CSS fade (`(app)/template.tsx`) is used. Component-level motion still uses the `sb-*` motion tokens and always respects `prefers-reduced-motion`.
+
 ## Files
 
 | File | What it is |
