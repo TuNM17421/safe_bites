@@ -69,8 +69,15 @@ const safebite: Partial<Config> = {
       keyframes: {
         'sb-shimmer': { '100%': { transform: 'translateX(100%)' } },
         'sb-spin': { to: { transform: 'rotate(360deg)' } },
+        // Route enter: gentle fade + rise. `backwards` fill applies the start frame before the
+        // run and reverts to base after, so no lingering transform traps position:fixed children.
+        'sb-page-enter': { from: { opacity: '0', transform: 'translateY(8px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
       },
-      animation: { 'sb-shimmer':'sb-shimmer 1200ms linear infinite', 'sb-spin':'sb-spin .8s linear infinite' },
+      animation: {
+        'sb-shimmer': 'sb-shimmer 1200ms linear infinite',
+        'sb-spin': 'sb-spin .8s linear infinite',
+        'sb-page-enter': 'sb-page-enter 300ms cubic-bezier(0.05,0.7,0.1,1) backwards',
+      },
     },
   },
 };

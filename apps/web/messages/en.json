@@ -39,7 +39,7 @@
   "nav": {
     "home": "Home",
     "dishes": "Dishes",
-    "restaurants": "Restaurants",
+    "restaurants": "Nearby",
     "allergyCard": "Allergy card",
     "questionCard": "Question card",
     "profile": "Profile"
@@ -189,7 +189,7 @@
     }
   },
   "restaurants": {
-    "screenTitle": "Restaurants",
+    "screenTitle": "Nearby",
     "rankedReminder": "Ranked by allergy readiness for your profile. Always confirm with staff before ordering.",
     "searchPlaceholder": "Search by name",
     "filterDistrict": "District",

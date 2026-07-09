@@ -39,7 +39,7 @@
   "nav": {
     "home": "Trang chủ",
     "dishes": "Món ăn",
-    "restaurants": "Nhà hàng",
+    "restaurants": "Gần đây",
     "allergyCard": "Thẻ dị ứng",
     "questionCard": "Thẻ câu hỏi",
     "profile": "Hồ sơ"
@@ -189,7 +189,7 @@
     }
   },
   "restaurants": {
-    "screenTitle": "Nhà hàng",
+    "screenTitle": "Gần đây",
     "rankedReminder": "Xếp hạng theo mức độ sẵn sàng cho hồ sơ dị ứng của bạn. Luôn xác nhận với nhân viên trước khi gọi món.",
     "searchPlaceholder": "Tìm theo tên",
     "filterDistrict": "Quận",
