@@ -10,6 +10,7 @@ interface Input {
   profile: LocalUserProfile | null;
   targetLanguage: LanguageCode;
   dishId?: string;
+  menuItemId?: string;
   includeDish: boolean;
 }
 
@@ -26,7 +27,7 @@ async function resolveDishName(dishId: string): Promise<{ en: string; vi: string
   return saved ? { en: saved.name.en, vi: saved.name.vi } : undefined;
 }
 
-export function useQuestionCard({ profile, targetLanguage, dishId, includeDish }: Input): QuestionCardResult {
+export function useQuestionCard({ profile, targetLanguage, dishId, menuItemId, includeDish }: Input): QuestionCardResult {
   const online = useOnlineStatus();
   const [card, setCard] = useState<QuestionCardRecord | null>(null);
   const [source, setSource] = useState<'live' | 'saved' | null>(null);
@@ -49,6 +50,7 @@ export function useQuestionCard({ profile, targetLanguage, dishId, includeDish }
             destinationCity: profile.destinationCity,
           },
           dishId: effectiveDishId,
+          menuItemId,
           targetLanguage,
         });
         await questionCardRepo.saveLastQuestionCard(record);
@@ -81,7 +83,7 @@ export function useQuestionCard({ profile, targetLanguage, dishId, includeDish }
     } finally {
       setIsGenerating(false);
     }
-  }, [profile, targetLanguage, dishId, includeDish, online]);
+  }, [profile, targetLanguage, dishId, menuItemId, includeDish, online]);
 
   useEffect(() => {
     void generate();

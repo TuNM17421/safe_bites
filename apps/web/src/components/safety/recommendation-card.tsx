@@ -1,4 +1,5 @@
 'use client';
+import { ViewTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import type { DishRecommendationCard, LanguageCode } from '@safebite/domain';
 import { ConfidenceMeter } from '@/components/status/confidence-badge';
@@ -13,18 +14,21 @@ export function RecommendationCard({
   card,
   lang,
   showSubtitle = false,
+  morphName,
 }: {
   card: DishRecommendationCard;
   lang: LanguageCode;
   showSubtitle?: boolean;
+  morphName?: string;
 }) {
   const t = useTranslations('dishes');
   const title = showSubtitle ? card.name.vi : card.name[lang];
+  const heading = <h3 className="text-sb-title font-bold text-sb-fg">{title}</h3>;
   return (
     <article className="rounded-sb-md border border-sb-border bg-sb-surface p-4 shadow-sb-e1">
       <header className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="text-sb-title font-bold text-sb-fg">{title}</h3>
+          {morphName ? <ViewTransition name={morphName}>{heading}</ViewTransition> : heading}
           {showSubtitle && lang === 'en' && <p className="mt-0.5 text-sb-body-s text-sb-muted">{card.name.en}</p>}
         </div>
         <StatusBadge status={card.status} />

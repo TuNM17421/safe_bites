@@ -5,10 +5,11 @@ import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
-// Admin perimeter composed AROUND next-intl (phase-12 §9.7). Admin paths are handled first
-// so `/admin` is never locale-redirected to `/en/admin`; everything else falls through to
-// the intl middleware. `requireAdmin` in each handler is the authoritative second layer.
-export default async function middleware(req: NextRequest) {
+// Network boundary (Next 16: proxy.ts, formerly middleware.ts). Admin perimeter composed AROUND
+// next-intl (phase-12 §9.7): admin paths are handled first so `/admin` is never locale-redirected to
+// `/en/admin`; everything else falls through to the intl middleware. `requireAdmin` in each handler is
+// the authoritative second layer.
+export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const cookie = req.cookies.get(ADMIN_COOKIE)?.value;
 

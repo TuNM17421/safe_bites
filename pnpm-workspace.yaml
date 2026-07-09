@@ -2,18 +2,14 @@ packages:
   - "apps/*"
   - "packages/*"
 
-# Prebuilt-binary / codegen deps that need their install script approved under pnpm's
-# secure-by-default build policy: esbuild (vitest/vite), sharp (Next image optimizer),
-# prisma engines/client (query-engine binary + client codegen).
+# pnpm 11 build-script approvals (`allowBuilds`). All are trusted prebuild/codegen deps: esbuild
+# (vitest/vite), sharp (Next image), prisma engines/client (codegen), and @swc/core + @parcel/watcher
+# (Next 16 toolchain; ship platform prebuilds).
 allowBuilds:
   esbuild: true
   sharp: true
   prisma: true
-  "@prisma/client": true
-  "@prisma/engines": true
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
-  - prisma
-  - "@prisma/client"
-  - "@prisma/engines"
+  '@prisma/client': true
+  '@prisma/engines': true
+  '@swc/core': true
+  '@parcel/watcher': true

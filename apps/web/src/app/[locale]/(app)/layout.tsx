@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { ViewTransition, type ReactNode } from 'react';
 import { setRequestLocale } from 'next-intl/server';
 import { AppHeader } from '@/components/app-shell/app-header';
 import { BottomNav } from '@/components/app-shell/bottom-nav';
@@ -21,7 +21,9 @@ export default async function AppShellLayout({
       <ProfileHydrator />
       <AppHeader />
       <OfflineBanner />
-      <main className="flex-1 px-4 py-4">{children}</main>
+      <main className="flex-1 px-4 py-4">
+        <ViewTransition>{children}</ViewTransition>
+      </main>
       <InstallEducationCard />
       <BottomNav />
     </div>

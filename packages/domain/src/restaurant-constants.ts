@@ -58,6 +58,25 @@ export const STALE_REASON: Bilingual = {
   vi: 'Thông tin này chưa được kiểm tra gần đây và có thể đã lỗi thời.',
 };
 
+// --- Phase 03 feedback (§11.4/§11.6). Calm, hedged copy — never a verification claim. ---
+
+// Internal source marker written onto a menu-item recommendation whose Suitable status was
+// suppressed by an active feedback flag. The public UI maps this to a "Feedback under review"
+// label (not a verification source).
+export const FEEDBACK_UNDER_REVIEW_SOURCE = 'feedback_under_review';
+
+// Menu-item reason bound when an active feedback flag downgrades/suppresses the item.
+export const FEEDBACK_UNDER_REVIEW_REASON: Bilingual = {
+  en: 'Recent feedback for this item is under review. Ask staff directly before ordering.',
+  vi: 'Phản hồi gần đây về món này đang được kiểm tra. Hãy hỏi trực tiếp nhân viên trước khi gọi món.',
+};
+
+// Restaurant readiness reason appended when an active feedback flag caps/flags the restaurant.
+export const FEEDBACK_UNDER_REVIEW_SUMMARY: Bilingual = {
+  en: 'Recent feedback for this restaurant is under review. Take extra care and ask staff before ordering.',
+  vi: 'Phản hồi gần đây về nhà hàng này đang được kiểm tra. Hãy cẩn trọng và hỏi nhân viên trước khi gọi món.',
+};
+
 // §7.7 freshness thresholds in days, keyed by source/verification type. Discovery freshness
 // only — OSM/OpenMap is never treated as allergy verification regardless of age.
 export const STALENESS_DAYS: Record<string, number> = {

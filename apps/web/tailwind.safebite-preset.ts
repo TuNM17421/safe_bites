@@ -70,7 +70,10 @@ const safebite: Partial<Config> = {
         'sb-shimmer': { '100%': { transform: 'translateX(100%)' } },
         'sb-spin': { to: { transform: 'rotate(360deg)' } },
       },
-      animation: { 'sb-shimmer':'sb-shimmer 1200ms linear infinite', 'sb-spin':'sb-spin .8s linear infinite' },
+      animation: {
+        'sb-shimmer': 'sb-shimmer 1200ms linear infinite',
+        'sb-spin': 'sb-spin .8s linear infinite',
+      },
     },
   },
 };

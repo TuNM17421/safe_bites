@@ -7,15 +7,15 @@ export default async function QuestionCardPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ dishId?: string }>;
+  searchParams: Promise<{ dishId?: string; menuItemId?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { dishId } = await searchParams;
+  const { dishId, menuItemId } = await searchParams;
   return (
     <div className="flex flex-col gap-4">
       <SafetyNotice />
-      <QuestionCardScreen dishId={dishId} />
+      <QuestionCardScreen dishId={dishId} menuItemId={menuItemId} />
     </div>
   );
 }

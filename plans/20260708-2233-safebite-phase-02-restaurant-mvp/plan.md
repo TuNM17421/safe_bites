@@ -22,9 +22,11 @@ Risk **reduction**, never elimination. List-first; map is decorative P1.
 | 04 | [Admin restaurant & menu APIs](phase-04-admin-restaurant-and-menu-apis.md) | ✅ Done | 02 |
 | 05 | [Admin restaurant & menu UI](phase-05-admin-restaurant-and-menu-ui.md) | ✅ Done | 04 |
 | 06 | [Public restaurant APIs](phase-06-public-restaurant-apis.md) | ✅ Done | 01, 02 |
-| 07 | [Public restaurant UI](phase-07-public-restaurant-ui.md) | Not started | 06 |
-| 08 | [Location, map shell, offline, question card](phase-08-location-map-offline-questioncard.md) | Not started | 07 |
-| 09 | [Tests, README, quality gates](phase-09-tests-readme-quality-gates.md) | Not started | all |
+| 07 | [Public restaurant UI](phase-07-public-restaurant-ui.md) | ✅ Done | 06 |
+| 08 | [Location, map shell, offline, question card](phase-08-location-map-offline-questioncard.md) | ✅ Done | 07 |
+| 09 | [Tests, README, quality gates](phase-09-tests-readme-quality-gates.md) | ✅ Done | all |
+
+**All phases complete.** Gates green: typecheck · lint · test (96) · copy:check · test:e2e (dish + restaurant) · build.
 
 ## Build order (spec §20)
 

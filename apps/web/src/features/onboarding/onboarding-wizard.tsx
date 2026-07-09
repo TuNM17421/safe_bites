@@ -53,8 +53,8 @@ export function OnboardingWizard() {
   ];
 
   return (
-    <div className="flex min-h-[70vh] flex-col gap-5">
-      <div className="flex flex-col gap-3">
+    <div className="flex flex-1 flex-col">
+      <div className="flex flex-col gap-3 pt-4">
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -77,9 +77,9 @@ export function OnboardingWizard() {
         </div>
       </div>
 
-      <div className="flex-1">{steps[draft.step]}</div>
+      <div className="flex-1 py-5">{steps[draft.step]}</div>
 
-      <div className="sticky bottom-0 z-20 -mx-4 mt-auto border-t border-sb-border bg-sb-surface px-4 py-3">
+      <div className="sticky bottom-0 z-20 -mx-4 border-t border-sb-border bg-sb-surface px-4 py-3">
         {draft.step < TOTAL - 1 ? (
           <button
             type="button"

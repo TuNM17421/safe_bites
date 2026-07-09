@@ -50,3 +50,20 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+/* View Transitions (Next 16 experimental.viewTransition). Tune the default root cross-fade to the
+   app's emphasized-decelerate motion; freeze under reduced motion so navigation swaps instantly.
+   Unsupported browsers (e.g. Firefox) simply don't animate — the app works normally. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

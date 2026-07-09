@@ -8,7 +8,7 @@ import { Link } from '@/i18n/navigation';
 export function DishCard({ card, lang }: { card: DishRecommendationCard; lang: LanguageCode }) {
   return (
     <Link href={`/dishes/${card.dishId}`} className="block rounded-sb-md focus-visible:shadow-sb-focus">
-      <RecommendationCard card={card} lang={lang} showSubtitle />
+      <RecommendationCard card={card} lang={lang} showSubtitle morphName={`dish-title-${card.dishId}`} />
     </Link>
   );
 }

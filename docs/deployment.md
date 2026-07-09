@@ -7,6 +7,11 @@ PostGIS). Co-locate both in **Singapore (`ap-southeast-1`)** — closest to the 
 > Phase 1 is **local-first**: the production DB holds only the content catalog (allergens,
 > dishes, risks) and hidden restaurant rows — **no user PII**. Profiles live in the browser.
 
+> **Next 16 (done, 2026-07-09).** The app runs on Next.js 16 (`docs/NEXT16_MIGRATION.md`). The build
+> uses **`next build --webpack`** — Turbopack is Next 16's default but the Serwist service worker needs
+> Webpack (offline is a core feature). `vercel.json` `buildCommand` is already
+> `prisma generate && prisma migrate deploy && next build --webpack`; keep the `--webpack` flag.
+
 ---
 
 ## 0. Prerequisites
@@ -67,8 +72,9 @@ Secrets live **only** in Vercel/Neon; `.env` is git-ignored and `.env.example` c
 
 ## 4. Build & migrate
 
-The Vercel build runs `prisma generate && prisma migrate deploy && next build`
-(`apps/web/vercel.json`). `migrate deploy` uses `DIRECT_URL` and applies the init migration →
+The Vercel build runs `prisma generate && prisma migrate deploy && next build --webpack`
+(`apps/web/vercel.json`; `--webpack` is required so Serwist can bundle the service worker under Next
+16's Turbopack default). `migrate deploy` uses `DIRECT_URL` and applies the init migration →
 all **9 tables** + the `postgis` extension on Neon.
 
 **Verify** after the first deploy (from an ops shell with `DIRECT_URL` exported):

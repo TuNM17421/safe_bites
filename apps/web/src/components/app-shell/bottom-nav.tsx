@@ -1,23 +1,24 @@
 'use client';
-import { CircleUser, House, IdCard, MessageCircle, UtensilsCrossed } from 'lucide-react';
+import { CircleUser, House, MapPin, UtensilsCrossed } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 
+// Mobile bottom navigation — 4 top-level DESTINATIONS only (Material 3 / iOS HIG: 3–5 max;
+// 6 crowds thumb targets). Actions/utilities live elsewhere, per destination-vs-action:
+//   • Allergy card → persistent quick-access button in the AppHeader + Home hub.
+//   • Question card → contextual CTA on dish/restaurant detail + Home hub.
 const TABS = [
   { href: '/home', key: 'home', Icon: House },
   { href: '/dishes', key: 'dishes', Icon: UtensilsCrossed },
-  { href: '/allergy-card', key: 'allergyCard', Icon: IdCard },
-  { href: '/question-card', key: 'questionCard', Icon: MessageCircle },
+  { href: '/restaurants', key: 'restaurants', Icon: MapPin },
   { href: '/profile', key: 'profile', Icon: CircleUser },
 ] as const;
 
-// Mobile bottom navigation. Locale-aware links via @/i18n/navigation; no restaurant tab
-// (OSM data is discovery-only and hidden in Phase 1).
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
   return (
-    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
+    <nav className="sticky bottom-0 z-10 grid grid-cols-4 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
       {TABS.map(({ href, key, Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
@@ -25,7 +26,7 @@ export function BottomNav() {
             key={href}
             href={href}
             aria-current={active ? 'page' : undefined}
-            className="flex min-h-[48px] flex-col items-center justify-center gap-0.5 py-2 text-xs focus-visible:shadow-sb-focus"
+            className="flex min-h-sb-tap flex-col items-center justify-center gap-0.5 py-2 text-xs focus-visible:shadow-sb-focus"
           >
             <span className={`flex items-center rounded-full px-3 py-0.5 ${active ? 'bg-sb-brand-soft text-sb-brand' : 'text-sb-muted'}`}>
               <Icon aria-hidden className="size-5" />
