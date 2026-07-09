@@ -1,6 +1,9 @@
 import {
   restaurantRecommendationRequestSchema,
+  summarizeFeedbackSignals,
   type ConfidenceLabel,
+  type FeedbackSignal,
+  type FeedbackSummary,
   type RestaurantReadinessClass,
   type RestaurantRecommendation,
 } from '@safebite/domain';
@@ -8,7 +11,8 @@ import { apiOk, parseBody } from '@/lib/api-response';
 import { prisma } from '@/lib/db';
 import { haversineMeters } from '@/lib/geo/haversine';
 import { buildProfile, recommendRestaurant } from '@/lib/restaurant-recommend';
-import { approvedRestaurantWhere, loadDishRecMap } from '@/lib/restaurant-query';
+import { approvedRestaurantWhere, loadActiveFeedbackFlags, loadDishRecMap } from '@/lib/restaurant-query';
+import { flagRowToSignal } from '@/server/feedback/get-feedback-signals';
 import {
   attributionFor,
   restaurantDisplayName,
@@ -21,7 +25,12 @@ export const dynamic = 'force-dynamic';
 const CLASS_ORDER: Record<RestaurantReadinessClass, number> = { A: 0, B: 1, C: 2, D: 3, E: 4 };
 const CONF_ORDER: Record<ConfidenceLabel, number> = { high: 0, medium: 1, low: 2 };
 
-function toListItem(r: RestaurantWithMenu, rec: RestaurantRecommendation, distanceMeters: number | null) {
+function toListItem(
+  r: RestaurantWithMenu,
+  rec: RestaurantRecommendation,
+  distanceMeters: number | null,
+  feedbackSummary?: FeedbackSummary,
+) {
   return {
     restaurantId: r.id,
     slug: r.slug,
@@ -40,6 +49,7 @@ function toListItem(r: RestaurantWithMenu, rec: RestaurantRecommendation, distan
     menuStatus: rec.menuStatus,
     lastCheckedAt: rec.lastCheckedAt,
     stale: rec.stale,
+    feedbackSummary, // undefined ⇒ omitted from JSON (backward-compatible)
   };
 }
 
@@ -90,13 +100,30 @@ export async function POST(req: Request) {
     restaurants.flatMap((r) => r.menuItems.map((m) => m.dishId)),
   );
 
+  // Active feedback flags for the whole page (restaurant-level only in the list view, §11.2).
+  const profileAllergenIds = profile.allergies.map((a) => a.allergenId);
+  const severityByAllergen = Object.fromEntries(profile.allergies.map((a) => [a.allergenId, a.severity]));
+  const flags = await loadActiveFeedbackFlags({ restaurantIds: restaurants.map((r) => r.id) });
+  const signalsByRestaurant = new Map<string, FeedbackSignal[]>();
+  for (const flag of flags) {
+    const signal = flagRowToSignal(flag);
+    const key = signal.restaurantId ?? signal.entityId;
+    signalsByRestaurant.set(key, [...(signalsByRestaurant.get(key) ?? []), signal]);
+  }
+
   const items = restaurants.map((r) => {
-    const { recommendation } = recommendRestaurant(r, dishRecMap, profile, now);
+    const rSignals = signalsByRestaurant.get(r.id) ?? [];
+    const { recommendation } = recommendRestaurant(r, dishRecMap, profile, now, {
+      signals: rSignals,
+      profileAllergenIds,
+      severityByAllergen,
+    });
+    const summary = rSignals.length ? summarizeFeedbackSignals({ signals: rSignals, profileAllergenIds, now }) : null;
     const distanceMeters =
       clientLocation && r.lat !== null && r.lon !== null
         ? haversineMeters(clientLocation, { lat: Number(r.lat), lon: Number(r.lon) })
         : null;
-    return toListItem(r, recommendation, distanceMeters);
+    return toListItem(r, recommendation, distanceMeters, summary?.hasActiveFlags ? summary : undefined);
   });
 
   const sorted = sortItems(items, filters.sort);

@@ -1,8 +1,11 @@
 import {
+  applyFeedbackSignalsToMenuItem,
+  applyFeedbackSignalsToRestaurantReadiness,
   evaluateMenuItem,
   evaluateRestaurantReadiness,
   type DishRecommendationCard,
   type DishRecommendationLike,
+  type FeedbackSignal,
   type LocalUserProfile,
   type MenuItemRecommendation,
   type RestaurantMenuStatus,
@@ -52,19 +55,36 @@ export function dishCardToLike(card: DishRecommendationCard): DishRecommendation
   };
 }
 
+// Active feedback context threaded from the route (§11). Default = none, so callers/tests that
+// omit it get byte-identical Phase-02 output (the apply-fns no-op on an empty signal set).
+export interface FeedbackContext {
+  signals: FeedbackSignal[];
+  profileAllergenIds: string[];
+  severityByAllergen: Record<string, string>;
+}
+
+const NO_FEEDBACK: FeedbackContext = { signals: [], profileAllergenIds: [], severityByAllergen: {} };
+
 // Evaluate a restaurant's menu items and roll them up to a readiness class for the profile.
 // `dishRecMap` holds pre-evaluated cards for the APPROVED dishes referenced by menu items;
 // unmapped/unapproved dishes simply provide no inference (evidence falls back to Unknown).
+//
+// Feedback ordering (§11, corrected): readiness is computed from the BASE menu recs, THEN the two
+// feedback transforms are applied independently. `applyFeedbackSignalsToMenuItem` rewrites `source`
+// to the review marker, so its output must never feed the readiness evaluator (it detects evidence
+// by `source`). The restaurant class reflects feedback via active `cap_restaurant_readiness` flags.
 export function recommendRestaurant(
   restaurant: RestaurantWithMenu,
   dishRecMap: Map<string, DishRecommendationLike>,
   profile: LocalUserProfile,
   now: Date,
+  feedback: FeedbackContext = NO_FEEDBACK,
 ): { recommendation: RestaurantRecommendation; menuRecommendations: MenuItemRecommendation[] } {
   const menuStatus = restaurant.menuStatus as RestaurantMenuStatus;
   const restaurantVerificationStatus = restaurant.verificationStatus as RestaurantVerificationStatus;
+  const { signals, profileAllergenIds, severityByAllergen } = feedback;
 
-  const menuRecommendations = restaurant.menuItems.map((m) =>
+  const baseMenuRecommendations = restaurant.menuItems.map((m) =>
     evaluateMenuItem({
       menuItem: toMenuItemLike(m),
       explicitAllergenStatuses: m.allergenStatuses.map(toAllergenStatusLike),
@@ -76,12 +96,25 @@ export function recommendRestaurant(
     }),
   );
 
-  const recommendation = evaluateRestaurantReadiness({
+  // Readiness from BASE recs (source intact), then apply the restaurant-level feedback cap.
+  const baseReadiness = evaluateRestaurantReadiness({
     restaurant: toRestaurantLike(restaurant),
-    menuRecommendations,
+    menuRecommendations: baseMenuRecommendations,
     profile,
     now,
   });
+  const recommendation = applyFeedbackSignalsToRestaurantReadiness({
+    recommendation: baseReadiness,
+    signals,
+    profileAllergenIds,
+    severityByAllergen,
+    now,
+  });
+
+  // Per-item feedback adjustment (may rewrite status/source/confidence) — applied to base recs.
+  const menuRecommendations = baseMenuRecommendations.map((rec) =>
+    applyFeedbackSignalsToMenuItem({ recommendation: rec, signals, profileAllergenIds, severityByAllergen, now }),
+  );
 
   return { recommendation, menuRecommendations };
 }
