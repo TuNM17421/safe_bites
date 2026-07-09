@@ -1,5 +1,6 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
+import { SkeletonCard } from '@/components/common/skeleton-card';
 import { AllergenChip } from '@/components/safety/allergen-chip';
 import { SafetyNotice } from '@/components/safety/safety-notice';
 import { Link } from '@/i18n/navigation';
@@ -16,7 +17,7 @@ export function AllergyCardDisplay() {
   const hydrated = useProfileStore((s) => s.hydrated);
   const card = useProfileStore((s) => s.allergyCard);
 
-  if (!hydrated) return <p className="text-sb-body-s text-sb-muted">…</p>;
+  if (!hydrated) return <SkeletonCard />;
   if (!card) {
     return (
       <div className="flex flex-col gap-3">

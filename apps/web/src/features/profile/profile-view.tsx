@@ -2,6 +2,7 @@
 import { CircleUser, Languages, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
+import { SkeletonCard } from '@/components/common/skeleton-card';
 import { AllergenChip } from '@/components/safety/allergen-chip';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
@@ -27,7 +28,7 @@ export function ProfileView() {
   const clearAll = useProfileStore((s) => s.clearAll);
   const router = useRouter();
 
-  if (!hydrated) return <p className="text-sb-body-s text-sb-muted">…</p>;
+  if (!hydrated) return <SkeletonCard />;
   if (!profile) {
     return (
       <div className="flex flex-col gap-3">
