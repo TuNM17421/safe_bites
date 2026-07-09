@@ -154,9 +154,9 @@ export const FeedbackReportInputSchema = z
     userTrustRating: z.number().int().min(1).max(5).nullish(),
     notes: z.string().max(500).nullish(),
   })
-  // §9.3: at least one of profileSnapshot(allergies) / allergenIds must be present so the
-  // report can be interpreted against an allergen.
   .superRefine((val, ctx) => {
+    // §9.3: at least one of profileSnapshot(allergies) / allergenIds must be present so the
+    // report can be interpreted against an allergen.
     const hasAllergenIds = val.allergenIds.length > 0;
     const hasSnapshot = (val.profileSnapshot?.allergies.length ?? 0) > 0;
     if (!hasAllergenIds && !hasSnapshot) {
@@ -165,6 +165,28 @@ export const FeedbackReportInputSchema = z
         message: 'Provide profileSnapshot.allergies or allergenIds.',
         path: ['allergenIds'],
       });
+    }
+
+    // §9.3 limits: visitedAt cannot be >30 days in the future or >180 days in the past.
+    if (val.visitedAt) {
+      const t = Date.parse(val.visitedAt);
+      if (!Number.isNaN(t)) {
+        const now = Date.now();
+        const DAY = 86_400_000;
+        if (t - now > 30 * DAY) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'visitedAt cannot be more than 30 days in the future.',
+            path: ['visitedAt'],
+          });
+        } else if (now - t > 180 * DAY) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'visitedAt cannot be more than 180 days in the past.',
+            path: ['visitedAt'],
+          });
+        }
+      }
     }
   });
 export type FeedbackReportInput = z.infer<typeof FeedbackReportInputSchema>;

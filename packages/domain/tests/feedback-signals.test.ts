@@ -207,4 +207,20 @@ describe('FeedbackReportInputSchema (§9.3 validation)', () => {
     };
     expect(FeedbackReportInputSchema.safeParse(withSnapshot).success).toBe(true);
   });
+
+  const DAY = 86_400_000;
+  it('rejects visitedAt more than 30 days in the future', () => {
+    const future = new Date(Date.now() + 40 * DAY).toISOString();
+    expect(FeedbackReportInputSchema.safeParse({ ...valid, visitedAt: future }).success).toBe(false);
+  });
+
+  it('rejects visitedAt more than 180 days in the past', () => {
+    const past = new Date(Date.now() - 200 * DAY).toISOString();
+    expect(FeedbackReportInputSchema.safeParse({ ...valid, visitedAt: past }).success).toBe(false);
+  });
+
+  it('accepts a recent visitedAt', () => {
+    const recent = new Date(Date.now() - 2 * DAY).toISOString();
+    expect(FeedbackReportInputSchema.safeParse({ ...valid, visitedAt: recent }).success).toBe(true);
+  });
 });

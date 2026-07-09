@@ -35,7 +35,7 @@ Spec §20.2 assertion → where it lives:
 
 | §20.2 assertion | Home |
 |---|---|
-| POST creates report / validates required / rejects mismatched menuItem / idempotent by clientReportId | **e2e** (real DB) + schema-shape half in `feedback-schema.test.ts` (pure) |
+| POST creates report / validates required / rejects mismatched menuItem / idempotent by clientReportId | **e2e** (real DB) + schema-shape half in `feedback-schema.test.ts` (pure). E2E MUST assert: re-POST same `clientReportId` → 200 + identical `reportId` + zero new rows; and the POST response body contains **no** `notes`/`staffAnswerText`/`profileSnapshot` (privacy). Whitelist itself is guarded DB-free by `buildMinimalProfileSnapshot` unit tests (Phase 03). |
 | Severe creates urgent active flags / no-reaction creates none | **pure** `feedback-plan.test.ts` (`planFeedbackReport`) + **e2e** persistence assertion |
 | Feedback notes length-limited | **pure** `feedback-schema.test.ts` (Zod max 500) |
 | Admin list requires auth / start review / resolve / audit row / clear flag | **e2e** (admin-login helper + real DB) |
