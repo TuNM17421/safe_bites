@@ -1,6 +1,6 @@
 # SafeBite Travel — Next.js 16 Upgrade (Implementation Plan)
 
-**Migration doc:** `docs/NEXT16_MIGRATION.md` · **Created:** 2026-07-09 · **Status:** Planned (not started)
+**Migration doc:** `docs/NEXT16_MIGRATION.md` · **Created:** 2026-07-09 · **Status:** ✅ Done (2026-07-09, branch `chore/nextjs-16-upgrade`; Playwright e2e pending CI)
 
 Upgrade the web app from **Next.js 15.5 → 16** (React stays 19.2) so we can ship real **View
 Transitions** (cross-fade + shared-element morph) — a feature that is unavailable on 15.5 because
@@ -29,12 +29,12 @@ build (Serwist) as the top risk.
 ## Phases
 | # | Phase | Depends on | Status |
 |---|-------|-----------|--------|
-| 01 | [Pre-flight, branch & baseline](phase-01-preflight-and-baseline.md) | — | ☐ Not started |
-| 02 | [Core upgrade: codemod + Next 16 + Serwist + middleware→proxy](phase-02-core-upgrade.md) | 01 | ☐ Not started |
-| 03 | [next-intl v3 → v4 migration](phase-03-next-intl-v4.md) | 02 | ☐ Not started |
-| 04 | [PWA / Turbopack build (`--webpack`) + offline verify](phase-04-pwa-turbopack-build.md) | 02 | ☐ Not started |
-| 05 | [Full verification & stabilization (tests/build/all screens)](phase-05-verify-and-stabilize.md) | 02–04 | ☐ Not started |
-| 06 | [Enable View Transitions (cross-fade + shared-element morph)](phase-06-view-transitions.md) | 05 | ☐ Not started |
+| 01 | [Pre-flight, branch & baseline](phase-01-preflight-and-baseline.md) | — | ✅ Done |
+| 02 | [Core upgrade: codemod + Next 16 + Serwist + middleware→proxy](phase-02-core-upgrade.md) | 01 | ✅ Done |
+| 03 | [next-intl v3 → v4 migration](phase-03-next-intl-v4.md) | 02 | ✅ Done |
+| 04 | [PWA / Turbopack build (`--webpack`) + offline verify](phase-04-pwa-turbopack-build.md) | 02 | ✅ Done |
+| 05 | [Full verification & stabilization (tests/build/all screens)](phase-05-verify-and-stabilize.md) | 02–04 | ✅ Done |
+| 06 | [Enable View Transitions (cross-fade + shared-element morph)](phase-06-view-transitions.md) | 05 | ✅ Done |
 
 Phases 03 and 04 can partly parallelize once 02 lands. **06 is the goal**; do it only after 05 is green.
 After execution, update the docs to reflect reality (see Phase 06 + the migration doc).

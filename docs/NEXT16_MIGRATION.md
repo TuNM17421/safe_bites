@@ -1,12 +1,12 @@
 # Next.js 16 Migration — reference for agents
 
-**Status: PLANNED (not yet executed).** Execute via
-`plans/20260709-1058-nextjs-16-upgrade/plan.md`. This doc is the single place that explains **what
-changes and the conventions to follow once the upgrade lands**, so any agent touching the app afterward
-works with the new reality. Until the plan is executed, the app is on **Next 15.5** and the "before"
-column applies.
+**Status: DONE (2026-07-09)** — executed on branch `chore/nextjs-16-upgrade` per
+`plans/20260709-1058-nextjs-16-upgrade/plan.md`. The app now runs on **Next 16.2.10 · next-intl 4.13.1 ·
+Serwist 9.5.11 · React 19.2.7**, with View Transitions enabled. This doc is the reference for what changed
+and the conventions to follow; the "before" column below is historical (Next 15.5).
 
-> When the upgrade completes, flip the status to **Done (YYYY-MM-DD)** and delete the "before" notes.
+> Remaining check: the Playwright **e2e** gate was not run locally (needs a seeded PostGIS) — confirm it
+> in CI before merging to the main line.
 
 ## Why
 Ship real **View Transitions** (cross-fade + shared-element morph). Next 15.5's bundled React has **no
