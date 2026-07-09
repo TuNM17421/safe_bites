@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
   // Linting is a dedicated CI gate (`pnpm lint`, the flat-config source of truth); don't let
   // `next build`'s stricter built-in ESLint pass double-lint and diverge from it (Phase 13).
   eslint: { ignoreDuringBuilds: true },
+  // Enable React's <ViewTransition> integration so route navigations cross-fade / morph.
+  experimental: { viewTransition: true },
 };
 
 export default withSerwist(withNextIntl(nextConfig));

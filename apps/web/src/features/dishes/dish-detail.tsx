@@ -1,4 +1,5 @@
 'use client';
+import { ViewTransition } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, EyeOff, MessageCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -58,7 +59,9 @@ export function DishDetail({ dishId }: { dishId: string }) {
           <ChevronLeft aria-hidden className="size-6" />
         </Link>
         <div className="min-w-0">
-          <h1 className="truncate text-sb-title font-bold text-sb-fg">{dish.name[lang]}</h1>
+          <ViewTransition name={`dish-title-${dishId}`}>
+            <h1 className="truncate text-sb-title font-bold text-sb-fg">{dish.name[lang]}</h1>
+          </ViewTransition>
           <p className="truncate text-sb-caption text-sb-faint">{dish.name[other]}</p>
         </div>
       </div>
