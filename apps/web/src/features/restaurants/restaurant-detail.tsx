@@ -7,6 +7,8 @@ import { SkeletonCard } from '@/components/common/skeleton-card';
 import { StateView } from '@/components/common/state-view';
 import { LanguageToggle } from '@/components/common/language-toggle';
 import { SafetyNotice } from '@/components/safety/safety-notice';
+import { FeedbackEntryButton } from '@/components/feedback/feedback-entry-button';
+import { FeedbackSummaryBanner } from '@/components/feedback/feedback-summary-banner';
 import { STATUS_DISPLAY_ORDER } from '@/components/status/status-visuals';
 import { MenuItemRecommendationCard } from '@/components/restaurants/menu-item-recommendation-card';
 import {
@@ -110,6 +112,8 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
           <RestaurantMenuStatusBadge status={r.menuStatus} />
           <RestaurantSourceBadge source={r.source} />
         </div>
+        {rec.feedbackSummary?.hasActiveFlags ? <FeedbackSummaryBanner summary={rec.feedbackSummary} /> : null}
+        <FeedbackEntryButton restaurantId={r.restaurantId} variant="restaurant" />
       </section>
 
       <SafetyNotice />

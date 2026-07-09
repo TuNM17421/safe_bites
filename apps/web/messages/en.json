@@ -317,5 +317,106 @@
     "unsupported": "Location is not available on this device. You can still browse by city.",
     "sortingByDistance": "Sorting by distance from you",
     "clear": "Clear"
+  },
+  "feedback": {
+    "entry": {
+      "share": "Share meal feedback",
+      "iAteThis": "I ate this / Share feedback"
+    },
+    "form": {
+      "title": "Share meal feedback",
+      "stepOf": "Step {current} of {total}",
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Submit feedback",
+      "submitting": "Submitting…",
+      "fixErrors": "Please review the highlighted fields."
+    },
+    "step1": {
+      "title": "Confirm the item",
+      "menuItemLabel": "Which menu item?",
+      "otherNotListed": "Other / not listed",
+      "dontRemember": "I do not remember",
+      "currentStatus": "Current status"
+    },
+    "step2": {
+      "title": "What happened?",
+      "visitedAtLabel": "When did you visit?",
+      "helper": "This report helps improve confidence and review outdated information. It does not prove that a dish is suitable for other travelers."
+    },
+    "step3": {
+      "title": "Relevant allergen",
+      "selectAllergens": "Select the allergens this report is about",
+      "noProfile": "No profile found. Choose the allergens this report is about."
+    },
+    "step4": {
+      "title": "Did you ask staff?",
+      "answerLabel": "What did staff tell you?",
+      "noteLabel": "Add a short note (optional)",
+      "noMedical": "Do not include personal medical details."
+    },
+    "step5": {
+      "title": "Any reaction after eating?",
+      "timingLabel": "When did it happen?"
+    },
+    "step6": {
+      "title": "Trust and notes",
+      "trustLabel": "How much did you trust this restaurant? (optional)",
+      "notesLabel": "Anything else? (optional)",
+      "notesHint": "Up to 500 characters. Do not include personal medical details."
+    },
+    "ternary": {
+      "yes": "Yes",
+      "no": "No",
+      "not_sure": "Not sure"
+    },
+    "reaction": {
+      "none": "No reaction",
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe",
+      "anaphylaxis_or_emergency": "Anaphylaxis or emergency",
+      "not_sure": "Not sure",
+      "prefer_not_to_say": "Prefer not to say"
+    },
+    "timing": {
+      "during_meal": "During the meal",
+      "within_2_hours": "Within 2 hours",
+      "later_same_day": "Later the same day",
+      "next_day_or_later": "Next day or later",
+      "not_sure": "Not sure",
+      "not_applicable": "Not applicable"
+    },
+    "staffAnswer": {
+      "confirmed_no_allergen": "Confirmed no allergen",
+      "confirmed_contains_allergen": "Confirmed it contains the allergen",
+      "confirmed_can_remove": "They can remove it",
+      "confirmed_cannot_remove": "They cannot remove it",
+      "kitchen_checked": "Kitchen checked",
+      "not_sure": "Not sure",
+      "language_barrier": "Language barrier",
+      "no_answer": "No answer",
+      "other": "Other"
+    },
+    "severeNotice": {
+      "title": "Seek local emergency help if needed",
+      "body": "If you may be having a serious allergic reaction, seek local emergency help immediately. This app cannot provide medical advice or emergency support."
+    },
+    "underReview": "Feedback under review",
+    "summary": {
+      "title": "Feedback under review",
+      "recentReports": "{count, plural, one {# recent report} other {# recent reports}}",
+      "lastReport": "Last report: {date}",
+      "action": "Ask staff directly before ordering.",
+      "severe": "Recent feedback for this allergen is under review. For severe allergy profiles, consider avoiding this item until the information is reviewed."
+    },
+    "success": {
+      "title": "Thank you",
+      "body": "Your report was submitted for review. Recommendations may show a review warning while the team checks this information.",
+      "back": "Back to restaurants"
+    },
+    "errors": {
+      "submitFailed": "Could not submit your feedback. Please try again."
+    }
   }
 }

@@ -3,6 +3,8 @@ import { MessageCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { LanguageCode } from '@safebite/domain';
 import { ConfidenceMeter } from '@/components/status/confidence-badge';
+import { FeedbackEntryButton } from '@/components/feedback/feedback-entry-button';
+import { FeedbackUnderReviewBadge } from '@/components/feedback/feedback-under-review-badge';
 import { LastCheckedBadge } from '@/components/status/source-badge';
 import { StatusBadge } from '@/components/status/status-badge';
 import { Link } from '@/i18n/navigation';
@@ -44,15 +46,24 @@ export function MenuItemRecommendationCard({ rec, lang }: { rec: MenuRecommendat
         ) : rec.lastCheckedAt ? (
           <LastCheckedBadge label={rec.lastCheckedAt.slice(0, 10)} />
         ) : null}
+        {rec.feedbackSummary?.hasActiveFlags ? <FeedbackUnderReviewBadge /> : null}
       </div>
 
-      <Link
-        href={`/question-card?menuItemId=${encodeURIComponent(rec.menuItemId)}`}
-        className="mt-3 inline-flex min-h-sb-tap items-center gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-2 px-4 text-sb-body-s font-bold text-sb-fg focus-visible:shadow-sb-focus focus-visible:outline-none"
-      >
-        <MessageCircle aria-hidden className="size-4" />
-        {t('askAboutItem')}
-      </Link>
+      <div className="mt-3 flex flex-col gap-2">
+        <Link
+          href={`/question-card?menuItemId=${encodeURIComponent(rec.menuItemId)}`}
+          className="inline-flex min-h-sb-tap items-center gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-2 px-4 text-sb-body-s font-bold text-sb-fg focus-visible:shadow-sb-focus focus-visible:outline-none"
+        >
+          <MessageCircle aria-hidden className="size-4" />
+          {t('askAboutItem')}
+        </Link>
+        <FeedbackEntryButton
+          restaurantId={rec.restaurantId}
+          menuItemId={rec.menuItemId}
+          dishId={rec.dishId}
+          variant="menuItem"
+        />
+      </div>
     </article>
   );
 }

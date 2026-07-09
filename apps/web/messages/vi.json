@@ -317,5 +317,106 @@
     "unsupported": "Vị trí không khả dụng trên thiết bị này. Bạn vẫn có thể duyệt theo thành phố.",
     "sortingByDistance": "Đang sắp xếp theo khoảng cách từ bạn",
     "clear": "Xóa"
+  },
+  "feedback": {
+    "entry": {
+      "share": "Gửi phản hồi sau bữa ăn",
+      "iAteThis": "Tôi đã ăn món này / Gửi phản hồi"
+    },
+    "form": {
+      "title": "Gửi phản hồi sau bữa ăn",
+      "stepOf": "Bước {current} trong {total}",
+      "back": "Quay lại",
+      "continue": "Tiếp tục",
+      "submit": "Gửi phản hồi",
+      "submitting": "Đang gửi…",
+      "fixErrors": "Vui lòng kiểm tra lại các trường được đánh dấu."
+    },
+    "step1": {
+      "title": "Xác nhận món ăn",
+      "menuItemLabel": "Món nào trong thực đơn?",
+      "otherNotListed": "Khác / không có trong danh sách",
+      "dontRemember": "Tôi không nhớ",
+      "currentStatus": "Trạng thái hiện tại"
+    },
+    "step2": {
+      "title": "Chuyện gì đã xảy ra?",
+      "visitedAtLabel": "Bạn đã ghé khi nào?",
+      "helper": "Phản hồi này giúp cải thiện độ tin cậy và rà soát thông tin đã cũ. Nó không chứng minh rằng một món ăn phù hợp với những du khách khác."
+    },
+    "step3": {
+      "title": "Dị nguyên liên quan",
+      "selectAllergens": "Chọn các dị nguyên mà phản hồi này đề cập",
+      "noProfile": "Không tìm thấy hồ sơ. Hãy chọn các dị nguyên mà phản hồi này đề cập."
+    },
+    "step4": {
+      "title": "Bạn có hỏi nhân viên không?",
+      "answerLabel": "Nhân viên nói gì với bạn?",
+      "noteLabel": "Thêm ghi chú ngắn (không bắt buộc)",
+      "noMedical": "Không ghi kèm thông tin y tế cá nhân."
+    },
+    "step5": {
+      "title": "Có phản ứng nào sau khi ăn không?",
+      "timingLabel": "Nó xảy ra khi nào?"
+    },
+    "step6": {
+      "title": "Mức tin cậy và ghi chú",
+      "trustLabel": "Bạn tin tưởng nhà hàng này đến mức nào? (không bắt buộc)",
+      "notesLabel": "Còn gì khác không? (không bắt buộc)",
+      "notesHint": "Tối đa 500 ký tự. Không ghi kèm thông tin y tế cá nhân."
+    },
+    "ternary": {
+      "yes": "Có",
+      "no": "Không",
+      "not_sure": "Không chắc"
+    },
+    "reaction": {
+      "none": "Không có phản ứng",
+      "mild": "Nhẹ",
+      "moderate": "Vừa",
+      "severe": "Nặng",
+      "anaphylaxis_or_emergency": "Sốc phản vệ hoặc cấp cứu",
+      "not_sure": "Không chắc",
+      "prefer_not_to_say": "Không muốn nói"
+    },
+    "timing": {
+      "during_meal": "Trong bữa ăn",
+      "within_2_hours": "Trong vòng 2 giờ",
+      "later_same_day": "Muộn hơn trong cùng ngày",
+      "next_day_or_later": "Ngày hôm sau hoặc muộn hơn",
+      "not_sure": "Không chắc",
+      "not_applicable": "Không áp dụng"
+    },
+    "staffAnswer": {
+      "confirmed_no_allergen": "Xác nhận không có dị nguyên",
+      "confirmed_contains_allergen": "Xác nhận có chứa dị nguyên",
+      "confirmed_can_remove": "Họ có thể bỏ thành phần đó",
+      "confirmed_cannot_remove": "Họ không thể bỏ thành phần đó",
+      "kitchen_checked": "Bếp đã kiểm tra",
+      "not_sure": "Không chắc",
+      "language_barrier": "Rào cản ngôn ngữ",
+      "no_answer": "Không có câu trả lời",
+      "other": "Khác"
+    },
+    "severeNotice": {
+      "title": "Hãy tìm hỗ trợ khẩn cấp tại địa phương nếu cần",
+      "body": "Nếu bạn có thể đang gặp phản ứng dị ứng nghiêm trọng, hãy tìm hỗ trợ khẩn cấp tại địa phương ngay. Ứng dụng này không thể cung cấp tư vấn y tế hoặc hỗ trợ khẩn cấp."
+    },
+    "underReview": "Phản hồi đang được kiểm tra",
+    "summary": {
+      "title": "Phản hồi đang được kiểm tra",
+      "recentReports": "{count, plural, other {# phản hồi gần đây}}",
+      "lastReport": "Phản hồi gần nhất: {date}",
+      "action": "Hãy hỏi trực tiếp nhân viên trước khi gọi món.",
+      "severe": "Phản hồi gần đây về dị nguyên này đang được kiểm tra. Với hồ sơ dị ứng nặng, hãy cân nhắc tránh món này cho đến khi thông tin được rà soát."
+    },
+    "success": {
+      "title": "Cảm ơn bạn",
+      "body": "Phản hồi của bạn đã được gửi để rà soát. Các gợi ý có thể hiển thị cảnh báo đang kiểm tra trong khi đội ngũ xem xét thông tin này.",
+      "back": "Quay lại danh sách nhà hàng"
+    },
+    "errors": {
+      "submitFailed": "Không thể gửi phản hồi của bạn. Vui lòng thử lại."
+    }
   }
 }
