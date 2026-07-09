@@ -9,3 +9,9 @@ export { evaluateMenuItem } from './menu-item';
 export { evaluateRestaurantReadiness } from './restaurant-readiness';
 export { isStale, downgradeConfidence } from './staleness';
 export { buildQuestionCard } from './question-card';
+export * from './feedback';
+export {
+  FEEDBACK_UNDER_REVIEW_REASON,
+  FEEDBACK_UNDER_REVIEW_SUMMARY,
+  FEEDBACK_UNDER_REVIEW_SOURCE,
+} from './restaurant-constants';
