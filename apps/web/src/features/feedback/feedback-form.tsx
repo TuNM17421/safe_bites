@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft } from 'lucide-react';
 import { FeedbackReportInputSchema } from '@safebite/domain';
+import { useOnlineStatus } from '@/components/app-shell/use-online-status';
 import { useRouter } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
 import { buildProfileSnapshot } from './build-feedback-snapshot';
-import { FeedbackSubmitError, submitFeedback } from './feedback-client';
+import { FeedbackSubmitError } from './feedback-client';
+import { submitOrQueueFeedback } from './offline-feedback-queue';
 import { FEEDBACK_STEP_COUNT, FeedbackStep } from './feedback-steps';
 import { useFeedbackDraft } from './use-feedback-draft';
 import { useFeedbackOptions } from './use-feedback-options';
@@ -32,6 +34,7 @@ export function FeedbackForm({ restaurantId, menuItemId, dishId }: { restaurantI
   const options = useFeedbackOptions(restaurantId);
   const profile = useProfileStore((s) => s.profile);
   const hydrated = useProfileStore((s) => s.hydrated);
+  const online = useOnlineStatus();
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const seeded = useRef(false);
@@ -77,10 +80,11 @@ export function FeedbackForm({ restaurantId, menuItemId, dishId }: { restaurantI
     }
     setSubmitting(true);
     try {
-      await submitFeedback(parsed.data);
+      const outcome = await submitOrQueueFeedback(parsed.data, { online });
       draft.reset();
-      router.replace('/feedback/thanks');
+      router.replace(outcome === 'queued' ? '/feedback/thanks?queued=1' : '/feedback/thanks');
     } catch (e) {
+      // Only non-queueable client errors (400/404) reach here; transient errors were queued.
       if (e instanceof FeedbackSubmitError && e.status === 400) setError(t('form.fixErrors'));
       else setError(t('errors.submitFailed'));
       setSubmitting(false);

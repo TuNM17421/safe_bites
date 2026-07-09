@@ -413,10 +413,17 @@
     "success": {
       "title": "Cảm ơn bạn",
       "body": "Phản hồi của bạn đã được gửi để rà soát. Các gợi ý có thể hiển thị cảnh báo đang kiểm tra trong khi đội ngũ xem xét thông tin này.",
-      "back": "Quay lại danh sách nhà hàng"
+      "back": "Quay lại danh sách nhà hàng",
+      "queuedTitle": "Đã lưu trên thiết bị này",
+      "queuedBody": "Báo cáo này sẽ được gửi khi bạn có mạng trở lại."
     },
     "errors": {
       "submitFailed": "Không thể gửi phản hồi của bạn. Vui lòng thử lại."
+    },
+    "offline": {
+      "pending": "{count, plural, other {# báo cáo đang chờ đồng bộ}}",
+      "syncNow": "Đồng bộ ngay",
+      "syncing": "Đang đồng bộ…"
     }
   }
 }

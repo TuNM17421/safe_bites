@@ -3,6 +3,7 @@ import Dexie, { type Table } from 'dexie';
 import type {
   AllergyCard,
   DishRecommendationCard,
+  FeedbackReportInput,
   LocalUserProfile,
   QuestionCardRecord,
 } from '@safebite/domain';
@@ -44,6 +45,20 @@ export interface CachedRestaurantDetail {
   payload: unknown;
 }
 
+// Phase 03 §12.1 offline feedback queue (outbox). Stores ONLY the sync payload — the exact
+// validated FeedbackReportInput — never the full profile object, geolocation, or tokens. A synced
+// row is deleted (no `synced` status retained); `retryCount`/`lastError` back the failed banner.
+export type PendingFeedbackStatus = 'pending' | 'syncing' | 'failed';
+export interface PendingFeedbackReport {
+  clientReportId: string;
+  payload: FeedbackReportInput;
+  createdAt: string;
+  updatedAt: string;
+  status: PendingFeedbackStatus;
+  retryCount: number;
+  lastError?: string | null;
+}
+
 export const ACTIVE_PROFILE_ID = 'activeProfileId';
 export const LAST_QUESTION_CARD_ID = 'lastQuestionCardId';
 
@@ -58,6 +73,7 @@ export class SafeBiteDB extends Dexie {
   metadata!: Table<MetadataRow, string>;
   lastRestaurantSearch!: Table<CachedRestaurantSearch, string>;
   lastRestaurantDetail!: Table<CachedRestaurantDetail, string>;
+  pendingFeedbackReports!: Table<PendingFeedbackReport, string>;
 
   constructor() {
     super('safebite_pwa_v1');
@@ -72,6 +88,10 @@ export class SafeBiteDB extends Dexie {
     this.version(2).stores({
       lastRestaurantSearch: 'cacheKey, city, savedAt',
       lastRestaurantDetail: 'cacheKey, restaurantId, savedAt',
+    });
+    // v3 (Phase 03 §12.1): additive offline feedback outbox; existing stores/data are preserved.
+    this.version(3).stores({
+      pendingFeedbackReports: 'clientReportId, status, createdAt',
     });
   }
 }

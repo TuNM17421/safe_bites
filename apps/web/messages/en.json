@@ -413,10 +413,17 @@
     "success": {
       "title": "Thank you",
       "body": "Your report was submitted for review. Recommendations may show a review warning while the team checks this information.",
-      "back": "Back to restaurants"
+      "back": "Back to restaurants",
+      "queuedTitle": "Saved on this device",
+      "queuedBody": "This report will be sent when you are back online."
     },
     "errors": {
       "submitFailed": "Could not submit your feedback. Please try again."
+    },
+    "offline": {
+      "pending": "{count, plural, one {# report waiting to sync} other {# reports waiting to sync}}",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…"
     }
   }
 }

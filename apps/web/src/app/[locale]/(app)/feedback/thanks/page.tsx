@@ -3,10 +3,13 @@ import { FeedbackSuccessPanel } from '@/components/feedback/feedback-success-pan
 
 export default async function FeedbackThanksPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ queued?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <FeedbackSuccessPanel />;
+  const { queued } = await searchParams;
+  return <FeedbackSuccessPanel queued={queued === '1'} />;
 }

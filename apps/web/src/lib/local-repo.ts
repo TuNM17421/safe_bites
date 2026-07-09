@@ -1,11 +1,13 @@
 import 'client-only';
-import type { DishRecommendationCard, LocalUserProfile } from '@safebite/domain';
+import type { DishRecommendationCard, FeedbackReportInput, LocalUserProfile } from '@safebite/domain';
 import {
   ACTIVE_PROFILE_ID,
   db,
   LAST_QUESTION_CARD_ID,
   type CachedRestaurantDetail,
   type CachedRestaurantSearch,
+  type PendingFeedbackReport,
+  type PendingFeedbackStatus,
   type SavedDish,
   type StoredAllergyCard,
   type StoredQuestionCard,
@@ -154,10 +156,53 @@ export const restaurantCacheRepo = {
   },
 };
 
+// Phase 03 §12 offline feedback outbox. Stores ONLY the sync payload (FeedbackReportInput) — no
+// full profile, no geolocation, no tokens. Keyed by clientReportId so a re-tap of the same draft
+// overwrites (never duplicates) and a re-flush is deduped server-side.
+export const pendingFeedbackRepo = {
+  async save(payload: FeedbackReportInput): Promise<PendingFeedbackReport> {
+    const now = nowIso();
+    const row: PendingFeedbackReport = {
+      clientReportId: payload.clientReportId,
+      payload,
+      createdAt: now,
+      updatedAt: now,
+      status: 'pending',
+      retryCount: 0,
+      lastError: null,
+    };
+    assertNoSecrets(row);
+    await db.pendingFeedbackReports.put(row);
+    return row;
+  },
+  async list(statuses?: PendingFeedbackStatus[]): Promise<PendingFeedbackReport[]> {
+    const rows = await db.pendingFeedbackReports.orderBy('createdAt').toArray();
+    return statuses ? rows.filter((r) => statuses.includes(r.status)) : rows;
+  },
+  async count(): Promise<number> {
+    return db.pendingFeedbackReports.count();
+  },
+  async markSyncing(clientReportId: string): Promise<void> {
+    await db.pendingFeedbackReports.update(clientReportId, { status: 'syncing', updatedAt: nowIso() });
+  },
+  async markFailed(clientReportId: string, error: string): Promise<void> {
+    const row = await db.pendingFeedbackReports.get(clientReportId);
+    await db.pendingFeedbackReports.update(clientReportId, {
+      status: 'failed',
+      retryCount: (row?.retryCount ?? 0) + 1,
+      lastError: error.slice(0, 300),
+      updatedAt: nowIso(),
+    });
+  },
+  async delete(clientReportId: string): Promise<void> {
+    await db.pendingFeedbackReports.delete(clientReportId);
+  },
+};
+
 export async function clearAllLocalData(): Promise<void> {
   await db.transaction(
     'rw',
-    [db.profiles, db.allergyCards, db.questionCards, db.savedDishes, db.metadata, db.lastRestaurantSearch, db.lastRestaurantDetail],
+    [db.profiles, db.allergyCards, db.questionCards, db.savedDishes, db.metadata, db.lastRestaurantSearch, db.lastRestaurantDetail, db.pendingFeedbackReports],
     async () => {
       await Promise.all([
         db.profiles.clear(),
@@ -167,6 +212,7 @@ export async function clearAllLocalData(): Promise<void> {
         db.metadata.clear(),
         db.lastRestaurantSearch.clear(),
         db.lastRestaurantDetail.clear(),
+        db.pendingFeedbackReports.clear(),
       ]);
     },
   );
