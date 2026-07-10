@@ -3,7 +3,11 @@ import { useEffect } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
 
-const PROFILE_REQUIRED = ['/dishes', '/allergy-card', '/question-card'];
+// v2 profile-dependent destinations: personalized safety views that are meaningless
+// without allergens on file. The demoted v1 routes (/dishes, /allergy-card, /question-card)
+// are intentionally excluded. Matching is exact or `${p}/…`, so '/restaurant' gates
+// '/restaurant/:id[/dish]' but not the (soon-removed) plural '/restaurants' list.
+const PROFILE_REQUIRED = ['/agent', '/ocr', '/famous', '/restaurant'];
 
 // Hydrates the profile store from Dexie on mount and, once hydrated, redirects
 // profile-required routes to /onboarding when there is no local profile. /home and

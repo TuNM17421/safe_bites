@@ -1,6 +1,7 @@
 import { ViewTransition, type ReactNode } from 'react';
 import { setRequestLocale } from 'next-intl/server';
 import { AppHeader } from '@/components/app-shell/app-header';
+import { AppMain } from '@/components/app-shell/app-main';
 import { BottomNav } from '@/components/app-shell/bottom-nav';
 import { InstallEducationCard } from '@/components/app-shell/install-education-card';
 import { OfflineBanner } from '@/components/app-shell/offline-banner';
@@ -21,9 +22,9 @@ export default async function AppShellLayout({
       <ProfileHydrator />
       <AppHeader />
       <OfflineBanner />
-      <main className="flex-1 px-4 py-4">
+      <AppMain>
         <ViewTransition>{children}</ViewTransition>
-      </main>
+      </AppMain>
       <InstallEducationCard />
       <BottomNav />
     </div>

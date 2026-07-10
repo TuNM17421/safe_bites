@@ -1,25 +1,29 @@
 'use client';
 import { useState } from 'react';
 import { Check, ChevronLeft } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { ALLERGY_ALLERGEN_IDS } from '@safebite/domain';
+import { useLocale, useTranslations } from 'next-intl';
+import { ALLERGY_ALLERGEN_IDS, type LanguageCode } from '@safebite/domain';
 import { buildAllergyCard } from '@/features/allergy-card/build-allergy-card';
 import { useRouter } from '@/i18n/navigation';
 import { allergyCardRepo, profileRepo } from '@/lib/local-repo';
 import { useProfileStore } from '@/lib/profile-store';
 import { buildProfile } from './build-profile';
-import { StepCity, StepCrossContact, StepDisclaimer, StepLanguage, StepSeverity, StepTemplates } from './onboarding-steps';
-import { useAllergens, useClientConfigQuery, useProfileTemplates } from './use-onboarding-data';
+import { StepDisclaimer, StepTemplates } from './onboarding-steps';
+import { useAllergens, useProfileTemplates } from './use-onboarding-data';
 import { useOnboardingDraft } from './use-onboarding-draft';
 
-const TOTAL = 6;
+// v2: onboarding is 2 steps — (1) pick allergens, (2) acknowledge the "app only suggests"
+// warning. Severity + cross-contact move to profile-edit (follow-up); until then buildProfile
+// applies conservative defaults (moderate / not_sure). City defaults to Hà Nội; language
+// follows the active locale.
+const TOTAL = 2;
 
 export function OnboardingWizard() {
   const t = useTranslations('onboarding');
   const draft = useOnboardingDraft();
   const templates = useProfileTemplates();
   const allergens = useAllergens();
-  const config = useClientConfigQuery();
+  const locale = useLocale();
   const router = useRouter();
   const setProfile = useProfileStore((s) => s.setProfile);
   const [saving, setSaving] = useState(false);
@@ -30,7 +34,9 @@ export function OnboardingWizard() {
   async function finish() {
     setSaving(true);
     const now = new Date().toISOString();
-    const profile = buildProfile(draft, crypto.randomUUID(), now);
+    // Language follows the visited locale (the dedicated language step is gone in v2).
+    const lang: LanguageCode = locale === 'vi' ? 'vi' : 'en';
+    const profile = buildProfile({ ...draft, language: lang }, crypto.randomUUID(), now);
     const names = {
       allergens: Object.fromEntries((allergens.data?.items ?? []).map((a) => [a.id, a.name])),
       templates: Object.fromEntries((templates.data?.items ?? []).map((tpl) => [tpl.id, tpl.name])),
@@ -40,15 +46,11 @@ export function OnboardingWizard() {
     await allergyCardRepo.saveAllergyCard(card);
     setProfile(profile, card);
     draft.reset();
-    router.replace('/home', { locale: draft.language });
+    router.replace('/home', { locale: lang });
   }
 
   const steps = [
     <StepTemplates key="templates" templates={templateItems} allergens={allergenItems} />,
-    <StepSeverity key="severity" allergens={allergenItems} />,
-    <StepCrossContact key="cross" allergens={allergenItems} />,
-    <StepCity key="city" cities={config.data?.supportedCities ?? ['hanoi']} />,
-    <StepLanguage key="language" />,
     <StepDisclaimer key="disclaimer" />,
   ];
 

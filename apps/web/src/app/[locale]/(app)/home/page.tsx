@@ -83,7 +83,7 @@ export default function HomePage() {
               <UtensilsCrossed aria-hidden className="size-5" />
               {t('browseDishes')}
             </Link>
-            <Link href="/allergy-card" className={ghostBtn}>
+            <Link href="/profile" className={ghostBtn}>
               <IdCard aria-hidden className="size-5" />
               {t('showAllergyCard')}
             </Link>

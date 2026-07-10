@@ -38,11 +38,21 @@
   },
   "nav": {
     "home": "Home",
+    "map": "Map",
+    "agent": "Assistant",
+    "ocr": "OCR",
+    "famous": "Famous",
     "dishes": "Dishes",
     "restaurants": "Nearby",
     "allergyCard": "Allergy card",
     "questionCard": "Question card",
     "profile": "Profile"
+  },
+  "scaffold": {
+    "comingSoon": "This screen is coming soon.",
+    "restaurant": "Restaurant",
+    "dish": "Dish",
+    "login": "Sign in"
   },
   "home": {
     "destinationCity": "Destination city",
@@ -128,7 +138,9 @@
     "clearData": "Clear local + offline data",
     "noProfile": "No profile yet.",
     "startProfile": "Start allergy profile",
-    "you": "Your profile"
+    "you": "Your profile",
+    "editAllergies": "Edit my allergies",
+    "staffCardTitle": "Allergy card"
   },
   "dishes": {
     "reason": "Reason",

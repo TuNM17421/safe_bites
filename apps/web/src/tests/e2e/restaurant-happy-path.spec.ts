@@ -43,7 +43,7 @@ test('restaurants: profile → list → detail → menu recommendations → ques
   await expect(page.getByText('Curated').first()).toBeVisible();
 
   // Detail: menu items grouped by status with a risk classification.
-  await page.goto('/en/restaurants/demo-bun-cha-hoan-kiem');
+  await page.goto('/en/restaurant/demo-bun-cha-hoan-kiem');
   await expect(page.getByRole('heading', { name: 'Menu items' })).toBeVisible();
   // Menu-item title (a heading) — specific so it doesn't also match the "Matched dish:" line.
   await expect(page.getByRole('heading', { name: 'Grilled pork with rice noodles' })).toBeVisible();

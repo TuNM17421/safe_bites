@@ -36,7 +36,7 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
   const detail = useRestaurantDetail(restaurantIdOrSlug, profile);
 
   const backLink = (
-    <Link href="/restaurants" className="inline-flex items-center gap-1 text-sb-body-s text-sb-muted hover:text-sb-fg">
+    <Link href="/home" className="inline-flex items-center gap-1 text-sb-body-s text-sb-muted hover:text-sb-fg">
       <ArrowLeft aria-hidden className="size-4" />
       {t('back')}
     </Link>

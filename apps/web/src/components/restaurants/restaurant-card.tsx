@@ -25,7 +25,7 @@ const COUNTS: Array<{ key: keyof RestaurantListItem['counts']; status: string }>
 export function RestaurantCard({ item, lang }: { item: RestaurantListItem; lang: LanguageCode }) {
   const t = useTranslations('restaurantCard');
   const tStatus = useTranslations('statuses');
-  const href = `/restaurants/${item.slug ?? item.restaurantId}`;
+  const href = `/restaurant/${item.slug ?? item.restaurantId}`;
   const nonZeroCounts = COUNTS.filter(({ key }) => item.counts[key] > 0);
 
   return (

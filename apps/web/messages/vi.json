@@ -38,11 +38,21 @@
   },
   "nav": {
     "home": "Trang chủ",
+    "map": "Bản đồ",
+    "agent": "Trợ lý",
+    "ocr": "OCR",
+    "famous": "Nổi tiếng",
     "dishes": "Món ăn",
     "restaurants": "Gần đây",
     "allergyCard": "Thẻ dị ứng",
     "questionCard": "Thẻ câu hỏi",
     "profile": "Hồ sơ"
+  },
+  "scaffold": {
+    "comingSoon": "Màn hình này sắp ra mắt.",
+    "restaurant": "Nhà hàng",
+    "dish": "Món ăn",
+    "login": "Đăng nhập"
   },
   "home": {
     "destinationCity": "Thành phố đến",
@@ -128,7 +138,9 @@
     "clearData": "Xóa dữ liệu cục bộ + ngoại tuyến",
     "noProfile": "Chưa có hồ sơ.",
     "startProfile": "Tạo hồ sơ dị ứng",
-    "you": "Hồ sơ của bạn"
+    "you": "Hồ sơ của bạn",
+    "editAllergies": "Sửa dị ứng của tôi",
+    "staffCardTitle": "Thẻ dị ứng"
   },
   "dishes": {
     "reason": "Lý do",

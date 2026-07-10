@@ -15,6 +15,8 @@ export function buildProfile(draft: ProfileDraft, id: string, now: string): Loca
   return {
     id,
     selectedProfileIds: draft.selectedProfileIds,
+    // v2: the severity + cross-contact onboarding steps were removed; both now fall back to
+    // conservative defaults here (moderate / not_sure) until profile-edit lets users set them.
     allergies: draft.selectedAllergenIds.map((allergenId) => ({
       allergenId,
       severity: draft.severity[allergenId] ?? 'moderate',

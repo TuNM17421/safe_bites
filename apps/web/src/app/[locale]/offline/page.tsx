@@ -13,7 +13,7 @@ export default async function OfflinePage({ params }: { params: Promise<{ locale
       <h1 className="text-xl font-bold text-sb-fg">{t('title')}</h1>
       <p className="text-sb-muted">{t('notice')}</p>
       <div className="flex flex-col gap-2">
-        <Link href="/allergy-card" className={linkBtn}>
+        <Link href="/profile" className={linkBtn}>
           {t('savedAllergyCard')}
         </Link>
         <Link href="/question-card" className={linkBtn}>

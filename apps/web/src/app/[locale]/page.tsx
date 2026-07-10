@@ -1,4 +1,4 @@
-import { Globe, Leaf, Lock, Plus, Shield, UtensilsCrossed, WifiOff } from 'lucide-react';
+import { Globe, Leaf, Lock, Plus, Shield, WifiOff } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SafetyNotice } from '@/components/safety/safety-notice';
 import { StatusLadderLegend } from '@/components/status/status-ladder-legend';
@@ -57,13 +57,6 @@ export default async function LandingPage({
         >
           <Plus aria-hidden className="size-5" />
           {t('startProfile')}
-        </Link>
-        <Link
-          href="/dishes"
-          className="inline-flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-sm border border-sb-border bg-sb-surface-2 px-4 text-sb-body font-bold text-sb-fg focus-visible:shadow-sb-focus"
-        >
-          <UtensilsCrossed aria-hidden className="size-5" />
-          {t('browseDishes')}
         </Link>
       </div>
     </main>

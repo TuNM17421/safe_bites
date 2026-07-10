@@ -78,7 +78,7 @@ export function DishGuide() {
             icon={<Search className="size-8" />}
             title={t('offlineNoSaved')}
             action={
-              <Link href="/allergy-card" className={primaryBtn}>
+              <Link href="/profile" className={primaryBtn}>
                 {t('showAllergyCard')}
               </Link>
             }

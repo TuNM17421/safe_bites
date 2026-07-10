@@ -1,36 +1,26 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import { SkeletonCard } from '@/components/common/skeleton-card';
+import type { AllergyCardEntry, LanguageCode } from '@safebite/domain';
 import { AllergenChip } from '@/components/safety/allergen-chip';
 import { SafetyNotice } from '@/components/safety/safety-notice';
-import { Link } from '@/i18n/navigation';
-import { useProfileStore } from '@/lib/profile-store';
 
-// §12.7 — self-contained offline allergy card rendered from the Dexie-hydrated store.
-// Brand-tinted card; each entry is an AllergenChip (icon + name + severity colour) with the
-// VI name alongside, so EN and VI are always present for restaurant staff.
-export function AllergyCardDisplay() {
+// Bilingual staff allergy card, folded into /profile (v2, Phase 03). Both EN + VI names stay
+// visible for restaurant staff; `dataLang` only chooses which name is emphasised (the chip).
+// Lifted from the former standalone allergy-card-display.tsx.
+export function ProfileAllergyCard({
+  entries,
+  dataLang,
+  updatedAt,
+}: {
+  entries: AllergyCardEntry[];
+  dataLang: LanguageCode;
+  updatedAt: string;
+}) {
   const t = useTranslations('allergyCard');
   const tSev = useTranslations('severity');
   const tCross = useTranslations('onboarding');
   const locale = useLocale();
-  const hydrated = useProfileStore((s) => s.hydrated);
-  const card = useProfileStore((s) => s.allergyCard);
-
-  if (!hydrated) return <SkeletonCard />;
-  if (!card) {
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sb-body-s text-sb-muted">{t('noCard')}</p>
-        <Link
-          href="/onboarding"
-          className="inline-flex min-h-sb-tap w-full items-center justify-center rounded-sb-md bg-sb-primary px-4 font-semibold text-sb-primary-foreground focus-visible:shadow-sb-focus"
-        >
-          {t('startProfile')}
-        </Link>
-      </div>
-    );
-  }
+  const other: LanguageCode = dataLang === 'en' ? 'vi' : 'en';
 
   const crossLabel = (v: boolean | 'not_sure') =>
     v === true ? t('crossContactAvoid') : v === false ? t('crossContactOk') : tCross('notSure');
@@ -38,17 +28,17 @@ export function AllergyCardDisplay() {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  }).format(new Date(card.updatedAt));
+  }).format(new Date(updatedAt));
 
   return (
     <div className="flex flex-col gap-4">
       <section className="rounded-sb-lg border border-sb-border bg-sb-brand-soft p-4 shadow-sb-e1">
         <ul className="flex flex-col divide-y divide-sb-border">
-          {card.entries.map((e) => (
+          {entries.map((e) => (
             <li key={e.allergenId} className="flex flex-col gap-1.5 py-3 first:pt-0 last:pb-0">
               <div className="flex flex-wrap items-center gap-2">
-                <AllergenChip name={e.name.en} severity={e.severity} />
-                <span className="text-sb-body-s text-sb-muted">{e.name.vi}</span>
+                <AllergenChip name={e.name[dataLang]} severity={e.severity} />
+                <span className="text-sb-body-s text-sb-muted">{e.name[other]}</span>
               </div>
               {e.severity && (
                 <p className="text-sb-caption text-sb-muted">
