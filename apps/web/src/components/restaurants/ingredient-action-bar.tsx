@@ -12,19 +12,19 @@ const ghost =
 // Add ingredient (writes an unverified user contribution) · Report wrong (feedback spine) ·
 // Create question for owner (reuses the question-card route). Human-in-the-loop throughout.
 export function IngredientActionBar({
-  restaurantId,
   menuItemId,
   lang,
   existingIngredientIds,
   onAdd,
   adding,
+  onReportWrong,
 }: {
-  restaurantId: string;
   menuItemId: string;
   lang: LanguageCode;
   existingIngredientIds: string[];
   onAdd: (ingredientId: string) => void;
   adding: boolean;
+  onReportWrong: () => void;
 }) {
   const t = useTranslations('dishAtRestaurant');
   const [open, setOpen] = useState(false);
@@ -60,13 +60,10 @@ export function IngredientActionBar({
           <CirclePlus aria-hidden className="size-4" />
           {t('addIngredient')}
         </button>
-        <Link
-          href={`/feedback/new?restaurantId=${encodeURIComponent(restaurantId)}&menuItemId=${encodeURIComponent(menuItemId)}`}
-          className={`${ghost} border-sb-status-avoid-border text-sb-status-avoid-fg`}
-        >
+        <button type="button" onClick={onReportWrong} className={`${ghost} border-sb-status-avoid-border text-sb-status-avoid-fg`}>
           <Flag aria-hidden className="size-4" />
           {t('reportWrong')}
-        </Link>
+        </button>
       </div>
 
       {open ? (

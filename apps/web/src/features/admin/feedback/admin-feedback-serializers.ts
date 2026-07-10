@@ -29,6 +29,11 @@ export function feedbackReportRowToListDTO(r: ReportListRow) {
     allergenIds: r.allergenIds,
     askedStaff: r.askedStaff,
     hasActiveFlags: r.flags.length > 0,
+    // v2 ingredient-correction context surfaced on the /admin/reports queue.
+    notes: r.notes,
+    reporterRef: r.reporterRef,
+    correctionIngredientId: r.correctionIngredientId,
+    correctionPresent: r.correctionPresent,
   };
 }
 

@@ -162,6 +162,39 @@ export async function applyAdminAction(input: AdminActionInput): Promise<AdminAc
         }
         break;
       }
+      case 'approve_ingredient_correction': {
+        // First data-mutating action: apply the report's ingredient correction to the dish, then
+        // resolve. Stays user_contribution/unverified — admin approval applies data, never verifies
+        // the recipe. before/after snapshot the ingredient change (audit invariant for a mutation).
+        const ingredientId = report.correctionIngredientId;
+        if (!report.menuItemId || !ingredientId) return { ok: false, reason: 'invalid_target' };
+        const key = { menuItemId_ingredientId: { menuItemId: report.menuItemId, ingredientId } };
+        const existing = await tx.menuItemIngredient.findUnique({ where: key });
+        before = {
+          reportStatus: report.status,
+          menuItemIngredient: existing
+            ? { id: existing.id, source: existing.source, contributorType: existing.contributorType, verificationStatus: existing.verificationStatus }
+            : null,
+        };
+
+        if (report.correctionPresent === false) {
+          if (existing) await tx.menuItemIngredient.delete({ where: key });
+          after = { reportStatus: 'resolved', present: false, removedMenuItemIngredientId: existing?.id ?? null };
+        } else {
+          const row = await tx.menuItemIngredient.upsert({
+            where: key,
+            update: { source: 'user_contribution', contributorType: 'user', verificationStatus: 'unverified' },
+            create: { menuItemId: report.menuItemId, ingredientId, source: 'user_contribution', contributorType: 'user', verificationStatus: 'unverified' },
+          });
+          after = { reportStatus: 'resolved', present: true, menuItemIngredientId: row.id, source: 'user_contribution', verificationStatus: 'unverified' };
+        }
+
+        await tx.feedbackReport.update({
+          where: { id: reportId },
+          data: { status: 'resolved', reviewedAt: new Date(), reviewedBy: actor, reviewOutcome: 'ingredient_corrected' },
+        });
+        break;
+      }
       case 'add_note':
         break; // audit row only
     }

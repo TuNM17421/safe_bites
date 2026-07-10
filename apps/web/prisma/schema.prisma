@@ -161,6 +161,7 @@ enum FeedbackAdminActionType {
   suppress_suitable_until_review
   hide_menu_item_temporarily
   add_note
+  approve_ingredient_correction // v2: applies a user's ingredient correction to MenuItemIngredient
 }
 
 // ---------- Core models (§5.2) ----------
@@ -464,6 +465,8 @@ model FeedbackReport {
   submissionSource       String                  @default("online") @map("submission_source") // online | offline_synced
   offlineCreatedAt       DateTime?               @map("offline_created_at")
   reporterRef            String?                 @map("reporter_ref") // v2: opaque device id of the submitter (nullable — anonymity preserved)
+  correctionIngredientId String?                 @map("correction_ingredient_id") // v2: ingredient a "report wrong ingredient" targets
+  correctionPresent      Boolean?                @map("correction_present") // v2: true = dish contains it, false = it does not
 
   restaurantId           String                  @map("restaurant_id")
   menuItemId             String?                 @map("menu_item_id")

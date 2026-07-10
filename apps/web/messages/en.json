@@ -451,6 +451,20 @@
       "pending": "{count, plural, one {# report waiting to sync} other {# reports waiting to sync}}",
       "syncNow": "Sync now",
       "syncing": "Syncing…"
+    },
+    "reportIngredient": {
+      "title": "Report a wrong ingredient",
+      "searchIngredient": "Search ingredient…",
+      "contains": "Dish contains it",
+      "notContains": "Dish does not contain it",
+      "notePlaceholder": "Add a note (optional)",
+      "submit": "Submit report",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "error": "Couldn't submit. Please try again.",
+      "submitted": "Thanks — an admin will review your report.",
+      "queued": "Saved offline — it will send when you're back online.",
+      "close": "Done"
     }
   },
   "dishAtRestaurant": {

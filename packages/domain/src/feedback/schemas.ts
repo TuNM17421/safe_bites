@@ -81,6 +81,7 @@ export const FeedbackAdminActionTypeSchema = z.enum([
   'suppress_suitable_until_review',
   'hide_menu_item_temporarily',
   'add_note',
+  'approve_ingredient_correction',
 ]);
 export type FeedbackAdminActionType = z.infer<typeof FeedbackAdminActionTypeSchema>;
 
@@ -153,6 +154,13 @@ export const FeedbackReportInputSchema = z
     reactionTiming: FeedbackReactionTimingSchema.nullish(),
     userTrustRating: z.number().int().min(1).max(5).nullish(),
     notes: z.string().max(500).nullish(),
+
+    // v2 "report wrong ingredient" (optional; the reaction path leaves these undefined). The
+    // report proposes that a menu item does/does not contain `correctionIngredientId`; an admin
+    // applies it via approve_ingredient_correction. reporterRef stays nullable (anonymity default).
+    reporterRef: z.string().max(200).nullish(),
+    correctionIngredientId: z.string().max(200).nullish(),
+    correctionPresent: z.boolean().nullish(),
   })
   .superRefine((val, ctx) => {
     // §9.3: at least one of profileSnapshot(allergies) / allergenIds must be present so the

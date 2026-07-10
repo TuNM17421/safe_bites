@@ -1,9 +1,11 @@
 'use client';
 import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SkeletonCard } from '@/components/common/skeleton-card';
 import { StateView } from '@/components/common/state-view';
 import { SafetyNotice } from '@/components/safety/safety-notice';
+import { ReportIngredientSheet } from '@/components/feedback/report-ingredient-sheet';
 import { IngredientActionBar } from '@/components/restaurants/ingredient-action-bar';
 import { IngredientRow } from '@/components/restaurants/ingredient-row';
 import { Link } from '@/i18n/navigation';
@@ -25,6 +27,7 @@ export function DishAtRestaurant({
   const profile = useProfileStore((s) => s.profile);
   const { data, isLoading, isError, online, add } = useMenuItemIngredients(menuItemId);
   const profileAllergenIds = profile?.allergies.map((a) => a.allergenId) ?? [];
+  const [reportOpen, setReportOpen] = useState(false);
 
   const back = (
     <Link
@@ -102,13 +105,22 @@ export function DishAtRestaurant({
       </section>
 
       <IngredientActionBar
-        restaurantId={data.menuItem.restaurantId}
         menuItemId={data.menuItem.id}
         lang={locale}
         existingIngredientIds={data.ingredients.map((i) => i.ingredientId)}
         onAdd={(id) => add.mutate(id)}
         adding={add.isPending}
+        onReportWrong={() => setReportOpen(true)}
       />
+
+      {reportOpen ? (
+        <ReportIngredientSheet
+          restaurantId={data.menuItem.restaurantId}
+          menuItemId={data.menuItem.id}
+          lang={locale}
+          onDone={() => setReportOpen(false)}
+        />
+      ) : null}
 
       <SafetyNotice />
     </div>

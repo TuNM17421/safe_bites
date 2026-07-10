@@ -451,6 +451,20 @@
       "pending": "{count, plural, other {# báo cáo đang chờ đồng bộ}}",
       "syncNow": "Đồng bộ ngay",
       "syncing": "Đang đồng bộ…"
+    },
+    "reportIngredient": {
+      "title": "Báo nguyên liệu sai",
+      "searchIngredient": "Tìm nguyên liệu…",
+      "contains": "Món có chứa",
+      "notContains": "Món không chứa",
+      "notePlaceholder": "Ghi chú thêm (không bắt buộc)",
+      "submit": "Gửi báo cáo",
+      "submitting": "Đang gửi…",
+      "cancel": "Huỷ",
+      "error": "Không gửi được. Vui lòng thử lại.",
+      "submitted": "Cảm ơn — quản trị viên sẽ xem xét báo cáo của bạn.",
+      "queued": "Đã lưu ngoại tuyến — sẽ gửi khi có mạng.",
+      "close": "Xong"
     }
   },
   "dishAtRestaurant": {
