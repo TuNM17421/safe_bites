@@ -306,7 +306,14 @@
     "loading": "Loading restaurant…",
     "notFound": "Restaurant not found.",
     "error": "Could not load this restaurant.",
-    "back2list": "Browse restaurants"
+    "back2list": "Browse restaurants",
+    "compatHigh": "High match for your profile",
+    "compatAsk": "Ask before ordering",
+    "compatLow": "Low match — consider elsewhere",
+    "compatUnknown": "Not enough data yet",
+    "compatAria": "{percent}% match",
+    "countsSummary": "{suit} suitable · {ask} ask first · {avoid} avoid",
+    "openGoogleMaps": "Open Google Maps"
   },
   "menuItemCard": {
     "matchedDish": "Matched dish",
@@ -326,7 +333,8 @@
       "not_applicable": "Not applicable",
       "true": "Yes",
       "false": "No"
-    }
+    },
+    "viewIngredients": "View ingredients"
   },
   "locationPermission": {
     "useMyLocation": "Use my location",
@@ -444,5 +452,26 @@
       "syncNow": "Sync now",
       "syncing": "Syncing…"
     }
+  },
+  "dishAtRestaurant": {
+    "back": "Back",
+    "noDish": "No dish selected.",
+    "offline": "You're offline. Ingredient details need a connection.",
+    "error": "Couldn't load ingredients.",
+    "ingredientsSubtitle": "Ingredients (as recorded for this place)",
+    "noIngredients": "No ingredients recorded yet. Add one or ask the owner.",
+    "containsYourAllergen": "Contains your allergen",
+    "addIngredient": "Add ingredient",
+    "reportWrong": "Report wrong ingredient",
+    "createQuestion": "Create question for owner",
+    "searchIngredient": "Search ingredient…",
+    "searching": "Searching…",
+    "noIngredientMatches": "No matching ingredients.",
+    "addDisclaimer": "Your contribution is pending review — it won't show as verified.",
+    "provPrefix": "Source:",
+    "provSelfDeclared": "restaurant self-declared",
+    "provUser": "{count} user contributions",
+    "provAdmin": "{count} admin-added",
+    "provOcr": "{count} from OCR"
   }
 }

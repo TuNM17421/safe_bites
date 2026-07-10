@@ -306,7 +306,14 @@
     "loading": "Đang tải nhà hàng…",
     "notFound": "Không tìm thấy nhà hàng.",
     "error": "Không thể tải nhà hàng này.",
-    "back2list": "Xem nhà hàng"
+    "back2list": "Xem nhà hàng",
+    "compatHigh": "Phù hợp cao với hồ sơ của bạn",
+    "compatAsk": "Nên hỏi trước khi gọi món",
+    "compatLow": "Ít phù hợp — cân nhắc chỗ khác",
+    "compatUnknown": "Chưa đủ dữ liệu",
+    "compatAria": "Độ phù hợp {percent}%",
+    "countsSummary": "{suit} hợp · {ask} hỏi lại · {avoid} không hợp",
+    "openGoogleMaps": "Mở Google Maps"
   },
   "menuItemCard": {
     "matchedDish": "Món được khớp",
@@ -326,7 +333,8 @@
       "not_applicable": "Không áp dụng",
       "true": "Có",
       "false": "Không"
-    }
+    },
+    "viewIngredients": "Xem nguyên liệu"
   },
   "locationPermission": {
     "useMyLocation": "Dùng vị trí của tôi",
@@ -444,5 +452,26 @@
       "syncNow": "Đồng bộ ngay",
       "syncing": "Đang đồng bộ…"
     }
+  },
+  "dishAtRestaurant": {
+    "back": "Quay lại",
+    "noDish": "Chưa chọn món.",
+    "offline": "Bạn đang ngoại tuyến. Cần kết nối để xem nguyên liệu.",
+    "error": "Không tải được nguyên liệu.",
+    "ingredientsSubtitle": "Nguyên liệu (theo quán này)",
+    "noIngredients": "Chưa có nguyên liệu nào được ghi nhận. Thêm nguyên liệu hoặc hỏi chủ quán.",
+    "containsYourAllergen": "Chứa chất gây dị ứng của bạn",
+    "addIngredient": "Thêm nguyên liệu",
+    "reportWrong": "Báo nguyên liệu sai",
+    "createQuestion": "Tạo câu hỏi cho chủ quán",
+    "searchIngredient": "Tìm nguyên liệu…",
+    "searching": "Đang tìm…",
+    "noIngredientMatches": "Không tìm thấy nguyên liệu.",
+    "addDisclaimer": "Đóng góp của bạn sẽ chờ duyệt trước khi hiển thị là đã xác minh.",
+    "provPrefix": "Nguồn:",
+    "provSelfDeclared": "quán tự khai",
+    "provUser": "{count} đóng góp từ người dùng",
+    "provAdmin": "{count} từ quản trị",
+    "provOcr": "{count} từ OCR"
   }
 }
