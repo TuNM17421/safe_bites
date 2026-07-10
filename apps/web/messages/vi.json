@@ -473,5 +473,13 @@
     "provUser": "{count} đóng góp từ người dùng",
     "provAdmin": "{count} từ quản trị",
     "provOcr": "{count} từ OCR"
+  },
+  "famous": {
+    "screenTitle": "Món nổi tiếng",
+    "reminder": "Món địa phương nổi tiếng. Đèn phù hợp theo hồ sơ dị ứng của bạn — luôn hỏi lại nhân viên.",
+    "restaurantsNearby": "{count} quán bán món này gần bạn",
+    "noRestaurantsNearby": "Chưa có quán gần bạn",
+    "empty": "Chưa có món nổi tiếng cho khu vực này.",
+    "error": "Không tải được món nổi tiếng."
   }
 }

@@ -36,7 +36,7 @@ traffic-light + compatibility %-ring, color-blind-safe, light/dark).
 | 05 | [Data-model foundation](./phase-05-data-model-foundation.md) | L | high | 02 | ✅ Done |
 | 06 | [Map-first /home (Leaflet)](./phase-06-map-first-home.md) | L | high | 05 | ✅ Done |
 | 07 | [Restaurant detail % ring + dish provenance](./phase-07-restaurant-detail-and-dish-provenance.md) | L | med | 05 | ✅ Done |
-| 08 | [/famous curated dishes](./phase-08-famous-dishes.md) | M | low | 05 | ⬜ Not started |
+| 08 | [/famous curated dishes](./phase-08-famous-dishes.md) | M | low | 05 | ✅ Done |
 | 09 | [Ingredient reports + /admin/reports](./phase-09-ingredient-reports-and-admin-reports.md) | L | med | 05, 07 | ⬜ Not started |
 | 10 | [Admin restaurants map+list + 4-item sidebar](./phase-10-admin-restaurants-map-list.md) | M | low | 05 | ⬜ Not started |
 | 11 | [Admin Excel/CSV import UI](./phase-11-admin-excel-import.md) | M | med | 10 | ⬜ Not started |

@@ -473,5 +473,13 @@
     "provUser": "{count} user contributions",
     "provAdmin": "{count} admin-added",
     "provOcr": "{count} from OCR"
+  },
+  "famous": {
+    "screenTitle": "Famous dishes",
+    "reminder": "Popular local dishes. The chip reflects your allergy profile — always confirm with staff.",
+    "restaurantsNearby": "{count} restaurants serving this near you",
+    "noRestaurantsNearby": "Not listed near you yet",
+    "empty": "No famous dishes yet for this area.",
+    "error": "Couldn't load famous dishes."
   }
 }
