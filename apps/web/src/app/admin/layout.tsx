@@ -14,12 +14,12 @@ import '../globals.css';
 // Admin shell: fixed-locale intl island (locale="en") + its own TanStack Query client
 // (the /admin tree is outside the public (app) providers). Deliberately uses next/link +
 // next/navigation, NOT @/i18n/navigation, so admin URLs are never locale-prefixed (phase-12 ADR).
+// v2 admin nav = 4 destinations. The dashboard + dish/ingredient/dish-risk CRUD pages stay
+// reachable by direct URL but are demoted off the nav.
 const NAV = [
-  { href: '/admin', key: 'dashboard' },
-  { href: '/admin/dishes', key: 'dishes' },
-  { href: '/admin/ingredients', key: 'ingredients' },
-  { href: '/admin/dish-risks', key: 'dishRisks' },
   { href: '/admin/restaurants', key: 'restaurants' },
+  { href: '/admin/import', key: 'import' },
+  { href: '/admin/ocr-review', key: 'ocrReview' },
   { href: '/admin/reports', key: 'reports' },
 ] as const;
 

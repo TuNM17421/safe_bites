@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { AdminDataTable, type AdminColumn } from '@/components/admin/admin-data-table';
@@ -9,6 +10,8 @@ import {
   SOURCE_TYPES,
   VERIFICATION_STATUSES,
 } from '@/app/admin/admin-messages';
+import { AdminProvenanceBadge } from './admin-provenance-badge';
+import { FilterSelect } from './admin-filter-select';
 import { RestaurantForm, type RestaurantRow } from './restaurant-form';
 import { useAdminResource } from './use-admin-resource';
 
@@ -17,37 +20,10 @@ import { useAdminResource } from './use-admin-resource';
 // URLs stay unprefixed (phase-12 ADR — the /admin island is deliberately not locale-routed).
 const BASE = '/api/v1/admin/restaurants';
 
-function FilterSelect({
-  label,
-  value,
-  anyLabel,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  anyLabel: string;
-  options: readonly string[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <label className="flex flex-col gap-1 text-xs text-sb-muted">
-      <span>{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="min-h-10 rounded-sb-sm border border-sb-border bg-sb-surface px-2 text-sm text-sb-fg"
-      >
-        <option value="">{anyLabel}</option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
+// Leaf Leaflet view — lazy, client-only.
+const RestaurantAdminMap = dynamic(() => import('./restaurant-admin-map').then((m) => m.RestaurantAdminMap), {
+  ssr: false,
+});
 
 export function RestaurantAdminList() {
   const t = useTranslations('admin');
@@ -60,6 +36,7 @@ export function RestaurantAdminList() {
   const [district, setDistrict] = useState('');
   const [editing, setEditing] = useState<RestaurantRow | 'new' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<'list' | 'map'>('list');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -117,8 +94,9 @@ export function RestaurantAdminList() {
       render: (r) => (
         <span>
           <span className="font-semibold">{r.canonicalName}</span>
-          <span className="block text-xs text-sb-faint">
-            {r.id} · {r.externalSource}
+          <span className="block text-xs text-sb-faint">{r.id}</span>
+          <span className="mt-1 block">
+            <AdminProvenanceBadge source={r.externalSource} />
           </span>
         </span>
       ),
@@ -129,6 +107,7 @@ export function RestaurantAdminList() {
     { key: 'menuStatus', header: t('fields.menuStatus') },
     { key: 'reviewStatus', header: t('fields.reviewStatus') },
     { key: 'menuItemCount', header: t('restaurant.count'), align: 'right' },
+    { key: 'ingredientCount', header: t('restaurant.ingredientCount'), align: 'right', render: (r) => r.ingredientCount ?? 0 },
     {
       key: 'review',
       header: t('table.review'),
@@ -173,9 +152,19 @@ export function RestaurantAdminList() {
           <span>{t('fields.district')}</span>
           <input value={district} onChange={(e) => setDistrict(e.target.value)} className="min-h-10 rounded-sb-sm border border-sb-border bg-sb-surface px-2 text-sm text-sb-fg" />
         </label>
-        <button type="button" onClick={() => { setError(null); setEditing('new'); }} className="ml-auto min-h-10 self-end rounded-sb-sm bg-sb-primary px-3 text-sm font-bold text-sb-primary-foreground">
-          {t('table.create')}
-        </button>
+        <div className="ml-auto flex items-end gap-2">
+          <div className="inline-flex self-end rounded-sb-sm border border-sb-border p-0.5">
+            <button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')} className={`min-h-9 rounded-sb-sm px-3 text-sm font-bold ${view === 'list' ? 'bg-sb-primary text-sb-primary-foreground' : 'text-sb-muted'}`}>
+              {t('restaurant.viewList')}
+            </button>
+            <button type="button" aria-pressed={view === 'map'} onClick={() => setView('map')} className={`min-h-9 rounded-sb-sm px-3 text-sm font-bold ${view === 'map' ? 'bg-sb-primary text-sb-primary-foreground' : 'text-sb-muted'}`}>
+              {t('restaurant.viewMap')}
+            </button>
+          </div>
+          <button type="button" onClick={() => { setError(null); setEditing('new'); }} className="min-h-10 self-end rounded-sb-sm bg-sb-primary px-3 text-sm font-bold text-sb-primary-foreground">
+            {t('table.create')}
+          </button>
+        </div>
       </div>
 
       {error ? <p role="alert" className="text-sm text-sb-status-avoid-fg">{error}</p> : null}
@@ -195,6 +184,8 @@ export function RestaurantAdminList() {
         <p className="text-sm text-sb-muted">{t('table.loading')}</p>
       ) : list.isError ? (
         <p className="text-sm text-sb-status-avoid-fg">{(list.error as Error).message}</p>
+      ) : view === 'map' ? (
+        <RestaurantAdminMap rows={list.data ?? []} />
       ) : (
         <AdminDataTable
           columns={columns}

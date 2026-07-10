@@ -125,7 +125,9 @@ export function adminMenuItemToDTO(m: MenuItem & { allergenStatuses?: MenuItemAl
   };
 }
 
-export function adminRestaurantToDTO(r: Restaurant & { _count?: { menuItems: number } }) {
+export function adminRestaurantToDTO(
+  r: Restaurant & { _count?: { menuItems: number }; menuItems?: { _count: { ingredients: number } }[] },
+) {
   return {
     id: r.id,
     externalSource: r.externalSource,
@@ -160,6 +162,7 @@ export function adminRestaurantToDTO(r: Restaurant & { _count?: { menuItems: num
     reviewStatus: r.reviewStatus,
     notes: r.notes,
     menuItemCount: r._count?.menuItems ?? null,
+    ingredientCount: r.menuItems ? r.menuItems.reduce((sum, m) => sum + m._count.ingredients, 0) : null,
     createdAt: r.createdAt.toISOString(),
     updatedAt: r.updatedAt.toISOString(),
   };
