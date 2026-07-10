@@ -39,7 +39,7 @@ traffic-light + compatibility %-ring, color-blind-safe, light/dark).
 | 08 | [/famous curated dishes](./phase-08-famous-dishes.md) | M | low | 05 | ✅ Done |
 | 09 | [Ingredient reports + /admin/reports](./phase-09-ingredient-reports-and-admin-reports.md) | L | med | 05, 07 | ✅ Done |
 | 10 | [Admin restaurants map+list + 4-item sidebar](./phase-10-admin-restaurants-map-list.md) | M | low | 05 | ✅ Done |
-| 11 | [Admin Excel/CSV import UI](./phase-11-admin-excel-import.md) | M | med | 10 | ⬜ Not started |
+| 11 | [Admin Excel/CSV import UI](./phase-11-admin-excel-import.md) | M | med | 10 | ✅ Done |
 | 12 | [/ocr scanner + /admin/ocr-review (mock vision)](./phase-12-ocr-scanner-and-review.md) | XL | high | 05, 10 | ⬜ Not started |
 | 13 | [/agent chat assistant (scripted)](./phase-13-agent-chat-assistant.md) | L | high | 06, 09 | ⬜ Not started |
 | 14 | [Biometric /login (simulated) + encryption](./phase-14-biometric-login.md) | L | high | 04 | ⬜ Not started |
