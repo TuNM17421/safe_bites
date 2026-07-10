@@ -1,4 +1,5 @@
 import {
+  compatibilityPercent,
   restaurantDetailRecommendationRequestSchema,
   restaurantIdOrSlugSchema,
   signalTargetsMenuItem,
@@ -103,6 +104,7 @@ export async function POST(req: Request, ctx: Ctx) {
       readinessClass: recommendation.readinessClass,
       confidence: recommendation.confidence,
       counts: recommendation.counts,
+      compatibility: compatibilityPercent(recommendation.counts),
       summary: recommendation.summary,
       reasons: recommendation.reasons,
       stale: recommendation.stale,

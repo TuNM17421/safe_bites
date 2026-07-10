@@ -16,7 +16,8 @@ export type EvidenceType =
   | 'menu_observed'
   | 'restaurant_verified'
   | 'user_report'
-  | 'llm_inferred';
+  | 'llm_inferred'
+  | 'ocr'; // v2: predicted from a photo (general recipe), pending human review
 
 export type Bilingual = Record<LanguageCode, string>;
 

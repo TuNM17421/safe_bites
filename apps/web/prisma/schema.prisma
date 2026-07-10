@@ -48,6 +48,7 @@ enum EvidenceType {
   restaurant_verified
   user_report
   llm_inferred
+  ocr // v2: dish/ingredient predicted from a photo (general recipe), pending human review
 }
 
 enum SourceType {
@@ -61,6 +62,8 @@ enum SourceType {
   google_places
   foursquare
   admin_verified
+  ocr // v2: extracted from a photo via OCR/vision, pending human review
+  user_contribution // v2: added/corrected by an end user (report or chat), pending human review
 }
 
 enum ProfileType {
@@ -143,6 +146,7 @@ enum FeedbackEntityType {
   restaurant
   menu_item
   dish
+  ingredient // v2: "report wrong ingredient" targets a specific ingredient on a menu item
 }
 
 enum FeedbackAdminActionType {
@@ -205,7 +209,8 @@ model Ingredient {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  dishes DishIngredient[]
+  dishes              DishIngredient[]
+  menuItemIngredients MenuItemIngredient[]
 }
 
 model Dish {
@@ -227,6 +232,8 @@ model Dish {
   calorieClass                String?      @map("calorie_class")
   spicyLevel                  String?      @map("spicy_level")
   pickyEaterFlags             String[]     @default([]) @map("picky_eater_flags")
+  isFamous                    Boolean      @default(false) @map("is_famous") // v2: curated "famous local dish"
+  featuredRank                Int?         @map("featured_rank") // v2: ordering within the /famous list
   sourceType                  SourceType   @default(manual_seed) @map("source_type")
   sourceUrl                   String?      @map("source_url")
   reviewStatus                ReviewStatus @default(needs_review) @map("review_status")
@@ -237,6 +244,8 @@ model Dish {
   ingredients     DishIngredient[]
   allergenRisks   DishAllergenRisk[]
   feedbackReports FeedbackReport[]
+
+  @@index([isFamous, featuredRank])
 }
 
 model DishIngredient {
@@ -363,6 +372,7 @@ model MenuItem {
 
   restaurant       Restaurant               @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   allergenStatuses MenuItemAllergenStatus[]
+  ingredients      MenuItemIngredient[]
   feedbackReports  FeedbackReport[]
 
   @@index([restaurantId])
@@ -398,6 +408,35 @@ model MenuItemAllergenStatus {
   @@index([verificationStatus])
 }
 
+// ---------- Per-restaurant ingredient provenance — v2 (§5.6) ----------
+// Records that a menu item (a dish AT a restaurant) contains an ingredient, WITH provenance
+// (who said so) and verification state. The per-user traffic-light dot is derived at read time
+// from the linked Ingredient's allergen tags vs the profile — NOT stored here.
+
+model MenuItemIngredient {
+  id                 String     @id @default(cuid())
+  menuItemId         String     @map("menu_item_id")
+  ingredientId       String     @map("ingredient_id")
+  // Default to the pre-existing `user_submitted`; a newly-added enum value can't be a column
+  // DEFAULT in the same migration (Postgres 55P04). Later phases set `user_contribution`/`ocr`
+  // explicitly at runtime (after the enum addition has committed).
+  source             SourceType @default(user_submitted)
+  contributorType    String     @map("contributor_type") // restaurant | user | admin | ocr
+  verificationStatus String     @default("unverified") @map("verification_status")
+  confidence         Decimal?   @db.Decimal(3, 2)
+  note               String?    @db.Text
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  menuItem   MenuItem   @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, ingredientId])
+  @@index([menuItemId])
+  @@index([ingredientId])
+  @@index([verificationStatus])
+}
+
 // ---------- Import tracking (§5.4) ----------
 
 model ImportRun {
@@ -424,6 +463,7 @@ model FeedbackReport {
   clientPlatform         String                  @default("pwa_web") @map("client_platform")
   submissionSource       String                  @default("online") @map("submission_source") // online | offline_synced
   offlineCreatedAt       DateTime?               @map("offline_created_at")
+  reporterRef            String?                 @map("reporter_ref") // v2: opaque device id of the submitter (nullable — anonymity preserved)
 
   restaurantId           String                  @map("restaurant_id")
   menuItemId             String?                 @map("menu_item_id")

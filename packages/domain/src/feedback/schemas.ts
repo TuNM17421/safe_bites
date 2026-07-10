@@ -66,7 +66,7 @@ export type FeedbackFlagEffect = z.infer<typeof FeedbackFlagEffectSchema>;
 export const FeedbackFlagStatusSchema = z.enum(['active', 'resolved', 'dismissed', 'expired']);
 export type FeedbackFlagStatus = z.infer<typeof FeedbackFlagStatusSchema>;
 
-export const FeedbackEntityTypeSchema = z.enum(['restaurant', 'menu_item', 'dish']);
+export const FeedbackEntityTypeSchema = z.enum(['restaurant', 'menu_item', 'dish', 'ingredient']);
 export type FeedbackEntityType = z.infer<typeof FeedbackEntityTypeSchema>;
 
 export const FeedbackAdminActionTypeSchema = z.enum([

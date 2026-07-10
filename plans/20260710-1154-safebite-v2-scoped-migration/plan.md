@@ -33,7 +33,7 @@ traffic-light + compatibility %-ring, color-blind-safe, light/dark).
 | 02 | [Route rename, link sweep, removals](./phase-02-route-rename-and-removals.md) | M | med | 01 | ✅ Done |
 | 03 | [Merge allergy-card into Profile](./phase-03-merge-allergy-card-into-profile.md) | M | low | 02 | ✅ Done |
 | 04 | [Trim onboarding to 2 steps](./phase-04-trim-onboarding-two-steps.md) | S | med | 01 | ✅ Done |
-| 05 | [Data-model foundation](./phase-05-data-model-foundation.md) | L | high | 02 | ⬜ Not started |
+| 05 | [Data-model foundation](./phase-05-data-model-foundation.md) | L | high | 02 | ✅ Done |
 | 06 | [Map-first /home (Leaflet)](./phase-06-map-first-home.md) | L | high | 05 | ⬜ Not started |
 | 07 | [Restaurant detail % ring + dish provenance](./phase-07-restaurant-detail-and-dish-provenance.md) | L | med | 05 | ⬜ Not started |
 | 08 | [/famous curated dishes](./phase-08-famous-dishes.md) | M | low | 05 | ⬜ Not started |
