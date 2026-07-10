@@ -68,7 +68,14 @@
     "greeting": "Welcome back",
     "greetingNamed": "Hi {name}",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "searchPlaceholder": "Search nearby places",
+    "nearbyCount": "{count} places near you",
+    "noResults": "No places match your search.",
+    "mapOffline": "Map is unavailable offline — showing your saved list.",
+    "compatLabel": "{percent}% match",
+    "compatUnknown": "Match not rated yet",
+    "toggleSheet": "Toggle nearby list"
   },
   "offline": {
     "title": "You are offline",

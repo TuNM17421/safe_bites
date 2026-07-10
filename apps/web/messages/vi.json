@@ -68,7 +68,14 @@
     "greeting": "Chào mừng trở lại",
     "greetingNamed": "Chào {name}",
     "online": "Trực tuyến",
-    "offline": "Ngoại tuyến"
+    "offline": "Ngoại tuyến",
+    "searchPlaceholder": "Tìm quán gần đây",
+    "nearbyCount": "{count} quán quanh bạn",
+    "noResults": "Không có quán nào khớp tìm kiếm.",
+    "mapOffline": "Bản đồ không khả dụng khi ngoại tuyến — hiển thị danh sách đã lưu.",
+    "compatLabel": "{percent}% phù hợp",
+    "compatUnknown": "Chưa đánh giá độ phù hợp",
+    "toggleSheet": "Mở/đóng danh sách gần đây"
   },
   "offline": {
     "title": "Bạn đang ngoại tuyến",

@@ -10,5 +10,7 @@ const FULL_BLEED = ['/home'];
 export function AppMain({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const fullBleed = FULL_BLEED.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-  return <main className={fullBleed ? 'flex-1' : 'flex-1 px-4 py-4'}>{children}</main>;
+  // Full-bleed routes (the map home) become a flex column so their child can `flex-1` and fill
+  // the space between header and bottom nav; padded routes keep the standard column.
+  return <main className={fullBleed ? 'flex flex-1 flex-col' : 'flex-1 px-4 py-4'}>{children}</main>;
 }
