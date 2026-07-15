@@ -21,7 +21,7 @@ import { NearbySheet } from './nearby-sheet';
 // home bundle and never runs on the server.
 const MapCanvas = dynamic(() => import('./map-canvas').then((m) => m.MapCanvas), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-sb-surface-2" aria-hidden />,
+  loading: () => <div className="absolute inset-0 bg-sb-surface-2" aria-hidden />,
 });
 
 const HANOI: LatLng = [21.0285, 105.8542];

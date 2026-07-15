@@ -52,7 +52,10 @@ export function MapCanvas({
   onSelect: (item: RestaurantListItem) => void;
 }) {
   return (
-    <MapContainer center={center} zoom={15} zoomControl={false} className="h-full w-full">
+    // Fill the `relative` wrapper via absolute inset-0 rather than `h-full`: a percentage height
+    // won't resolve against the wrapper's min-height through the flex/ViewTransition chain (Leaflet
+    // would collapse to 0px), but absolute positioning resolves against the used height.
+    <MapContainer center={center} zoom={15} zoomControl={false} className="absolute inset-0">
       {/* License-clean raster tiles. Swap the URL for a keyed provider via env in production. */}
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

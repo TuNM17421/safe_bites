@@ -43,11 +43,13 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
   unlocked: false,
   // Existence check only — never decrypts, so the gate can run before the session is unlocked.
   // Also restores the session-unlocked flag from sessionStorage (survives reloads within a tab).
-  // With no profile on disk the store has reached its final (empty) state → mark it hydrated so
-  // no-profile empty states render; a locked profile stays un-hydrated until unlock() decrypts it.
+  // The store is "settled" (hydrated) when there is no profile on disk (final empty state) OR one
+  // is already loaded in memory (e.g. straight after onboarding/unlock via soft nav — must NOT be
+  // clobbered back to a skeleton). Only a locked, not-yet-decrypted profile stays un-hydrated.
   async probe() {
     const hasProfileOnDisk = await profileRepo.hasActiveProfile();
-    set({ hasProfileOnDisk, unlocked: readUnlocked(), probed: true, hydrated: hasProfileOnDisk ? false : true });
+    const settled = !hasProfileOnDisk || get().profile !== null;
+    set({ hasProfileOnDisk, unlocked: readUnlocked(), probed: true, hydrated: settled });
   },
   // Decrypts + loads the active profile into memory. Only meaningful once unlocked.
   async hydrate() {
