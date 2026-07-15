@@ -32,6 +32,16 @@ export interface LocalKeyRow {
 }
 export const LOCAL_KEY_ID = 'local-aes-gcm';
 
+// Agent chat transcript, encrypted at rest like the profile (it holds the user's allergy/food
+// discussion). The whole rolling conversation is one blob keyed by CHAT_SESSION_ID; only the id and
+// a non-PII timestamp stay in clear.
+export interface EncryptedChatRow {
+  id: string;
+  updatedAt: string;
+  blob: EncryptedEnvelope;
+}
+export const CHAT_SESSION_ID = 'active';
+
 // Canonical §9.6 question-card record (see @safebite/domain).
 export type StoredQuestionCard = QuestionCardRecord;
 
@@ -96,6 +106,7 @@ export class SafeBiteDB extends Dexie {
   lastRestaurantDetail!: Table<CachedRestaurantDetail, string>;
   pendingFeedbackReports!: Table<PendingFeedbackReport, string>;
   localKeys!: Table<LocalKeyRow, string>;
+  chatSessions!: Table<EncryptedChatRow, string>;
 
   constructor() {
     super('safebite_pwa_v1');
@@ -122,6 +133,10 @@ export class SafeBiteDB extends Dexie {
       profiles: 'id, updatedAt',
       allergyCards: 'id, profileId, updatedAt',
       localKeys: 'id',
+    });
+    // v5: encrypted agent chat transcript (additive; existing stores/data preserved).
+    this.version(5).stores({
+      chatSessions: 'id',
     });
   }
 }

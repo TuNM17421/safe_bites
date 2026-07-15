@@ -1,6 +1,6 @@
 import 'server-only';
 import { z } from 'zod';
-import type { AgentReply, BotRestaurant, DataEditProposal } from '@/lib/agent-schemas';
+import type { AgentReply, BotRestaurant, DataEditProposal, HistoryTurn } from '@/lib/agent-schemas';
 import { getOpenAi, OPENAI_MODEL, OPENAI_TIMEOUT_MS } from '@/lib/openai';
 import { isFlaggedContent } from '@/server/ai/moderation';
 import { fetchGroundedRestaurants, resolveIngredient, type GroundedRestaurant } from './grounding';
@@ -105,6 +105,7 @@ export async function openAiAgentReply(input: {
   message: string;
   allergenIds: string[];
   city: string;
+  history: HistoryTurn[];
 }): Promise<AgentReply> {
   // Input guardrail: refuse abusive/harmful content up front.
   if (await isFlaggedContent(input.message)) {
@@ -112,6 +113,12 @@ export async function openAiAgentReply(input: {
   }
 
   const grounded = await fetchGroundedRestaurants(input.city, input.allergenIds);
+
+  // Replay prior turns so follow-ups have context; 'bot' maps to the assistant role.
+  const priorTurns = input.history.map((h) => ({
+    role: (h.role === 'bot' ? 'assistant' : 'user') as 'assistant' | 'user',
+    content: h.text,
+  }));
 
   const completion = await getOpenAi().chat.completions.create(
     {
@@ -121,6 +128,7 @@ export async function openAiAgentReply(input: {
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'system', content: `Grounded data (JSON). Only use these:\n${JSON.stringify(grounded)}` },
+        ...priorTurns,
         { role: 'user', content: input.message },
       ],
       response_format: {

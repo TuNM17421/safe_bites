@@ -1,5 +1,5 @@
 import 'server-only';
-import type { AgentReply } from '@/lib/agent-schemas';
+import type { AgentReply, HistoryTurn } from '@/lib/agent-schemas';
 import { isOpenAiEnabled } from '@/lib/openai';
 import { openAiAgentReply } from './openai-agent';
 import { scriptAgentReply } from './script-agent-reply';
@@ -8,6 +8,7 @@ export interface AgentInput {
   message: string;
   allergenIds: string[];
   city: string;
+  history: HistoryTurn[];
 }
 
 // The single dispatch the route calls. OpenAI when a key is configured; the deterministic scripted

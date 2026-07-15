@@ -11,7 +11,17 @@ import { useProfileStore } from '@/lib/profile-store';
 // The bot's pre-filled data edit. Confirm routes it through the SAME phase-09 ingredient-correction
 // feedback path (needs_review, HITL — never auto-verified). Edit only flips contains/does-not before
 // sending; the human still submits. An admin later applies it via approve_ingredient_correction.
-export function DataEditProposalCard({ proposal, lang }: { proposal: DataEditProposal; lang: 'en' | 'vi' }) {
+export function DataEditProposalCard({
+  proposal,
+  lang,
+  alreadySent = false,
+  onSent,
+}: {
+  proposal: DataEditProposal;
+  lang: 'en' | 'vi';
+  alreadySent?: boolean;
+  onSent?: () => void;
+}) {
   const t = useTranslations('agent');
   const online = useOnlineStatus();
   const profile = useProfileStore((s) => s.profile);
@@ -42,6 +52,7 @@ export function DataEditProposalCard({ proposal, lang }: { proposal: DataEditPro
     }
     try {
       setResult(await submitOrQueueFeedback(parsed.data, { online }));
+      onSent?.(); // let the store persist "sent" so a restored transcript can't re-submit
     } catch {
       setError(true);
     } finally {
@@ -49,7 +60,8 @@ export function DataEditProposalCard({ proposal, lang }: { proposal: DataEditPro
     }
   }
 
-  if (result) {
+  // Collapsed "sent" state — either just submitted this session, or restored as already-sent.
+  if (result || alreadySent) {
     return (
       <p className="inline-flex items-center gap-2 rounded-sb-md border border-sb-status-suitable-border bg-sb-status-suitable-bg px-3 py-2 text-sb-body-s font-bold text-sb-status-suitable-fg">
         <Check aria-hidden className="size-4" />

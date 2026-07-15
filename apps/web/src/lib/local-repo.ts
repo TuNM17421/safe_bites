@@ -245,7 +245,7 @@ export const pendingFeedbackRepo = {
 export async function clearAllLocalData(): Promise<void> {
   await db.transaction(
     'rw',
-    [db.profiles, db.allergyCards, db.questionCards, db.savedDishes, db.metadata, db.lastRestaurantSearch, db.lastRestaurantDetail, db.pendingFeedbackReports],
+    [db.profiles, db.allergyCards, db.questionCards, db.savedDishes, db.metadata, db.lastRestaurantSearch, db.lastRestaurantDetail, db.pendingFeedbackReports, db.chatSessions],
     async () => {
       await Promise.all([
         db.profiles.clear(),
@@ -256,6 +256,7 @@ export async function clearAllLocalData(): Promise<void> {
         db.lastRestaurantSearch.clear(),
         db.lastRestaurantDetail.clear(),
         db.pendingFeedbackReports.clear(),
+        db.chatSessions.clear(),
       ]);
     },
   );

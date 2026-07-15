@@ -1,9 +1,3 @@
-import type { BotRestaurant, DataEditProposal } from '@/lib/agent-schemas';
-
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'bot';
-  text: string;
-  restaurant?: BotRestaurant | null;
-  proposal?: DataEditProposal | null;
-}
+// ChatMessage is inferred from chatMessageSchema (single source of truth) so the persisted /
+// validated shape and the UI type can never drift.
+export type { ChatMessage } from '@/lib/agent-schemas';

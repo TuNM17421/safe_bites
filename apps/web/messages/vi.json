@@ -500,6 +500,7 @@
     "welcome": "Chào bạn! Mình có thể gợi ý món gần đây theo dị ứng của bạn, hoặc ghi nhận nguyên liệu mà quán cho bạn biết. Bạn cần gì nào?",
     "placeholder": "Hỏi về một món hoặc báo một nguyên liệu…",
     "send": "Gửi",
+    "newChat": "Trò chuyện mới",
     "thinking": "Trợ lý đang trả lời…",
     "error": "Không kết nối được trợ lý. Vui lòng thử lại.",
     "matchLabel": "Phù hợp {percent}% với hồ sơ của bạn",

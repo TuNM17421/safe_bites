@@ -1,19 +1,18 @@
 'use client';
-import { Send } from 'lucide-react';
+import { Send, SquarePen } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { BotRestaurantCard } from '@/components/agent/bot-restaurant-card';
 import { ChatBubble } from '@/components/agent/chat-bubble';
 import { DataEditProposalCard } from '@/components/agent/data-edit-proposal-card';
 import { useProfileStore } from '@/lib/profile-store';
-import type { ChatMessage } from './agent-types';
+import { useAgentChatStore } from './agent-chat-store';
+import { messagesToHistory } from './history';
 import { useAgentChat } from './use-agent-chat';
 
-let seq = 0;
-const nextId = () => `m${(seq += 1)}`;
-
-// /agent chat orchestrator. Scripted, offline-tolerant. The transcript scrolls; the composer is
-// pinned. Bot replies may attach a real restaurant card or a HITL data-edit proposal.
+// /agent chat orchestrator. History lives in a module-singleton store (survives in-app navigation)
+// backed by an encrypted Dexie transcript (survives reload / cold open). The welcome bubble is
+// rendered from i18n, never stored, so its locale stays fresh.
 export function AgentChat() {
   const t = useTranslations('agent');
   const locale = useLocale();
@@ -21,51 +20,75 @@ export function AgentChat() {
   const profile = useProfileStore((s) => s.profile);
   const { send, sending } = useAgentChat();
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: nextId(), role: 'bot', text: t('welcome') },
-  ]);
+  const messages = useAgentChatStore((s) => s.messages);
+  const hydrate = useAgentChatStore((s) => s.hydrate);
+  const append = useAgentChatStore((s) => s.append);
+  const markProposalSent = useAgentChatStore((s) => s.markProposalSent);
+  const reset = useAgentChatStore((s) => s.reset);
+
   const [draft, setDraft] = useState('');
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    void hydrate();
+  }, [hydrate]);
+
+  useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, sending]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const message = draft.trim();
     if (!message || sending) return;
     setDraft('');
-    setMessages((prev) => [...prev, { id: nextId(), role: 'user', text: message }]);
+    // Prior turns (before this message) give the model context for follow-ups.
+    const history = messagesToHistory(useAgentChatStore.getState().messages);
+    append([{ id: crypto.randomUUID(), role: 'user', text: message }]);
 
     const reply = await send({
       message,
       allergenIds: profile?.allergies.map((a) => a.allergenId) ?? [],
       city: profile?.destinationCity ?? 'hanoi',
       locale: lang,
+      history,
     });
 
-    setMessages((prev) => [
-      ...prev,
+    append([
       reply
-        ? {
-            id: nextId(),
-            role: 'bot',
-            text: reply.text[lang],
-            restaurant: reply.restaurant,
-            proposal: reply.proposal,
-          }
-        : { id: nextId(), role: 'bot', text: t('error') },
+        ? { id: crypto.randomUUID(), role: 'bot', text: reply.text[lang], restaurant: reply.restaurant, proposal: reply.proposal }
+        : { id: crypto.randomUUID(), role: 'bot', text: t('error') },
     ]);
   }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
+      {messages.length > 0 ? (
+        <div className="flex shrink-0 justify-end border-b border-sb-border bg-sb-surface px-4 py-2">
+          <button
+            type="button"
+            onClick={() => void reset()}
+            className="inline-flex items-center gap-1.5 text-sb-body-s font-bold text-sb-brand focus-visible:shadow-sb-focus"
+          >
+            <SquarePen aria-hidden className="size-4" />
+            {t('newChat')}
+          </button>
+        </div>
+      ) : null}
+
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
+        <ChatBubble role="bot" text={t('welcome')} />
         {messages.map((m) => (
           <ChatBubble key={m.id} role={m.role} text={m.text}>
             {m.restaurant ? <BotRestaurantCard restaurant={m.restaurant} lang={lang} /> : null}
-            {m.proposal ? <DataEditProposalCard proposal={m.proposal} lang={lang} /> : null}
+            {m.proposal ? (
+              <DataEditProposalCard
+                proposal={m.proposal}
+                lang={lang}
+                alreadySent={m.proposalSent ?? false}
+                onSent={() => markProposalSent(m.id)}
+              />
+            ) : null}
           </ChatBubble>
         ))}
         {sending ? <p className="text-sb-caption text-sb-faint">{t('thinking')}</p> : null}

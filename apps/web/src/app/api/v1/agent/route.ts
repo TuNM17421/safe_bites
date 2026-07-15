@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     message: body.data.message,
     allergenIds: body.data.allergenIds,
     city: body.data.city,
+    history: body.data.history,
   });
   return apiOk(agentReplySchema.parse(reply));
 }

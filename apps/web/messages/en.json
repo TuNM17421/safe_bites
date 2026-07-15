@@ -500,6 +500,7 @@
     "welcome": "Hi! I can suggest nearby dishes for your allergies, or note an ingredient a restaurant told you about. What would you like?",
     "placeholder": "Ask about a dish or report an ingredient…",
     "send": "Send",
+    "newChat": "New chat",
     "thinking": "Assistant is typing…",
     "error": "Couldn't reach the assistant. Please try again.",
     "matchLabel": "{percent}% match with your profile",
