@@ -24,6 +24,9 @@ import { useAdminResource } from './use-admin-resource';
 // manage-menu links), so it composes the same primitives directly. Admin uses next/link so
 // URLs stay unprefixed (phase-12 ADR — the /admin island is deliberately not locale-routed).
 const BASE = '/api/v1/admin/restaurants';
+// Unfiltered fetch backing the KPI cards, so their counts stay stable GLOBAL totals as the table is
+// filtered (a filter shortcut, not a moving target). Stable querystring ⇒ stable react-query key.
+const TOTALS_QUERY = { review_status: 'all' };
 
 // Leaf Leaflet view — lazy, client-only.
 const RestaurantAdminMap = dynamic(() => import('./restaurant-admin-map').then((m) => m.RestaurantAdminMap), {
@@ -42,6 +45,8 @@ export function RestaurantAdminList() {
   const [editing, setEditing] = useState<RestaurantRow | 'new' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<'list' | 'map'>('list');
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,6 +65,8 @@ export function RestaurantAdminList() {
   }, [review, verification, menu, source, hasMenu, city, district]);
 
   const { list, create, update, remove } = useAdminResource<RestaurantRow>(BASE, query);
+  // Global totals for the KPI cards (mutations invalidate [BASE], so this refetches after actions).
+  const totals = useAdminResource<RestaurantRow>(BASE, TOTALS_QUERY).list;
 
   const onSubmit = async (body: unknown) => {
     setError(null);
@@ -96,6 +103,7 @@ export function RestaurantAdminList() {
     {
       key: 'canonicalName',
       header: t('fields.canonicalName'),
+      sortable: true,
       render: (r) => (
         <span>
           <span className="font-semibold">{r.canonicalName}</span>
@@ -106,13 +114,13 @@ export function RestaurantAdminList() {
         </span>
       ),
     },
-    { key: 'city', header: t('fields.city') },
-    { key: 'district', header: t('fields.district') },
-    { key: 'verificationStatus', header: t('fields.verificationStatus'), render: (r) => <AdminStatusBadge status={r.verificationStatus} /> },
-    { key: 'menuStatus', header: t('fields.menuStatus'), render: (r) => <AdminStatusBadge status={r.menuStatus} /> },
-    { key: 'reviewStatus', header: t('fields.reviewStatus'), render: (r) => <AdminStatusBadge status={r.reviewStatus} /> },
-    { key: 'menuItemCount', header: t('restaurant.count'), align: 'right' },
-    { key: 'ingredientCount', header: t('restaurant.ingredientCount'), align: 'right', render: (r) => r.ingredientCount ?? 0 },
+    { key: 'city', header: t('fields.city'), sortable: true },
+    { key: 'district', header: t('fields.district'), sortable: true },
+    { key: 'verificationStatus', header: t('fields.verificationStatus'), sortable: true, render: (r) => <AdminStatusBadge status={r.verificationStatus} /> },
+    { key: 'menuStatus', header: t('fields.menuStatus'), sortable: true, render: (r) => <AdminStatusBadge status={r.menuStatus} /> },
+    { key: 'reviewStatus', header: t('fields.reviewStatus'), sortable: true, render: (r) => <AdminStatusBadge status={r.reviewStatus} /> },
+    { key: 'menuItemCount', header: t('restaurant.count'), align: 'right', sortable: true },
+    { key: 'ingredientCount', header: t('restaurant.ingredientCount'), align: 'right', sortable: true, render: (r) => r.ingredientCount ?? 0 },
     {
       key: 'review',
       header: t('table.review'),
@@ -149,13 +157,45 @@ export function RestaurantAdminList() {
     setCity('');
     setDistrict('');
   };
-  // KPI counts over the CURRENT result set (updates as filters narrow).
+
+  // Client-side sort of the current page. The parent owns it (it knows the value types); numeric
+  // for the count columns, locale string compare otherwise. Default (null) preserves API order.
+  const toggleSort = (key: string) => {
+    if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  };
+  const sortedRows = useMemo(() => {
+    if (!sortKey) return rows;
+    const dir = sortDir === 'asc' ? 1 : -1;
+    const val = (r: RestaurantRow): string | number =>
+      sortKey === 'menuItemCount'
+        ? (r.menuItemCount ?? 0)
+        : sortKey === 'ingredientCount'
+          ? (r.ingredientCount ?? 0)
+          : String((r as unknown as Record<string, unknown>)[sortKey] ?? '');
+    return [...rows].sort((a, b) => {
+      const av = val(a);
+      const bv = val(b);
+      const cmp = typeof av === 'number' && typeof bv === 'number' ? av - bv : String(av).localeCompare(String(bv));
+      return cmp * dir;
+    });
+  }, [rows, sortKey, sortDir]);
+
+  // KPI cards use GLOBAL totals (stable) and double as filter toggles: click narrows the table to
+  // that subset, click again clears. Active reflects the matching filter state.
+  const totalRows = totals.data ?? [];
+  const toggle = (current: string, value: string, set: (v: string) => void) => set(current === value ? '' : value);
   const stats: AdminStat[] = [
-    { label: t('restaurant.statTotal'), value: rows.length },
-    { label: t('restaurant.statNeedsReview'), value: rows.filter((r) => r.reviewStatus === 'needs_review').length, tone: 'ask-first' },
-    { label: t('restaurant.statApproved'), value: rows.filter((r) => r.reviewStatus === 'approved').length, tone: 'suitable' },
-    { label: t('restaurant.statFlagged'), value: rows.filter((r) => r.verificationStatus === 'flagged').length, tone: 'avoid' },
-    { label: t('restaurant.statWithMenu'), value: rows.filter((r) => (r.menuItemCount ?? 0) > 0).length },
+    // Total is "showing everything": active only when NO filter (of any dimension) is set, and it
+    // clears ALL of them — so its pressed state never contradicts a filtered table.
+    { label: t('restaurant.statTotal'), value: totalRows.length, active: !hasFilters, onClick: clearFilters },
+    { label: t('restaurant.statNeedsReview'), value: totalRows.filter((r) => r.reviewStatus === 'needs_review').length, tone: 'ask-first', active: review === 'needs_review', onClick: () => toggle(review, 'needs_review', setReview) },
+    { label: t('restaurant.statApproved'), value: totalRows.filter((r) => r.reviewStatus === 'approved').length, tone: 'suitable', active: review === 'approved', onClick: () => toggle(review, 'approved', setReview) },
+    { label: t('restaurant.statFlagged'), value: totalRows.filter((r) => r.verificationStatus === 'flagged').length, tone: 'avoid', active: verification === 'flagged', onClick: () => toggle(verification, 'flagged', setVerification) },
+    { label: t('restaurant.statWithMenu'), value: totalRows.filter((r) => (r.menuItemCount ?? 0) > 0).length, active: hasMenu === 'true', onClick: () => toggle(hasMenu, 'true', setHasMenu) },
   ];
 
   // Rich empty state: guide toward a next action instead of a blank "No records" line. Filtered-out
@@ -200,7 +240,10 @@ export function RestaurantAdminList() {
 
   return (
     <div className="flex flex-col gap-3">
-      {!list.isError ? <RestaurantStatCards stats={stats} /> : null}
+      {/* Gate on the totals query (not list): render the cards only once real counts exist, so they
+          never flash all-zeros while that query is in flight; they stay put during filter refetches
+          (totals is cached). An empty array (genuinely no restaurants) is truthy → shows real zeros. */}
+      {totals.data && !totals.isError ? <RestaurantStatCards stats={stats} /> : null}
       <div className="flex flex-wrap items-end gap-2">
         <FilterSelect label={t('table.filter')} value={review} anyLabel={t('table.all')} options={REVIEW_STATUSES} onChange={setReview} />
         <FilterSelect label={t('restaurant.filterVerification')} value={verification} anyLabel={t('restaurant.filterAny')} options={VERIFICATION_STATUSES} onChange={setVerification} />
@@ -268,7 +311,7 @@ export function RestaurantAdminList() {
       ) : (
         <AdminDataTable
           columns={columns}
-          rows={list.data ?? []}
+          rows={sortedRows}
           onEdit={(row) => { setError(null); setEditing(row); }}
           onDelete={(row) => doDelete(row.id)}
           actionsHeader={t('table.actions')}
@@ -276,6 +319,9 @@ export function RestaurantAdminList() {
           deleteLabel={t('table.delete')}
           emptyLabel={t('table.empty')}
           emptyState={emptyState}
+          sortKey={sortKey}
+          sortDir={sortDir}
+          onSort={toggleSort}
         />
       )}
     </div>
