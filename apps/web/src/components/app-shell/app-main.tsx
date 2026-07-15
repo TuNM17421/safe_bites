@@ -3,9 +3,10 @@ import type { ReactNode } from 'react';
 import { usePathname } from '@/i18n/navigation';
 
 // Full-bleed opt-out for the in-app shell. The v2 map-first /home fills the column
-// edge-to-edge (no padding) so the map can reach the frame edges; every other in-app
-// route keeps the padded column. Matching is exact or `${p}/…`.
-const FULL_BLEED = ['/home'];
+// edge-to-edge (no padding) so the map can reach the frame edges; the /agent chat fills
+// it so the transcript scrolls and the composer pins. Others keep the padded column.
+// Matching is exact or `${p}/…`.
+const FULL_BLEED = ['/home', '/agent'];
 
 export function AppMain({ children }: { children: ReactNode }) {
   const pathname = usePathname();

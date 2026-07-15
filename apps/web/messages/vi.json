@@ -496,6 +496,25 @@
     "empty": "Chưa có món nổi tiếng cho khu vực này.",
     "error": "Không tải được món nổi tiếng."
   },
+  "agent": {
+    "welcome": "Chào bạn! Mình có thể gợi ý món gần đây theo dị ứng của bạn, hoặc ghi nhận nguyên liệu mà quán cho bạn biết. Bạn cần gì nào?",
+    "placeholder": "Hỏi về một món hoặc báo một nguyên liệu…",
+    "send": "Gửi",
+    "thinking": "Trợ lý đang trả lời…",
+    "error": "Không kết nối được trợ lý. Vui lòng thử lại.",
+    "matchLabel": "Phù hợp {percent}% với hồ sơ của bạn",
+    "matchUnknown": "Chưa rõ độ phù hợp",
+    "distanceKm": "Cách {km} km",
+    "proposalTitle": "Đề xuất sửa dữ liệu",
+    "contains": "nên được đánh dấu là CÓ chứa {ingredient}",
+    "notContains": "nên được đánh dấu là KHÔNG chứa {ingredient}",
+    "confirm": "Xác nhận",
+    "confirming": "Đang gửi…",
+    "edit": "Sửa",
+    "sentForReview": "Đã gửi để duyệt — cảm ơn bạn!",
+    "sentForReviewQueued": "Đã lưu ngoại tuyến — sẽ gửi khi bạn có mạng lại.",
+    "hitlNote": "Mọi thay đổi đều được quản trị viên duyệt trước khi hiển thị — không có gì tự động xác minh."
+  },
   "ocr": {
     "title": "Chụp món ăn",
     "aiTag": "AI dự đoán · công thức chung",

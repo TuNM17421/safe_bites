@@ -496,6 +496,25 @@
     "empty": "No famous dishes yet for this area.",
     "error": "Couldn't load famous dishes."
   },
+  "agent": {
+    "welcome": "Hi! I can suggest nearby dishes for your allergies, or note an ingredient a restaurant told you about. What would you like?",
+    "placeholder": "Ask about a dish or report an ingredient…",
+    "send": "Send",
+    "thinking": "Assistant is typing…",
+    "error": "Couldn't reach the assistant. Please try again.",
+    "matchLabel": "{percent}% match with your profile",
+    "matchUnknown": "Match unknown",
+    "distanceKm": "{km} km away",
+    "proposalTitle": "Proposed data edit",
+    "contains": "should be marked as containing {ingredient}",
+    "notContains": "should be marked as NOT containing {ingredient}",
+    "confirm": "Confirm",
+    "confirming": "Sending…",
+    "edit": "Edit",
+    "sentForReview": "Sent for review — thanks!",
+    "sentForReviewQueued": "Saved offline — it will send when you're back online.",
+    "hitlNote": "An admin reviews every edit before it goes live — nothing is auto-verified."
+  },
   "ocr": {
     "title": "Scan a dish",
     "aiTag": "AI estimate · general recipe",
