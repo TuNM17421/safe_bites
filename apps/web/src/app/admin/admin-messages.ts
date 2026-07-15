@@ -163,6 +163,13 @@ export const adminMessages = {
     viewMap: 'Map',
     ingredientCount: 'Ingredients',
     noCoords: 'No coordinates',
+    statTotal: 'Total',
+    statNeedsReview: 'Needs review',
+    statApproved: 'Approved',
+    statFlagged: 'Flagged',
+    statWithMenu: 'With menu',
+    resultCount: '{count, plural, one {# restaurant} other {# restaurants}}',
+    clearFilters: 'Clear filters',
   },
   reports: {
     heading: 'Reports',

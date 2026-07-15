@@ -1,9 +1,11 @@
 'use client';
+import { X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { AdminDataTable, type AdminColumn } from '@/components/admin/admin-data-table';
+import { AdminTableSkeleton } from '@/components/admin/admin-table-skeleton';
 import {
   RESTAURANT_MENU_STATUSES,
   REVIEW_STATUSES,
@@ -11,8 +13,10 @@ import {
   VERIFICATION_STATUSES,
 } from '@/app/admin/admin-messages';
 import { AdminProvenanceBadge } from './admin-provenance-badge';
+import { AdminStatusBadge } from './admin-status-badge';
 import { FilterSelect } from './admin-filter-select';
 import { RestaurantForm, type RestaurantRow } from './restaurant-form';
+import { RestaurantStatCards, type AdminStat } from './restaurant-stat-cards';
 import { useAdminResource } from './use-admin-resource';
 
 // Admin restaurant console (§5.2). Richer than AdminResourcePage (filters + review actions +
@@ -103,9 +107,9 @@ export function RestaurantAdminList() {
     },
     { key: 'city', header: t('fields.city') },
     { key: 'district', header: t('fields.district') },
-    { key: 'verificationStatus', header: t('fields.verificationStatus') },
-    { key: 'menuStatus', header: t('fields.menuStatus') },
-    { key: 'reviewStatus', header: t('fields.reviewStatus') },
+    { key: 'verificationStatus', header: t('fields.verificationStatus'), render: (r) => <AdminStatusBadge status={r.verificationStatus} /> },
+    { key: 'menuStatus', header: t('fields.menuStatus'), render: (r) => <AdminStatusBadge status={r.menuStatus} /> },
+    { key: 'reviewStatus', header: t('fields.reviewStatus'), render: (r) => <AdminStatusBadge status={r.reviewStatus} /> },
     { key: 'menuItemCount', header: t('restaurant.count'), align: 'right' },
     { key: 'ingredientCount', header: t('restaurant.ingredientCount'), align: 'right', render: (r) => r.ingredientCount ?? 0 },
     {
@@ -136,8 +140,29 @@ export function RestaurantAdminList() {
     },
   ];
 
+  const rows = list.data ?? [];
+  const hasFilters = Boolean(review || verification || menu || source || hasMenu || city.trim() || district.trim());
+  const clearFilters = () => {
+    setReview('');
+    setVerification('');
+    setMenu('');
+    setSource('');
+    setHasMenu('');
+    setCity('');
+    setDistrict('');
+  };
+  // KPI counts over the CURRENT result set (updates as filters narrow).
+  const stats: AdminStat[] = [
+    { label: t('restaurant.statTotal'), value: rows.length },
+    { label: t('restaurant.statNeedsReview'), value: rows.filter((r) => r.reviewStatus === 'needs_review').length, tone: 'ask-first' },
+    { label: t('restaurant.statApproved'), value: rows.filter((r) => r.reviewStatus === 'approved').length, tone: 'suitable' },
+    { label: t('restaurant.statFlagged'), value: rows.filter((r) => r.verificationStatus === 'flagged').length, tone: 'avoid' },
+    { label: t('restaurant.statWithMenu'), value: rows.filter((r) => (r.menuItemCount ?? 0) > 0).length },
+  ];
+
   return (
     <div className="flex flex-col gap-3">
+      {!list.isError ? <RestaurantStatCards stats={stats} /> : null}
       <div className="flex flex-wrap items-end gap-2">
         <FilterSelect label={t('table.filter')} value={review} anyLabel={t('table.all')} options={REVIEW_STATUSES} onChange={setReview} />
         <FilterSelect label={t('restaurant.filterVerification')} value={verification} anyLabel={t('restaurant.filterAny')} options={VERIFICATION_STATUSES} onChange={setVerification} />
@@ -180,8 +205,24 @@ export function RestaurantAdminList() {
         </div>
       ) : null}
 
+      {!list.isPending && !list.isError && view === 'list' ? (
+        <div className="flex items-center justify-between gap-2 text-sm text-sb-muted">
+          <span className="tabular-nums">{t('restaurant.resultCount', { count: rows.length })}</span>
+          {hasFilters ? (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="inline-flex min-h-9 items-center gap-1 font-semibold text-sb-brand-ink hover:underline focus-visible:shadow-sb-focus focus-visible:outline-none"
+            >
+              <X className="size-4" aria-hidden />
+              {t('restaurant.clearFilters')}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
       {list.isPending ? (
-        <p className="text-sm text-sb-muted">{t('table.loading')}</p>
+        <AdminTableSkeleton />
       ) : list.isError ? (
         <p className="text-sm text-sb-status-avoid-fg">{(list.error as Error).message}</p>
       ) : view === 'map' ? (
