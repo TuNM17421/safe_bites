@@ -495,5 +495,19 @@
     "noRestaurantsNearby": "Chưa có quán gần bạn",
     "empty": "Chưa có món nổi tiếng cho khu vực này.",
     "error": "Không tải được món nổi tiếng."
+  },
+  "ocr": {
+    "title": "Chụp món ăn",
+    "aiTag": "AI dự đoán · công thức chung",
+    "capture": "Chụp món ăn",
+    "scanning": "Đang phân tích…",
+    "starting": "Đang mở camera…",
+    "permissionDenied": "Camera bị từ chối quyền.",
+    "cameraUnsupported": "Không dùng được camera ở đây.",
+    "fallbackHint": "Cấp quyền camera, hoặc mở trên thiết bị có camera.",
+    "generalRecipeWarning": "Thành phần dự đoán từ công thức nấu chung — KHÔNG phải công thức riêng của quán này. Hãy hỏi lại quán.",
+    "recognized": "Nhận diện: {dish}",
+    "findRestaurants": "Tìm quán bán {dish}",
+    "rescan": "Chụp lại"
   }
 }

@@ -210,8 +210,9 @@ model Ingredient {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  dishes              DishIngredient[]
-  menuItemIngredients MenuItemIngredient[]
+  dishes               DishIngredient[]
+  menuItemIngredients  MenuItemIngredient[]
+  ocrReviewIngredients OcrReviewIngredient[]
 }
 
 model Dish {
@@ -335,6 +336,7 @@ model Restaurant {
 
   menuItems       MenuItem[]
   feedbackReports FeedbackReport[]
+  ocrReviewItems  OcrReviewItem[]
 
   @@index([externalSource, externalId])
   @@index([city])
@@ -375,6 +377,7 @@ model MenuItem {
   allergenStatuses MenuItemAllergenStatus[]
   ingredients      MenuItemIngredient[]
   feedbackReports  FeedbackReport[]
+  ocrReviewItems   OcrReviewItem[]
 
   @@index([restaurantId])
   @@index([dishId])
@@ -436,6 +439,47 @@ model MenuItemIngredient {
   @@index([menuItemId])
   @@index([ingredientId])
   @@index([verificationStatus])
+}
+
+// ---------- OCR review queue — v2 (§5.7) ----------
+// A user's dish photo scan submitted for admin review. The prediction is a GENERAL-RECIPE estimate
+// (source=ocr, unverified); only an admin action promotes an approved ingredient into
+// MenuItemIngredient. photoRef is a bounded base64 data URL for the mock; a real object store is
+// deferred behind that single field.
+
+model OcrReviewItem {
+  id           String       @id @default(cuid())
+  dishGuessVi  String       @map("dish_guess_vi")
+  dishGuessEn  String       @map("dish_guess_en")
+  photoRef     String?      @map("photo_ref") @db.Text
+  restaurantId String?      @map("restaurant_id")
+  menuItemId   String?      @map("menu_item_id")
+  status       ReviewStatus @default(needs_review)
+  reviewedAt   DateTime?    @map("reviewed_at")
+  reviewedBy   String?      @map("reviewed_by")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  ingredients OcrReviewIngredient[]
+  restaurant  Restaurant?           @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
+  menuItem    MenuItem?             @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+}
+
+model OcrReviewIngredient {
+  id           String   @id @default(cuid())
+  itemId       String   @map("item_id")
+  ingredientId String?  @map("ingredient_id")
+  rawName      String   @map("raw_name")
+  confidence   Decimal? @db.Decimal(3, 2)
+  decision     String   @default("pending") // pending | approved | rejected
+  editedName   String?  @map("edited_name")
+
+  item       OcrReviewItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  ingredient Ingredient?   @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
+
+  @@index([itemId])
 }
 
 // ---------- Import tracking (§5.4) ----------

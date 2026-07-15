@@ -495,5 +495,19 @@
     "noRestaurantsNearby": "Not listed near you yet",
     "empty": "No famous dishes yet for this area.",
     "error": "Couldn't load famous dishes."
+  },
+  "ocr": {
+    "title": "Scan a dish",
+    "aiTag": "AI estimate · general recipe",
+    "capture": "Capture dish",
+    "scanning": "Analyzing…",
+    "starting": "Starting camera…",
+    "permissionDenied": "Camera permission denied.",
+    "cameraUnsupported": "Camera not available here.",
+    "fallbackHint": "Grant camera access, or open on a device with a camera.",
+    "generalRecipeWarning": "Ingredients are predicted from a GENERAL recipe — NOT this restaurant's. Always ask staff.",
+    "recognized": "Recognized: {dish}",
+    "findRestaurants": "Find restaurants serving {dish}",
+    "rescan": "Scan again"
   }
 }
