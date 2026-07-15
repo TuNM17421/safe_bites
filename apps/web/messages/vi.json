@@ -515,6 +515,18 @@
     "sentForReviewQueued": "Đã lưu ngoại tuyến — sẽ gửi khi bạn có mạng lại.",
     "hitlNote": "Mọi thay đổi đều được quản trị viên duyệt trước khi hiển thị — không có gì tự động xác minh."
   },
+  "login": {
+    "subtitle": "Đăng nhập nhanh & bảo mật",
+    "lookAtCamera": "Nhìn vào camera để đăng nhập bằng Face ID",
+    "scanning": "Đang quét…",
+    "faceIdAffordance": "Đăng nhập bằng Face ID",
+    "signInFaceId": "Đăng nhập bằng Face ID",
+    "useFingerprint": "Dùng vân tay",
+    "continueWithout": "Tiếp tục không dùng sinh trắc",
+    "signingIn": "Đang đăng nhập…",
+    "failed": "Đăng nhập không thành công. Vui lòng thử lại.",
+    "encryptionNote": "Hồ sơ dị ứng được lưu & mã hoá trên thiết bị của bạn."
+  },
   "ocr": {
     "title": "Chụp món ăn",
     "aiTag": "AI dự đoán · công thức chung",

@@ -4,12 +4,33 @@ import type {
   AllergyCard,
   DishRecommendationCard,
   FeedbackReportInput,
-  LocalUserProfile,
   QuestionCardRecord,
 } from '@safebite/domain';
+import type { EncryptedEnvelope } from './crypto/local-crypto';
 
 // Structured allergy-card snapshot (bilingual entries resolved at save time for offline).
 export type StoredAllergyCard = AllergyCard;
+
+// Phase 14: profiles + allergy cards are encrypted at rest. Only the primary key and a non-PII
+// timestamp (+ the random profileId link) stay in clear for indexing; all PII lives inside `blob`.
+export interface EncryptedProfileRow {
+  id: string;
+  updatedAt: string;
+  blob: EncryptedEnvelope;
+}
+export interface EncryptedAllergyCardRow {
+  id: string;
+  profileId: string;
+  updatedAt: string;
+  blob: EncryptedEnvelope;
+}
+
+// Device-only AES-GCM key, held as an opaque non-extractable CryptoKey (never raw bytes).
+export interface LocalKeyRow {
+  id: string;
+  key: CryptoKey;
+}
+export const LOCAL_KEY_ID = 'local-aes-gcm';
 
 // Canonical §9.6 question-card record (see @safebite/domain).
 export type StoredQuestionCard = QuestionCardRecord;
@@ -66,14 +87,15 @@ export const LAST_QUESTION_CARD_ID = 'lastQuestionCardId';
 // (Decimals are already numbers, timestamps ISO strings) so offline reads reproduce API
 // output exactly — including honest Unknown statuses.
 export class SafeBiteDB extends Dexie {
-  profiles!: Table<LocalUserProfile, string>;
-  allergyCards!: Table<StoredAllergyCard, string>;
+  profiles!: Table<EncryptedProfileRow, string>;
+  allergyCards!: Table<EncryptedAllergyCardRow, string>;
   questionCards!: Table<StoredQuestionCard, string>;
   savedDishes!: Table<SavedDish, string>;
   metadata!: Table<MetadataRow, string>;
   lastRestaurantSearch!: Table<CachedRestaurantSearch, string>;
   lastRestaurantDetail!: Table<CachedRestaurantDetail, string>;
   pendingFeedbackReports!: Table<PendingFeedbackReport, string>;
+  localKeys!: Table<LocalKeyRow, string>;
 
   constructor() {
     super('safebite_pwa_v1');
@@ -92,6 +114,14 @@ export class SafeBiteDB extends Dexie {
     // v3 (Phase 03 §12.1): additive offline feedback outbox; existing stores/data are preserved.
     this.version(3).stores({
       pendingFeedbackReports: 'clientReportId, status, createdAt',
+    });
+    // v4 (Phase 14): encryption at rest. Drop the now-encrypted PII secondary indexes
+    // (destinationCity/language) — values move inside `blob`; keep id + updatedAt (+ profileId).
+    // Add the device-only key store. Additive; existing plaintext rows are read defensively.
+    this.version(4).stores({
+      profiles: 'id, updatedAt',
+      allergyCards: 'id, profileId, updatedAt',
+      localKeys: 'id',
     });
   }
 }

@@ -42,7 +42,7 @@ traffic-light + compatibility %-ring, color-blind-safe, light/dark).
 | 11 | [Admin Excel/CSV import UI](./phase-11-admin-excel-import.md) | M | med | 10 | ✅ Done |
 | 12 | [/ocr scanner + /admin/ocr-review (mock vision)](./phase-12-ocr-scanner-and-review.md) | XL | high | 05, 10 | ✅ Done |
 | 13 | [/agent chat assistant (scripted)](./phase-13-agent-chat-assistant.md) | L | high | 06, 09 | ✅ Done |
-| 14 | [Biometric /login (simulated) + encryption](./phase-14-biometric-login.md) | L | high | 04 | ⬜ Not started |
+| 14 | [Biometric /login (simulated) + encryption](./phase-14-biometric-login.md) | L | high | 04 | ✅ Done |
 
 ## Sequencing
 `01→02→{03, 04}` first (structural). Then **05 is the linchpin** (one migration).
