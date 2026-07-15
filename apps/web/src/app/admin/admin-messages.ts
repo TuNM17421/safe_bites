@@ -170,6 +170,8 @@ export const adminMessages = {
     statWithMenu: 'With menu',
     resultCount: '{count, plural, one {# restaurant} other {# restaurants}}',
     clearFilters: 'Clear filters',
+    emptyNone: 'No restaurants yet — import a sheet or add one.',
+    emptyFiltered: 'No restaurants match these filters.',
   },
   reports: {
     heading: 'Reports',

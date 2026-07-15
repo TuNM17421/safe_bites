@@ -24,6 +24,7 @@ export function AdminDataTable<T extends { id: string }>({
   editLabel,
   deleteLabel,
   emptyLabel,
+  emptyState,
 }: {
   columns: AdminColumn<T>[];
   rows: T[];
@@ -33,6 +34,9 @@ export function AdminDataTable<T extends { id: string }>({
   editLabel: string;
   deleteLabel: string;
   emptyLabel: string;
+  // Optional rich empty state (icon + message + CTA). Falls back to the plain emptyLabel line so
+  // other admin tables that don't pass one are unaffected.
+  emptyState?: ReactNode;
 }) {
   const hasActions = Boolean(onEdit || onDelete);
   const colSpan = columns.length + (hasActions ? 1 : 0);
@@ -58,8 +62,8 @@ export function AdminDataTable<T extends { id: string }>({
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={colSpan} className="px-3 py-8 text-center text-sb-muted">
-                {emptyLabel}
+              <td colSpan={colSpan} className="px-3 py-8">
+                {emptyState ?? <p className="text-center text-sb-muted">{emptyLabel}</p>}
               </td>
             </tr>
           ) : (

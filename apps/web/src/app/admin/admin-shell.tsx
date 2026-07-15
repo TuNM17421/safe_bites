@@ -49,7 +49,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
             </div>
           </header>
         ) : null}
-        <main className="mx-auto max-w-5xl p-4">{children}</main>
+        {/* Data-dense admin tables have many columns; a wider container keeps primary row actions
+            (review / edit / delete) visible without horizontal scroll. */}
+        <main className="mx-auto max-w-7xl p-4">{children}</main>
       </QueryClientProvider>
     </NextIntlClientProvider>
   );

@@ -1,5 +1,5 @@
 'use client';
-import { X } from 'lucide-react';
+import { Store, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ import { AdminProvenanceBadge } from './admin-provenance-badge';
 import { AdminStatusBadge } from './admin-status-badge';
 import { FilterSelect } from './admin-filter-select';
 import { RestaurantForm, type RestaurantRow } from './restaurant-form';
+import { RestaurantReviewActions } from './restaurant-review-actions';
 import { RestaurantStatCards, type AdminStat } from './restaurant-stat-cards';
 import { useAdminResource } from './use-admin-resource';
 
@@ -116,17 +117,14 @@ export function RestaurantAdminList() {
       key: 'review',
       header: t('table.review'),
       render: (r) => (
-        <div className="inline-flex flex-wrap gap-1">
-          <button type="button" onClick={() => doReview(r.id, { reviewStatus: 'approved' })} className="min-h-9 rounded-sb-sm border border-sb-status-suitable-border px-2 text-xs text-sb-status-suitable-fg hover:bg-sb-status-suitable-bg focus-visible:shadow-sb-focus focus-visible:outline-none">
-            {t('table.approve')}
-          </button>
-          <button type="button" onClick={() => doReview(r.id, { reviewStatus: 'rejected' })} className="min-h-9 rounded-sb-sm border border-sb-border px-2 text-xs text-sb-muted hover:bg-sb-surface-2 focus-visible:shadow-sb-focus focus-visible:outline-none">
-            {t('table.reject')}
-          </button>
-          <button type="button" onClick={() => doReview(r.id, { verificationStatus: 'flagged' })} className="min-h-9 rounded-sb-sm border border-sb-status-avoid-border px-2 text-xs text-sb-status-avoid-fg hover:bg-sb-status-avoid-bg focus-visible:shadow-sb-focus focus-visible:outline-none">
-            {t('table.flag')}
-          </button>
-        </div>
+        <RestaurantReviewActions
+          onApprove={() => doReview(r.id, { reviewStatus: 'approved' })}
+          onReject={() => doReview(r.id, { reviewStatus: 'rejected' })}
+          onFlag={() => doReview(r.id, { verificationStatus: 'flagged' })}
+          approveLabel={t('table.approve')}
+          rejectLabel={t('table.reject')}
+          flagLabel={t('table.flag')}
+        />
       ),
     },
     {
@@ -159,6 +157,46 @@ export function RestaurantAdminList() {
     { label: t('restaurant.statFlagged'), value: rows.filter((r) => r.verificationStatus === 'flagged').length, tone: 'avoid' },
     { label: t('restaurant.statWithMenu'), value: rows.filter((r) => (r.menuItemCount ?? 0) > 0).length },
   ];
+
+  // Rich empty state: guide toward a next action instead of a blank "No records" line. Filtered-out
+  // vs genuinely-empty get different guidance.
+  const emptyState = (
+    <div className="flex flex-col items-center gap-3 py-6 text-center">
+      <Store className="size-8 text-sb-faint" aria-hidden />
+      <p className="text-sm text-sb-muted">{hasFilters ? t('restaurant.emptyFiltered') : t('restaurant.emptyNone')}</p>
+      <div className="flex flex-wrap justify-center gap-2">
+        {hasFilters ? (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="inline-flex min-h-9 items-center gap-1 rounded-sb-sm border border-sb-border px-3 text-sm font-semibold text-sb-fg hover:bg-sb-surface-2 focus-visible:shadow-sb-focus focus-visible:outline-none"
+          >
+            <X className="size-4" aria-hidden />
+            {t('restaurant.clearFilters')}
+          </button>
+        ) : (
+          <>
+            <Link
+              href="/admin/import"
+              className="inline-flex min-h-9 items-center rounded-sb-sm border border-sb-border px-3 text-sm font-semibold text-sb-fg hover:bg-sb-surface-2 focus-visible:shadow-sb-focus focus-visible:outline-none"
+            >
+              {t('nav.import')}
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setEditing('new');
+              }}
+              className="inline-flex min-h-9 items-center rounded-sb-sm bg-sb-primary px-3 text-sm font-bold text-sb-primary-foreground focus-visible:shadow-sb-focus focus-visible:outline-none"
+            >
+              {t('table.create')}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -237,6 +275,7 @@ export function RestaurantAdminList() {
           editLabel={t('table.edit')}
           deleteLabel={t('table.delete')}
           emptyLabel={t('table.empty')}
+          emptyState={emptyState}
         />
       )}
     </div>
