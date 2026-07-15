@@ -1,7 +1,7 @@
 import type { OcrPrediction } from '@/lib/ocr-schemas';
 
 // Swap point for OCR/vision. The stub returns a canned "general recipe" prediction and IGNORES the
-// image; a real vision provider implements the same interface with no route/UI change.
+// image; the OpenAI vision provider implements the same interface with no route/UI change.
 export interface OcrPredictInput {
   allergenIds: string[];
   imageBytes?: Buffer | null;
@@ -41,5 +41,21 @@ class StubOcrPredictor implements OcrPredictor {
   }
 }
 
-// The single instance the route uses. Replace with a real provider behind the same interface.
-export const ocrPredictor: OcrPredictor = new StubOcrPredictor();
+const stub = new StubOcrPredictor();
+
+// The single instance the route uses. Dispatches to OpenAI vision when a key is configured, else the
+// stub — AND on ANY OpenAI failure (timeout, rate limit, bad output). Dynamic import keeps the
+// OpenAI code out of the graph when it's unused and avoids a static import cycle.
+export const ocrPredictor: OcrPredictor = {
+  async predict(input) {
+    // Inline env check (not the @/lib/openai helper) so this module — and the stub unit test that
+    // imports it — never statically pulls in the server-only OpenAI code.
+    if (!process.env.OPENAI_API_KEY) return stub.predict(input);
+    try {
+      const { openAiVisionPredictor } = await import('./openai-vision-predictor');
+      return await openAiVisionPredictor.predict(input);
+    } catch {
+      return stub.predict(input);
+    }
+  },
+};
