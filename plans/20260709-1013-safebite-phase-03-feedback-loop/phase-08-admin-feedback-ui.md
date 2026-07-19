@@ -20,7 +20,7 @@ Build the admin-side feedback triage surface: a `/admin/feedback` queue page (su
 - **`AdminDataTable<T extends {id:string}>`** (`components/admin/admin-data-table.tsx`) is presentational and i18n-agnostic: caller passes already-translated `header` strings and a `render` per `AdminColumn`. Reuse it for the queue; render badges/context via `column.render`. Feedback report rows have `id` so the `T extends {id:string}` constraint holds.
 - **No StatusBadge exists in admin** (Phase 02 rendered status as plain text). Build small `AdminFeedbackPriorityBadge` + `AdminFeedbackStatusBadge` — icon + label + `sb-*` triad, **never colour-only** (spec §16.2 "visually prominent but not color-only"; a11y §13). Mirror the public `StatusBadge` idea but self-contained in `features/admin/feedback/`.
 - **Badge counts come from list-API meta**, not a separate call. [[phase-05-admin-feedback-api]] returns `meta.urgentPendingCount` + `meta.needsReviewCount` (+ summary-card counts) alongside `items`/`nextCursor`. Do NOT recompute client-side from a page slice.
-- **`ctx.params` is a Promise in Next 15** — but that's server-side; here the client detail page reads the id via `useParams<{reportId:string}>()` exactly like `app/admin/restaurants/[restaurantId]/page.tsx`.
+- **`ctx.params` is a Promise (Next 16, unchanged from 15)** — but that's server-side; here the client detail page reads the id via `useParams<{reportId:string}>()` exactly like `app/admin/restaurants/[restaurantId]/page.tsx`.
 - **Filter-select + edit-panel pattern** is fully worked out in `features/admin/restaurant-admin-list.tsx` (`FilterSelect`, `useMemo` query object, `panelRef` focus, `role="alert"` error line, `window.confirm` for destructive). Copy that structure.
 - Enum option lists (status/priority/reaction) live as client-safe `as const` arrays in `admin-messages.ts` (like `REVIEW_STATUSES`) so forms never import `@prisma/client`.
 
@@ -136,7 +136,7 @@ Nav badge: the layout can't call the list hook (it's outside a page). Simplest K
 
 ## Security & Privacy Considerations
 
-- All routes/data behind the existing `sbt_admin` cookie; middleware already 401s `/admin` APIs, and every fetch is same-origin so the cookie authenticates automatically — no token handling in client code.
+- All routes/data behind the existing `sbt_admin` cookie; the `proxy.ts` boundary already 401s `/admin` APIs, and every fetch is same-origin so the cookie authenticates automatically — no token handling in client code.
 - Internal fields (`notes`, `staffAnswerText`, admin action `note`, `before`/`after` snapshots) are rendered **only** inside `app/admin/*`; never re-exported to public components or copy.
 - No allergy/profile data in any URL — detail routing keys on `reportId` only; filters use ids/enums, never profile payloads.
 - Admin copy passes `copy:check`: avoid all denylisted/forbidden phrases (`reported safe`, `user verified`, `community verified`, `verified_safe`, `guaranteed safe`, `100% safe`, `allergy-proof`, `this dish is safe`).

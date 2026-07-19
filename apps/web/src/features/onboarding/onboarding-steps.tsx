@@ -2,18 +2,14 @@
 import { useState } from 'react';
 import { IdCard, Shield } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { LanguageCode, Severity } from '@safebite/domain';
-import { routing } from '@/i18n/routing';
-import { Chip, SearchInput, SeverityRadio } from './onboarding-controls';
+import type { LanguageCode } from '@safebite/domain';
+import { Chip, SearchInput } from './onboarding-controls';
 import type { Allergen, Template } from './use-onboarding-data';
 import { useOnboardingDraft } from './use-onboarding-draft';
 
-const SEVERITIES: Severity[] = ['mild', 'moderate', 'severe', 'anaphylaxis_risk'];
-const CROSS_OPTIONS: Array<{ v: boolean | 'not_sure'; key: string }> = [
-  { v: true, key: 'yes' },
-  { v: false, key: 'no' },
-  { v: 'not_sure', key: 'notSure' },
-];
+// v2 onboarding: only two steps survive — allergen pick (StepTemplates) and the
+// "app only suggests" acknowledgement (StepDisclaimer). Severity, cross-contact, city, and
+// language capture moved to defaults / profile-edit (see build-profile.ts).
 
 function useLang(): LanguageCode {
   return useLocale() === 'vi' ? 'vi' : 'en';
@@ -51,95 +47,6 @@ export function StepTemplates({ templates, allergens }: { templates: Template[];
         {templates.map((tpl) => (
           <Chip key={tpl.id} active={selectedProfileIds.includes(tpl.id)} onClick={() => toggleProfile(tpl.id)}>
             {tpl.name[lang]}
-          </Chip>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function StepSeverity({ allergens }: { allergens: Allergen[] }) {
-  const t = useTranslations('onboarding');
-  const tSev = useTranslations('severity');
-  const lang = useLang();
-  const { selectedAllergenIds, severity, setSeverity } = useOnboardingDraft();
-  const selected = allergens.filter((a) => selectedAllergenIds.includes(a.id));
-  if (selected.length === 0) return <p className="text-sb-body-s text-sb-muted">{t('noAllergensSelected')}</p>;
-  return (
-    <section className="flex flex-col gap-4">
-      <h2 className="text-sb-title font-bold text-sb-fg">{t('setSeverity')}</h2>
-      {selected.map((a) => (
-        <div key={a.id} className="flex flex-col gap-2">
-          <p className="text-sb-body-s font-semibold text-sb-fg">{a.name[lang]}</p>
-          <div role="radiogroup" aria-label={a.name[lang]} className="flex flex-col gap-2">
-            {SEVERITIES.map((s) => (
-              <SeverityRadio
-                key={s}
-                selected={severity[a.id] === s}
-                onClick={() => setSeverity(a.id, s)}
-                label={tSev(s)}
-                note={s === 'anaphylaxis_risk' ? t('anaphylaxisNote') : undefined}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-export function StepCrossContact({ allergens }: { allergens: Allergen[] }) {
-  const t = useTranslations('onboarding');
-  const lang = useLang();
-  const { selectedAllergenIds, crossContact, setCrossContact } = useOnboardingDraft();
-  const selected = allergens.filter((a) => selectedAllergenIds.includes(a.id));
-  if (selected.length === 0) return <p className="text-sb-body-s text-sb-muted">{t('noAllergensSelected')}</p>;
-  return (
-    <section className="flex flex-col gap-4">
-      <h2 className="text-sb-title font-bold text-sb-fg">{t('setCrossContact')}</h2>
-      {selected.map((a) => (
-        <div key={a.id} className="flex flex-col gap-2">
-          <p className="text-sb-body-s font-semibold text-sb-fg">{a.name[lang]}</p>
-          <div className="flex flex-wrap gap-2">
-            {CROSS_OPTIONS.map((o) => (
-              <Chip key={o.key} active={crossContact[a.id] === o.v} onClick={() => setCrossContact(a.id, o.v)}>
-                {t(o.key)}
-              </Chip>
-            ))}
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-export function StepCity({ cities }: { cities: string[] }) {
-  const t = useTranslations('onboarding');
-  const { destinationCity, setCity } = useOnboardingDraft();
-  return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-sb-title font-bold text-sb-fg">{t('chooseCity')}</h2>
-      <div className="flex flex-wrap gap-2">
-        {cities.map((c) => (
-          <Chip key={c} active={destinationCity === c} onClick={() => setCity(c)}>
-            <span className="capitalize">{c.replace(/_/g, ' ')}</span>
-          </Chip>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function StepLanguage() {
-  const t = useTranslations('onboarding');
-  const { language, setLanguage } = useOnboardingDraft();
-  return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-sb-title font-bold text-sb-fg">{t('chooseLanguage')}</h2>
-      <div className="flex flex-wrap gap-2">
-        {routing.locales.map((l) => (
-          <Chip key={l} active={language === l} onClick={() => setLanguage(l)}>
-            {l === 'vi' ? 'Tiếng Việt' : 'English'}
           </Chip>
         ))}
       </div>

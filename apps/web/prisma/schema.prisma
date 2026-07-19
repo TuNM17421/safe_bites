@@ -48,6 +48,7 @@ enum EvidenceType {
   restaurant_verified
   user_report
   llm_inferred
+  ocr // v2: dish/ingredient predicted from a photo (general recipe), pending human review
 }
 
 enum SourceType {
@@ -61,6 +62,8 @@ enum SourceType {
   google_places
   foursquare
   admin_verified
+  ocr // v2: extracted from a photo via OCR/vision, pending human review
+  user_contribution // v2: added/corrected by an end user (report or chat), pending human review
 }
 
 enum ProfileType {
@@ -74,6 +77,91 @@ enum Strictness {
   low
   medium
   strict
+}
+
+// ---------- Feedback enums — Phase 03 (§7.1) ----------
+
+enum FeedbackReportStatus {
+  needs_review
+  in_review
+  resolved
+  dismissed
+  spam
+}
+
+enum FeedbackPriority {
+  low
+  normal
+  high
+  urgent
+}
+
+enum FeedbackReaction {
+  none
+  mild
+  moderate
+  severe
+  anaphylaxis_or_emergency
+  not_sure
+  prefer_not_to_say
+}
+
+enum FeedbackReactionTiming {
+  during_meal
+  within_2_hours
+  later_same_day
+  next_day_or_later
+  not_sure
+  not_applicable
+}
+
+enum StaffAnswer {
+  confirmed_no_allergen
+  confirmed_contains_allergen
+  confirmed_can_remove
+  confirmed_cannot_remove
+  kitchen_checked
+  not_sure
+  language_barrier
+  no_answer
+  other
+}
+
+enum FeedbackFlagStatus {
+  active
+  resolved
+  dismissed
+  expired
+}
+
+enum FeedbackFlagEffect {
+  flag_for_review
+  downgrade_confidence
+  suppress_suitable
+  cap_restaurant_readiness
+  hide_recommendation
+}
+
+enum FeedbackEntityType {
+  restaurant
+  menu_item
+  dish
+  ingredient // v2: "report wrong ingredient" targets a specific ingredient on a menu item
+}
+
+enum FeedbackAdminActionType {
+  start_review
+  resolve_no_change
+  dismiss_report
+  mark_spam
+  confirm_feedback_flag
+  clear_feedback_flag
+  request_reverification
+  apply_confidence_downgrade
+  suppress_suitable_until_review
+  hide_menu_item_temporarily
+  add_note
+  approve_ingredient_correction // v2: applies a user's ingredient correction to MenuItemIngredient
 }
 
 // ---------- Core models (§5.2) ----------
@@ -122,7 +210,9 @@ model Ingredient {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  dishes DishIngredient[]
+  dishes               DishIngredient[]
+  menuItemIngredients  MenuItemIngredient[]
+  ocrReviewIngredients OcrReviewIngredient[]
 }
 
 model Dish {
@@ -144,6 +234,8 @@ model Dish {
   calorieClass                String?      @map("calorie_class")
   spicyLevel                  String?      @map("spicy_level")
   pickyEaterFlags             String[]     @default([]) @map("picky_eater_flags")
+  isFamous                    Boolean      @default(false) @map("is_famous") // v2: curated "famous local dish"
+  featuredRank                Int?         @map("featured_rank") // v2: ordering within the /famous list
   sourceType                  SourceType   @default(manual_seed) @map("source_type")
   sourceUrl                   String?      @map("source_url")
   reviewStatus                ReviewStatus @default(needs_review) @map("review_status")
@@ -151,8 +243,11 @@ model Dish {
   createdAt                   DateTime     @default(now())
   updatedAt                   DateTime     @updatedAt
 
-  ingredients   DishIngredient[]
-  allergenRisks DishAllergenRisk[]
+  ingredients     DishIngredient[]
+  allergenRisks   DishAllergenRisk[]
+  feedbackReports FeedbackReport[]
+
+  @@index([isFamous, featuredRank])
 }
 
 model DishIngredient {
@@ -239,7 +334,9 @@ model Restaurant {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  menuItems MenuItem[]
+  menuItems       MenuItem[]
+  feedbackReports FeedbackReport[]
+  ocrReviewItems  OcrReviewItem[]
 
   @@index([externalSource, externalId])
   @@index([city])
@@ -278,6 +375,9 @@ model MenuItem {
 
   restaurant       Restaurant               @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   allergenStatuses MenuItemAllergenStatus[]
+  ingredients      MenuItemIngredient[]
+  feedbackReports  FeedbackReport[]
+  ocrReviewItems   OcrReviewItem[]
 
   @@index([restaurantId])
   @@index([dishId])
@@ -312,6 +412,76 @@ model MenuItemAllergenStatus {
   @@index([verificationStatus])
 }
 
+// ---------- Per-restaurant ingredient provenance — v2 (§5.6) ----------
+// Records that a menu item (a dish AT a restaurant) contains an ingredient, WITH provenance
+// (who said so) and verification state. The per-user traffic-light dot is derived at read time
+// from the linked Ingredient's allergen tags vs the profile — NOT stored here.
+
+model MenuItemIngredient {
+  id                 String     @id @default(cuid())
+  menuItemId         String     @map("menu_item_id")
+  ingredientId       String     @map("ingredient_id")
+  // Default to the pre-existing `user_submitted`; a newly-added enum value can't be a column
+  // DEFAULT in the same migration (Postgres 55P04). Later phases set `user_contribution`/`ocr`
+  // explicitly at runtime (after the enum addition has committed).
+  source             SourceType @default(user_submitted)
+  contributorType    String     @map("contributor_type") // restaurant | user | admin | ocr
+  verificationStatus String     @default("unverified") @map("verification_status")
+  confidence         Decimal?   @db.Decimal(3, 2)
+  note               String?    @db.Text
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  menuItem   MenuItem   @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, ingredientId])
+  @@index([menuItemId])
+  @@index([ingredientId])
+  @@index([verificationStatus])
+}
+
+// ---------- OCR review queue — v2 (§5.7) ----------
+// A user's dish photo scan submitted for admin review. The prediction is a GENERAL-RECIPE estimate
+// (source=ocr, unverified); only an admin action promotes an approved ingredient into
+// MenuItemIngredient. photoRef is a bounded base64 data URL for the mock; a real object store is
+// deferred behind that single field.
+
+model OcrReviewItem {
+  id           String       @id @default(cuid())
+  dishGuessVi  String       @map("dish_guess_vi")
+  dishGuessEn  String       @map("dish_guess_en")
+  photoRef     String?      @map("photo_ref") @db.Text
+  restaurantId String?      @map("restaurant_id")
+  menuItemId   String?      @map("menu_item_id")
+  status       ReviewStatus @default(needs_review)
+  reviewedAt   DateTime?    @map("reviewed_at")
+  reviewedBy   String?      @map("reviewed_by")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  ingredients OcrReviewIngredient[]
+  restaurant  Restaurant?           @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
+  menuItem    MenuItem?             @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+}
+
+model OcrReviewIngredient {
+  id           String   @id @default(cuid())
+  itemId       String   @map("item_id")
+  ingredientId String?  @map("ingredient_id")
+  rawName      String   @map("raw_name")
+  confidence   Decimal? @db.Decimal(3, 2)
+  decision     String   @default("pending") // pending | approved | rejected
+  editedName   String?  @map("edited_name")
+
+  item       OcrReviewItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  ingredient Ingredient?   @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
+
+  @@index([itemId])
+}
+
 // ---------- Import tracking (§5.4) ----------
 
 model ImportRun {
@@ -326,4 +496,112 @@ model ImportRun {
   errors       Json?
   startedAt    DateTime  @default(now())
   finishedAt   DateTime?
+}
+
+// ---------- Feedback loop — Phase 03 (§7.2–§7.4) ----------
+
+model FeedbackReport {
+  id                     String                  @id @default(cuid())
+  clientReportId         String                  @unique @map("client_report_id")
+  city                   String
+  locale                 String?
+  clientPlatform         String                  @default("pwa_web") @map("client_platform")
+  submissionSource       String                  @default("online") @map("submission_source") // online | offline_synced
+  offlineCreatedAt       DateTime?               @map("offline_created_at")
+  reporterRef            String?                 @map("reporter_ref") // v2: opaque device id of the submitter (nullable — anonymity preserved)
+  correctionIngredientId String?                 @map("correction_ingredient_id") // v2: ingredient a "report wrong ingredient" targets
+  correctionPresent      Boolean?                @map("correction_present") // v2: true = dish contains it, false = it does not
+
+  restaurantId           String                  @map("restaurant_id")
+  menuItemId             String?                 @map("menu_item_id")
+  dishId                 String?                 @map("dish_id")
+
+  allergenIds            String[]                @default([]) @map("allergen_ids")
+  profileSnapshot        Json                    @map("profile_snapshot")
+  recommendationSnapshot Json?                   @map("recommendation_snapshot")
+
+  ateHere                Boolean?                @map("ate_here")
+  visitedAt              DateTime?               @map("visited_at")
+  askedStaff             Boolean?                @map("asked_staff")
+  staffAnswer            StaffAnswer?            @map("staff_answer")
+  staffAnswerText        String?                 @map("staff_answer_text") @db.Text
+
+  reaction               FeedbackReaction
+  reactionTiming         FeedbackReactionTiming? @map("reaction_timing")
+  userTrustRating        Int?                    @map("user_trust_rating")
+  notes                  String?                 @db.Text
+
+  status                 FeedbackReportStatus    @default(needs_review)
+  priority               FeedbackPriority        @default(normal)
+  severeAutoFlagged      Boolean                 @default(false) @map("severe_auto_flagged")
+
+  reviewedAt             DateTime?               @map("reviewed_at")
+  reviewedBy             String?                 @map("reviewed_by")
+  reviewOutcome          String?                 @map("review_outcome")
+  adminSummary           String?                 @map("admin_summary") @db.Text
+
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+
+  restaurant             Restaurant              @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  menuItem               MenuItem?               @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  dish                   Dish?                   @relation(fields: [dishId], references: [id], onDelete: SetNull)
+  flags                  FeedbackFlag[]
+  actions                FeedbackAdminAction[]
+
+  @@index([restaurantId, createdAt])
+  @@index([menuItemId, createdAt])
+  @@index([dishId, createdAt])
+  @@index([status, priority, createdAt])
+}
+
+model FeedbackFlag {
+  id              String                @id @default(cuid())
+  reportId        String?               @map("report_id")
+  entityType      FeedbackEntityType    @map("entity_type")
+  entityId        String                @map("entity_id")
+  restaurantId    String?               @map("restaurant_id")
+  menuItemId      String?               @map("menu_item_id")
+  dishId          String?               @map("dish_id")
+  allergenId      String?               @map("allergen_id")
+  effect          FeedbackFlagEffect
+  status          FeedbackFlagStatus    @default(active)
+  priority        FeedbackPriority      @default(normal)
+  reason          String                @db.Text
+  publicReasonKey String?               @map("public_reason_key")
+  confidenceDelta Float?                @map("confidence_delta")
+  readinessCap    String?               @map("readiness_cap")
+  expiresAt       DateTime?             @map("expires_at")
+  resolvedAt      DateTime?             @map("resolved_at")
+  resolvedBy      String?               @map("resolved_by")
+  adminNote       String?               @map("admin_note") @db.Text
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  report          FeedbackReport?       @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  actions         FeedbackAdminAction[]
+
+  @@index([entityType, entityId, status])
+  @@index([restaurantId, status])
+  @@index([menuItemId, status])
+  @@index([dishId, status])
+  @@index([allergenId, status])
+}
+
+model FeedbackAdminAction {
+  id         String                  @id @default(cuid())
+  reportId   String                  @map("report_id")
+  flagId     String?                 @map("flag_id")
+  actionType FeedbackAdminActionType @map("action_type")
+  actor      String // "admin" | "system"
+  note       String?                 @db.Text
+  before     Json?
+  after      Json?
+  createdAt  DateTime                @default(now())
+
+  report     FeedbackReport          @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  flag       FeedbackFlag?           @relation(fields: [flagId], references: [id], onDelete: SetNull)
+
+  @@index([reportId, createdAt])
+  @@index([flagId, createdAt])
 }

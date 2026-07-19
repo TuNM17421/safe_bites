@@ -1,20 +1,24 @@
 'use client';
 import { useState } from 'react';
-import { ArrowLeft, ExternalLink, Globe, MapPin, Phone, WifiOff } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Globe, Navigation, Phone, WifiOff } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { LanguageCode, RecommendationStatus } from '@safebite/domain';
 import { SkeletonCard } from '@/components/common/skeleton-card';
 import { StateView } from '@/components/common/state-view';
 import { LanguageToggle } from '@/components/common/language-toggle';
 import { SafetyNotice } from '@/components/safety/safety-notice';
+import { FeedbackEntryButton } from '@/components/feedback/feedback-entry-button';
+import { FeedbackSummaryBanner } from '@/components/feedback/feedback-summary-banner';
 import { STATUS_DISPLAY_ORDER } from '@/components/status/status-visuals';
+import { CompatRing } from '@/components/restaurants/compat-ring';
 import { MenuItemRecommendationCard } from '@/components/restaurants/menu-item-recommendation-card';
 import {
+  RestaurantDistanceLabel,
   RestaurantMenuStatusBadge,
-  RestaurantReadinessBadge,
   RestaurantSourceBadge,
   RestaurantVerificationBadge,
 } from '@/components/restaurants/restaurant-badges';
+import { compatBand } from '@/lib/compat-band';
 import { ConfidenceMeter } from '@/components/status/confidence-badge';
 import { useOnlineStatus } from '@/components/app-shell/use-online-status';
 import { Link } from '@/i18n/navigation';
@@ -34,7 +38,7 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
   const detail = useRestaurantDetail(restaurantIdOrSlug, profile);
 
   const backLink = (
-    <Link href="/restaurants" className="inline-flex items-center gap-1 text-sb-body-s text-sb-muted hover:text-sb-fg">
+    <Link href="/home" className="inline-flex items-center gap-1 text-sb-body-s text-sb-muted hover:text-sb-fg">
       <ArrowLeft aria-hidden className="size-4" />
       {t('back')}
     </Link>
@@ -70,10 +74,14 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
   if (!detail.data) return <div className="flex flex-col gap-3">{backLink}<SkeletonCard /></div>;
 
   const { restaurant: r, recommendation: rec, menuRecommendations, attribution } = detail.data;
-  const osmUrl =
+  const gmapsUrl =
     r.lat !== null && r.lon !== null
-      ? `https://www.openstreetmap.org/?mlat=${r.lat}&mlon=${r.lon}#map=18/${r.lat}/${r.lon}`
+      ? `https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lon}`
       : null;
+  const band = compatBand(rec.compatibility);
+  const compatHeadline = t(
+    band === 'suit' ? 'compatHigh' : band === 'ask' ? 'compatAsk' : band === 'avoid' ? 'compatLow' : 'compatUnknown',
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -97,19 +105,31 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
         </p>
       </header>
 
-      {/* Readiness panel */}
-      <section className="flex flex-col gap-3 rounded-sb-md border border-sb-border bg-sb-surface p-4 shadow-sb-e1">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sb-title font-bold text-sb-fg">{t('readinessTitle')}</h2>
-          <RestaurantReadinessBadge readinessClass={rec.readinessClass} />
+      {/* Compatibility panel (v2 % ring) */}
+      <section className="flex flex-col gap-3 rounded-sb-md border border-sb-border bg-gradient-to-b from-sb-brand-soft to-sb-surface p-4 shadow-sb-e1">
+        <div className="flex items-center gap-3">
+          <CompatRing percent={rec.compatibility} size="md" ariaLabel={t('compatAria', { percent: rec.compatibility ?? 0 })} />
+          <div className="min-w-0">
+            <p className="text-sb-body font-bold text-sb-fg">{compatHeadline}</p>
+            <p className="mt-0.5 text-sb-body-s text-sb-muted">
+              {t('countsSummary', {
+                suit: rec.counts.suitable,
+                ask: rec.counts.askFirst,
+                avoid: rec.counts.avoid + rec.counts.risky,
+              })}
+            </p>
+          </div>
         </div>
         <p className="text-sb-body-s text-sb-muted">{rec.summary[dataLang]}</p>
         <div className="flex flex-wrap items-center gap-1.5">
+          <RestaurantDistanceLabel meters={r.distanceMeters} />
           <ConfidenceMeter level={rec.confidence} />
           <RestaurantVerificationBadge status={r.verificationStatus} />
           <RestaurantMenuStatusBadge status={r.menuStatus} />
           <RestaurantSourceBadge source={r.source} />
         </div>
+        {rec.feedbackSummary?.hasActiveFlags ? <FeedbackSummaryBanner summary={rec.feedbackSummary} /> : null}
+        <FeedbackEntryButton restaurantId={r.restaurantId} variant="restaurant" />
       </section>
 
       <SafetyNotice />
@@ -156,9 +176,9 @@ export function RestaurantDetail({ restaurantIdOrSlug }: { restaurantIdOrSlug: s
               {t('openingHours')}: {r.openingHours}
             </span>
           ) : null}
-          {osmUrl ? (
-            <a href={osmUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sb-brand">
-              <MapPin aria-hidden className="size-4" /> {t('openInMap')} <ExternalLink aria-hidden className="size-3" />
+          {gmapsUrl ? (
+            <a href={gmapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sb-brand">
+              <Navigation aria-hidden className="size-4" /> {t('openGoogleMaps')} <ExternalLink aria-hidden className="size-3" />
             </a>
           ) : null}
         </dl>

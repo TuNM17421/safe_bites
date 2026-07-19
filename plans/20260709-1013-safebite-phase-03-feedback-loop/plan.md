@@ -21,13 +21,13 @@ CI job has no DB** so feedback logic must be unit-testable without Prisma (DB in
 
 | # | Phase | Depends on | Status |
 |---|---|---|---|
-| 01 | [Domain feedback core (schemas, signals, apply-logic) + unit tests](phase-01-domain-feedback-core.md) | — | ✅ Done (37 tests; quality gate green) |
-| 02 | [Prisma models, enums, migration, relations](phase-02-prisma-persistence.md) | 01 | ☐ Not started |
-| 03 | [Public feedback API (submit + options) + server services](phase-03-public-feedback-api.md) | 01, 02 | ☐ Not started |
-| 04 | [Recommendation integration (flags → signals → apply → feedbackSummary)](phase-04-recommendation-integration.md) | 01, 02, 03 | ☐ Not started |
-| 05 | [Admin feedback API (list/detail/patch/actions + audit)](phase-05-admin-feedback-api.md) | 02, 03 | ☐ Not started |
-| 06 | [Public feedback UX (form, routes, CTAs, badges, i18n)](phase-06-public-feedback-ux.md) | 03, 04 | ☐ Not started |
-| 07 | [Offline feedback queue + foreground sync](phase-07-offline-queue-sync.md) | 03, 06 | ☐ Not started |
+| 01 | [Domain feedback core (schemas, signals, apply-logic) + unit tests](phase-01-domain-feedback-core.md) | — | ✅ Done — merged to `main` (41 tests; gate green under Next 16) |
+| 02 | [Prisma models, enums, migration, relations](phase-02-prisma-persistence.md) | 01 | ✅ Done (schema + additive migration; gate green; CI applies it) |
+| 03 | [Public feedback API (submit + options) + server services](phase-03-public-feedback-api.md) | 01, 02 | ✅ Done (review: SHIP; gate green; DB round-trip + migrations verified) |
+| 04 | [Recommendation integration (flags → signals → apply → feedbackSummary)](phase-04-recommendation-integration.md) | 01, 02, 03 | ✅ Done (gate green; live pipeline smoke: cap C→D, allergen-scoped) |
+| 05 | [Admin feedback API (list/detail/patch/actions + audit)](phase-05-admin-feedback-api.md) | 02, 03 | ✅ Done (gate green; live admin-action smoke: full side-effect + audit trail) |
+| 06 | [Public feedback UX (form, routes, CTAs, badges, i18n)](phase-06-public-feedback-ux.md) | 03, 04 | ✅ Done (gate green; EN/VI parity; a11y toggle fix) |
+| 07 | [Offline feedback queue + foreground sync](phase-07-offline-queue-sync.md) | 03, 06 | ✅ Done (Dexie v3 outbox; 8 fake-indexeddb tests; gate green) |
 | 08 | [Admin feedback UI (queue/detail/actions/audit + nav)](phase-08-admin-feedback-ui.md) | 05 | ☐ Not started |
 | 09 | [Seed demo, tests (domain/unit/e2e), README, quality gate](phase-09-seed-tests-docs.md) | all | ☐ Not started |
 

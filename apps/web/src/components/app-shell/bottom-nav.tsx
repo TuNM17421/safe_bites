@@ -1,16 +1,18 @@
 'use client';
-import { CircleUser, House, MapPin, UtensilsCrossed } from 'lucide-react';
+import { Bot, Camera, CircleUser, Flame, Map } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 
-// Mobile bottom navigation — 4 top-level DESTINATIONS only (Material 3 / iOS HIG: 3–5 max;
-// 6 crowds thumb targets). Actions/utilities live elsewhere, per destination-vs-action:
-//   • Allergy card → persistent quick-access button in the AppHeader + Home hub.
-//   • Question card → contextual CTA on dish/restaurant detail + Home hub.
+// Mobile bottom navigation — v2: exactly 5 top-level DESTINATIONS (Material 3 / iOS HIG: 3–5 max).
+// Map · Assistant · OCR · Famous · Profile. Actions/utilities live elsewhere, per
+// destination-vs-action: the allergy card is now folded into /profile, and "create question
+// for owner" is a contextual CTA on the restaurant dish detail. `Map` (folded map) is used for
+// the tab so `MapPin` stays reserved for pins on the map itself.
 const TABS = [
-  { href: '/home', key: 'home', Icon: House },
-  { href: '/dishes', key: 'dishes', Icon: UtensilsCrossed },
-  { href: '/restaurants', key: 'restaurants', Icon: MapPin },
+  { href: '/home', key: 'map', Icon: Map },
+  { href: '/agent', key: 'agent', Icon: Bot },
+  { href: '/ocr', key: 'ocr', Icon: Camera },
+  { href: '/famous', key: 'famous', Icon: Flame },
   { href: '/profile', key: 'profile', Icon: CircleUser },
 ] as const;
 
@@ -18,7 +20,7 @@ export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
   return (
-    <nav className="sticky bottom-0 z-10 grid grid-cols-4 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
+    <nav className="sticky bottom-0 z-10 grid grid-cols-5 border-t border-sb-border bg-sb-surface/90 shadow-sb-e2 backdrop-blur supports-[backdrop-filter]:bg-sb-surface/90 pb-[env(safe-area-inset-bottom)]">
       {TABS.map(({ href, key, Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (

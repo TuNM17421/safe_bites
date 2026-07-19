@@ -13,7 +13,7 @@ export async function AppHeader() {
       <Leaf aria-hidden className="size-6 text-sb-brand" />
       <span className="text-sb-title text-sb-fg">{t('common.appName')}</span>
       <Link
-        href="/allergy-card"
+        href="/profile"
         aria-label={t('nav.allergyCard')}
         className="ml-auto grid size-11 place-items-center rounded-full text-sb-muted hover:bg-sb-surface-2 hover:text-sb-brand focus-visible:shadow-sb-focus"
       >

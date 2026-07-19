@@ -66,7 +66,7 @@ export type FeedbackFlagEffect = z.infer<typeof FeedbackFlagEffectSchema>;
 export const FeedbackFlagStatusSchema = z.enum(['active', 'resolved', 'dismissed', 'expired']);
 export type FeedbackFlagStatus = z.infer<typeof FeedbackFlagStatusSchema>;
 
-export const FeedbackEntityTypeSchema = z.enum(['restaurant', 'menu_item', 'dish']);
+export const FeedbackEntityTypeSchema = z.enum(['restaurant', 'menu_item', 'dish', 'ingredient']);
 export type FeedbackEntityType = z.infer<typeof FeedbackEntityTypeSchema>;
 
 export const FeedbackAdminActionTypeSchema = z.enum([
@@ -81,6 +81,7 @@ export const FeedbackAdminActionTypeSchema = z.enum([
   'suppress_suitable_until_review',
   'hide_menu_item_temporarily',
   'add_note',
+  'approve_ingredient_correction',
 ]);
 export type FeedbackAdminActionType = z.infer<typeof FeedbackAdminActionTypeSchema>;
 
@@ -153,10 +154,17 @@ export const FeedbackReportInputSchema = z
     reactionTiming: FeedbackReactionTimingSchema.nullish(),
     userTrustRating: z.number().int().min(1).max(5).nullish(),
     notes: z.string().max(500).nullish(),
+
+    // v2 "report wrong ingredient" (optional; the reaction path leaves these undefined). The
+    // report proposes that a menu item does/does not contain `correctionIngredientId`; an admin
+    // applies it via approve_ingredient_correction. reporterRef stays nullable (anonymity default).
+    reporterRef: z.string().max(200).nullish(),
+    correctionIngredientId: z.string().max(200).nullish(),
+    correctionPresent: z.boolean().nullish(),
   })
-  // §9.3: at least one of profileSnapshot(allergies) / allergenIds must be present so the
-  // report can be interpreted against an allergen.
   .superRefine((val, ctx) => {
+    // §9.3: at least one of profileSnapshot(allergies) / allergenIds must be present so the
+    // report can be interpreted against an allergen.
     const hasAllergenIds = val.allergenIds.length > 0;
     const hasSnapshot = (val.profileSnapshot?.allergies.length ?? 0) > 0;
     if (!hasAllergenIds && !hasSnapshot) {
@@ -165,6 +173,28 @@ export const FeedbackReportInputSchema = z
         message: 'Provide profileSnapshot.allergies or allergenIds.',
         path: ['allergenIds'],
       });
+    }
+
+    // §9.3 limits: visitedAt cannot be >30 days in the future or >180 days in the past.
+    if (val.visitedAt) {
+      const t = Date.parse(val.visitedAt);
+      if (!Number.isNaN(t)) {
+        const now = Date.now();
+        const DAY = 86_400_000;
+        if (t - now > 30 * DAY) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'visitedAt cannot be more than 30 days in the future.',
+            path: ['visitedAt'],
+          });
+        } else if (now - t > 180 * DAY) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'visitedAt cannot be more than 180 days in the past.',
+            path: ['visitedAt'],
+          });
+        }
+      }
     }
   });
 export type FeedbackReportInput = z.infer<typeof FeedbackReportInputSchema>;

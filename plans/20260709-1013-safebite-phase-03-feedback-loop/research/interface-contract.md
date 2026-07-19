@@ -3,6 +3,8 @@
 > Every phase file must use these exact names/paths. If a phase needs to change one,
 > update it here first. Grounded in `codebase-reality-map.md`.
 
+**Stack (as of 2026-07-09, PR #3):** Next 16.2.10 · next-intl 4.13.1 · Serwist 9.5.11 · React 19.2.7 · Prisma 6 (unchanged). See `codebase-reality-map.md` §0a. Phase-03 impact: network boundary is **`proxy.ts`** (not `middleware.ts`); build is `next build --webpack` (keep it); next-intl v4 same house APIs; `(app)` routes inherit React `<ViewTransition>` from the layout (don't add a `template.tsx`). **Phase 02 (Prisma) is unaffected by the upgrade.**
+
 ## Cross-cutting safety invariants (restate in every phase)
 
 1. Feedback never emits `suitable`; **unknown never → suitable**.

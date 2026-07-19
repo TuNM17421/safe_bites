@@ -1,0 +1,775 @@
+<!doctype html>
+<!-- SafeBite — UI/UX mockups v2 (scoped). Icons: Lucide (ISC) + Feather (MIT), inline. -->
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>SafeBite — UI/UX Mockups v2 (scoped)</title>
+<style>
+:root{
+  --bg:#eceff4; --surface:#ffffff; --surface-2:#f6f8fb; --surface-3:#eef2f7; --overlay:#ffffff;
+  --border:#e2e8f0; --border-strong:#cbd5e1; --hairline-top:transparent;
+  --text:#0f172a; --muted:#475569; --faint:#64748b;
+  --brand-50:#eef6ff; --brand-100:#d9ebff; --brand-200:#b8dbff; --brand-300:#86c3ff;
+  --brand-400:#5aa2ff; --brand-500:#2b84f0; --brand-600:#0b6bd6; --brand-700:#0a4da0;
+  --brand:var(--brand-600); --brand-ink:var(--brand-700); --brand-soft:#eef6ff;
+  --appetite:#ef6851; --appetite-soft:#fff1ee; --appetite-ink:#b23f2f;
+  --st-suit-fg:#05603a; --st-suit-bg:#e7f6ef; --st-suit-bd:#1f8f60;
+  --st-ask-fg:#7a5200;  --st-ask-bg:#fdf4e3;  --st-ask-bd:#a9812a;
+  --st-avoid-fg:#a11212;--st-avoid-bg:#fdeaea;--st-avoid-bd:#cc2b2b;
+  --st-unk-fg:#3f4b5b;  --st-unk-bg:#eef1f5;  --st-unk-bd:#6b7787;
+  --e1:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.04);
+  --e2:0 2px 4px rgba(15,23,42,.06),0 8px 20px rgba(15,23,42,.08);
+  --e3:0 6px 16px rgba(15,23,42,.10),0 12px 32px rgba(15,23,42,.10);
+  --e4:0 12px 28px rgba(15,23,42,.14),0 24px 60px rgba(15,23,42,.18);
+  --r-xs:8px; --r-sm:12px; --r-md:16px; --r-lg:22px; --r-xl:28px; --r-full:999px;
+  --font-stack:"Atkinson Hyperlegible",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --tap-min:48px; --nav-height:56px; --safe-bottom:max(10px,env(safe-area-inset-bottom));
+  --dur-standard:200ms; --dur-shimmer:1200ms; --ease-standard:cubic-bezier(0.2,0,0,1);
+  --focus-ring:0 0 0 2px var(--surface),0 0 0 4px var(--brand);
+  --hero-bg:radial-gradient(120% 130% at 8% -10%,#e7f1ff 0%,rgba(231,241,255,0) 55%),radial-gradient(120% 120% at 100% -20%,#ffe9df 0%,rgba(255,233,223,0) 48%),linear-gradient(180deg,#f4f8fd 0%,#eceff4 100%);
+}
+:root[data-theme="dark"]{
+  --bg:#0a0f1a; --surface:#0f172a; --surface-2:#16213a; --surface-3:#1e293b; --overlay:#24324a;
+  --hairline-top:rgba(255,255,255,.06); --border:#24324a; --border-strong:#33415c;
+  --text:#e2e8f0; --muted:#94a3b8; --faint:#7c8ba3;
+  --brand:#5aa2ff; --brand-ink:#86c3ff; --brand-soft:rgba(90,162,255,.14);
+  --appetite:#ff7a66; --appetite-soft:rgba(239,104,81,.14); --appetite-ink:#ff9d8c;
+  --st-suit-fg:#7ee6b8; --st-suit-bg:#0f2b20; --st-suit-bd:#3f9d72;
+  --st-ask-fg:#f5cf7a;  --st-ask-bg:#33280d;  --st-ask-bd:#a9842f;
+  --st-avoid-fg:#f5a3a3;--st-avoid-bg:#3a1717;--st-avoid-bd:#c96b6b;
+  --st-unk-fg:#aeb9c7;  --st-unk-bg:#1c2534;  --st-unk-bd:#6b7789;
+  --e1:0 1px 2px rgba(0,0,0,.4); --e2:0 2px 6px rgba(0,0,0,.5); --e3:0 8px 24px rgba(0,0,0,.55); --e4:0 20px 48px rgba(0,0,0,.65);
+  --hero-bg:radial-gradient(120% 130% at 8% -10%,#14233f 0%,rgba(20,35,63,0) 55%),radial-gradient(120% 120% at 100% -20%,#2b1a12 0%,rgba(43,26,18,0) 46%),linear-gradient(180deg,#0d1627 0%,#0a0f1a 100%);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f1a; --surface:#0f172a; --surface-2:#16213a; --surface-3:#1e293b; --overlay:#24324a;
+  --hairline-top:rgba(255,255,255,.06); --border:#24324a; --border-strong:#33415c;
+  --text:#e2e8f0; --muted:#94a3b8; --faint:#7c8ba3;
+  --brand:#5aa2ff; --brand-ink:#86c3ff; --brand-soft:rgba(90,162,255,.14);
+  --appetite:#ff7a66; --appetite-soft:rgba(239,104,81,.14); --appetite-ink:#ff9d8c;
+  --st-suit-fg:#7ee6b8; --st-suit-bg:#0f2b20; --st-suit-bd:#3f9d72;
+  --st-ask-fg:#f5cf7a;  --st-ask-bg:#33280d;  --st-ask-bd:#a9842f;
+  --st-avoid-fg:#f5a3a3;--st-avoid-bg:#3a1717;--st-avoid-bd:#c96b6b;
+  --st-unk-fg:#aeb9c7;  --st-unk-bg:#1c2534;  --st-unk-bd:#6b7789;
+  --e1:0 1px 2px rgba(0,0,0,.4); --e2:0 2px 6px rgba(0,0,0,.5); --e3:0 8px 24px rgba(0,0,0,.55); --e4:0 20px 48px rgba(0,0,0,.65);
+  --hero-bg:radial-gradient(120% 130% at 8% -10%,#14233f 0%,rgba(20,35,63,0) 55%),radial-gradient(120% 120% at 100% -20%,#2b1a12 0%,rgba(43,26,18,0) 46%),linear-gradient(180deg,#0d1627 0%,#0a0f1a 100%);
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-stack);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+:root.rm *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:opacity .1s linear!important}
+
+.ic{display:inline-block;vertical-align:middle;flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.i12{width:12px;height:12px}.i14{width:14px;height:14px}.i15{width:15px;height:15px}.i16{width:16px;height:16px}.i18{width:18px;height:18px}.i22{width:22px;height:22px}.i24{width:24px;height:24px}.i28{width:28px;height:28px}.i40{width:40px;height:40px}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:14px clamp(16px,4vw,40px);background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.brandmark{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em}
+.brandmark .ic{color:var(--brand)}
+.tag{font:400 12px/1 var(--font-stack);color:var(--muted);border:1px solid var(--border);padding:5px 11px;border-radius:var(--r-full)}
+.sp{flex:1}
+.tbtn{cursor:pointer;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);border-radius:var(--r-full);padding:9px 14px;font:600 14px/1 var(--font-stack);display:inline-flex;gap:8px;align-items:center;min-height:40px}
+.tbtn:hover{border-color:var(--brand)}
+.tbtn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,40px) 96px}
+.hero{position:relative;overflow:hidden;border-radius:var(--r-xl);padding:clamp(22px,4vw,40px);background:var(--hero-bg);border:1px solid var(--border)}
+.hero .kicker{color:var(--brand-ink);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.hero h1{font:700 clamp(24px,4vw,34px)/1.14 var(--font-stack);letter-spacing:-.02em;margin:.28em 0 .4em;max-width:24ch}
+.hero p{color:var(--muted);font-size:16px;margin:0;max-width:70ch}
+.hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hpill{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 var(--font-stack);padding:7px 12px;border-radius:var(--r-full);background:color-mix(in srgb,var(--surface) 70%,transparent);border:1px solid var(--border);color:var(--muted)}
+.section{margin-top:48px}
+.section>h2{font:700 22px/1.2 var(--font-stack);letter-spacing:-.01em;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.section>.sub{color:var(--muted);margin:0 0 22px;font-size:15px;max-width:80ch}
+.pillmini{font:700 11px/1 var(--font-stack);color:var(--brand-ink);background:var(--brand-soft);border-radius:var(--r-full);padding:4px 9px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:18px;box-shadow:var(--e1)}
+.panel h3{margin:0 0 12px;font:700 13px/1 var(--font-stack);text-transform:uppercase;letter-spacing:.07em;color:var(--faint)}
+.grid{display:grid;gap:16px}.cols{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.legend{display:grid;gap:10px}.legend .row{display:flex;align-items:center;gap:12px}.legend .row .st{min-width:150px}.legend .row small{color:var(--muted);font-size:13px}
+
+/* status chip (traffic light: suit=xanh, ask=vàng, avoid=đỏ) */
+.st{display:inline-flex;align-items:center;gap:6px;font:700 13px/1 var(--font-stack);padding:6px 11px 6px 9px;border-radius:var(--r-full);border:1px solid;white-space:nowrap}
+.st .ic{width:15px;height:15px}
+.st--suit{color:var(--st-suit-fg);background:var(--st-suit-bg);border-color:var(--st-suit-bd)}
+.st--ask{color:var(--st-ask-fg);background:var(--st-ask-bg);border-color:var(--st-ask-bd)}
+.st--avoid{color:var(--st-avoid-fg);background:var(--st-avoid-bg);border-color:var(--st-avoid-bd)}
+.st--unk{color:var(--st-unk-fg);background:var(--st-unk-bg);border-color:var(--st-unk-bd)}
+.st--sm{font-size:11.5px;padding:4px 9px 4px 7px}
+
+.meta{display:inline-flex;align-items:center;gap:5px;font:400 12px/1 var(--font-stack);color:var(--muted);border:1px solid var(--border);border-radius:var(--r-full);padding:5px 10px;background:var(--surface-2)}
+.meta .ic{width:13px;height:13px;color:var(--faint)}
+.metarow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.prov{display:inline-flex;align-items:center;gap:5px;font:600 11px/1 var(--font-stack);color:var(--muted);background:var(--surface-3);border-radius:var(--r-full);padding:4px 9px}
+
+/* compatibility ring */
+.compat{display:inline-flex;align-items:center;gap:9px}
+.compat .ring{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;flex:none;position:relative;font:800 12px/1 var(--font-stack);color:var(--_c);background:conic-gradient(var(--_c) calc(var(--_p)*1%),var(--surface-3) 0)}
+.compat .ring::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--surface)}
+.compat .ring span{position:relative}
+.compat .lbl b{font-size:13px;display:block}.compat .lbl small{color:var(--muted);font-size:11.5px}
+.compat.big .ring{width:66px;height:66px;font-size:17px}
+
+/* buttons */
+.btn{--_bg:var(--brand);--_fg:#fff;--_bd:transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;padding:0 16px;border:1px solid var(--_bd);border-radius:var(--r-sm);background:var(--_bg);color:var(--_fg);font:700 16px/1 var(--font-stack);cursor:pointer;transition:transform 100ms var(--ease-standard),filter 200ms}
+.btn .ic{width:20px;height:20px}
+.btn:hover{filter:brightness(1.06)}.btn:active{transform:scale(.98)}.btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.btn[disabled],.btn.is-disabled{opacity:.5;cursor:not-allowed}
+.btn--secondary{--_bg:var(--appetite-soft);--_fg:var(--appetite-ink)}
+.btn--ghost{--_bg:var(--surface-2);--_fg:var(--text);--_bd:var(--border)}
+.btn--danger{--_bg:transparent;--_fg:var(--st-avoid-fg);--_bd:var(--st-avoid-bd)}
+.btn--sm{min-height:40px;font-size:14px;width:auto;padding:0 14px}
+.btn+.btn{margin-top:10px}
+
+/* device frames */
+.gallery{display:flex;flex-wrap:wrap;gap:32px 26px;align-items:flex-start}
+.device{width:344px;flex:none}
+.device .cap{display:flex;align-items:center;gap:8px;margin:0 0 10px 4px}
+.device .cap b{font-weight:800;font-size:14px}
+.device .cap code{font:600 11.5px/1 var(--font-stack);color:var(--brand-ink);background:var(--brand-soft);border-radius:6px;padding:3px 7px}
+.phone{position:relative;border:10px solid #0b1220;background:var(--surface);border-radius:44px;overflow:hidden;box-shadow:var(--e4)}
+:root[data-theme="dark"] .phone{border-color:#000}
+.notch{height:30px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:600 12px/1 var(--font-stack);color:var(--text);position:relative}
+.notch::after{content:"";position:absolute;left:50%;top:7px;transform:translateX(-50%);width:96px;height:20px;background:#0b1220;border-radius:0 0 14px 14px}
+:root[data-theme="dark"] .notch::after{background:#000}
+.notch .r svg{width:16px;height:12px;fill:currentColor}
+.screen{padding:12px 14px 0;background:var(--surface);min-height:220px}
+.screen.hero-top{background:linear-gradient(180deg,color-mix(in srgb,var(--brand-soft) 60%,var(--surface)),var(--surface) 120px)}
+.screen.pad-b{padding-bottom:72px}.screen.flush{padding:0}
+
+.appbar{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 0 12px}
+.iconbtn{width:44px;height:44px;margin:-8px;border-radius:var(--r-full);display:grid;place-items:center;color:var(--muted);background:transparent;border:0;cursor:pointer}
+.iconbtn:hover{background:var(--surface-2)}
+.appbar .ttl{font:700 17px/1.2 var(--font-stack)}
+.appbar .ttl small{display:block;font:400 12px/1 var(--font-stack);color:var(--faint);margin-top:2px}
+.bottomnav{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:6px 6px calc(6px + var(--safe-bottom));background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--border);box-shadow:var(--e2)}
+.bottomnav a{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;font:600 10.5px/1 var(--font-stack);color:var(--faint);text-decoration:none;min-width:52px;min-height:48px;padding:5px 3px;border-radius:var(--r-md);justify-content:center}
+.bottomnav a .pillbox{display:grid;place-items:center;width:46px;height:26px;border-radius:var(--r-full);transition:background var(--dur-standard)}
+.bottomnav a.on{color:var(--brand)}.bottomnav a.on .pillbox{background:var(--brand-soft)}
+
+.h1{font:700 22px/1.18 var(--font-stack);letter-spacing:-.01em;margin:8px 0 8px}
+.h2{font:700 18px/1.25 var(--font-stack);margin:2px 0 10px}
+.eyebrow{font:700 12px/1 var(--font-stack);text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin:2px 0 8px}
+.p{color:var(--muted);font-size:14px;margin:0 0 12px}.small{font-size:12.5px;color:var(--faint)}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.chip{font:500 13.5px/1 var(--font-stack);padding:0 13px;min-height:40px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface-2);color:var(--text);display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.chip .ic{width:15px;height:15px}
+.chip.sel{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-ink);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px;box-shadow:var(--e1);margin:0 0 12px}
+.card.brand{background:linear-gradient(180deg,var(--brand-soft),var(--surface))}
+.card h4{margin:0;font:700 16px/1.25 var(--font-stack);display:flex;align-items:center;gap:8px;justify-content:space-between}
+.card .vi{color:var(--muted);font-size:13px;margin:2px 0 0}
+.notice{display:flex;gap:10px;border-radius:var(--r-sm);padding:11px 12px;font-size:12.5px;margin:0 0 12px;line-height:1.42}
+.notice .ic{width:16px;height:16px;flex:none;margin-top:1px}
+.notice--info{background:var(--surface-3);color:var(--muted);border:1px solid var(--border)}
+.notice--warn{background:var(--st-ask-bg);color:var(--st-ask-fg);border:1px solid var(--st-ask-bd)}
+.steps{display:flex;gap:6px;margin:2px 0 14px}.steps i{height:6px;border-radius:3px;flex:1;background:var(--border)}.steps i.on{background:var(--brand)}
+.stepno{font:700 12px/1 var(--font-stack);color:var(--faint);letter-spacing:.05em;margin:0 0 8px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;background:var(--surface-2)}
+.seg button{border:0;background:transparent;color:var(--muted);font:700 12.5px/1 var(--font-stack);padding:9px 13px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--brand);color:#fff}
+.input{position:relative;display:flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:var(--r-full);background:var(--surface);padding:0 14px;min-height:48px;box-shadow:var(--e1)}
+.input .ic{color:var(--faint);width:18px;height:18px}
+.input input{border:0;outline:0;background:transparent;color:var(--text);font:400 15px/1 var(--font-stack);flex:1;min-width:0;padding:14px 0}
+
+/* biometric */
+.biobtn{width:96px;height:96px;border-radius:var(--r-full);margin:0 auto;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);border:2px solid var(--brand-200)}
+.biobtn .ic{width:48px;height:48px}
+:root[data-theme="dark"] .biobtn{border-color:var(--border-strong)}
+
+/* map */
+.mapbox{position:relative;height:100%;min-height:300px;overflow:hidden;background:repeating-linear-gradient(90deg,transparent 0 46px,rgba(100,116,139,.16) 46px 48px),repeating-linear-gradient(0deg,transparent 0 42px,rgba(100,116,139,.16) 42px 44px),linear-gradient(160deg,#dbeafe,#eff6ff)}
+:root[data-theme="dark"] .mapbox{background:repeating-linear-gradient(90deg,transparent 0 46px,rgba(148,163,184,.10) 46px 48px),repeating-linear-gradient(0deg,transparent 0 42px,rgba(148,163,184,.10) 42px 44px),linear-gradient(160deg,#0e1a2e,#0b1424)}
+.mapbox .water{position:absolute;right:-32px;top:-24px;width:160px;height:130px;background:#bfdbfe;border-radius:42% 52% 46% 56%;transform:rotate(12deg);opacity:.7}
+:root[data-theme="dark"] .mapbox .water{background:#12233d}
+.mapbox .road{position:absolute;left:-8%;top:56%;width:130%;height:14px;background:var(--surface);transform:rotate(-7deg);opacity:.55}
+.compin{position:absolute;transform:translate(-50%,-100%)}
+.compin b{display:grid;place-items:center;width:38px;height:38px;border-radius:50% 50% 50% 6px;transform:rotate(45deg);border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.4);font:800 11px/1 sans-serif;color:#fff}
+.compin b span{transform:rotate(-45deg)}
+.here{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--brand);border:3px solid #fff;box-shadow:0 0 0 5px rgba(11,107,214,.28);transform:translate(-50%,-50%)}
+.attrib{position:absolute;right:6px;bottom:6px;font:400 9px/1 sans-serif;color:#334155;background:rgba(255,255,255,.85);padding:2px 6px;border-radius:6px}
+.mapsearch{position:absolute;left:12px;right:12px;top:10px}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-top-left-radius:20px;border-top-right-radius:20px;box-shadow:0 -6px 24px rgba(15,23,42,.14);padding:8px 14px calc(var(--nav-height) + var(--safe-bottom) + 6px)}
+.sheet .grip{width:40px;height:5px;border-radius:3px;background:var(--border-strong);margin:2px auto 10px}
+
+/* restaurant / dish rows */
+.rrow{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.rrow:last-child{border:0}
+.rrow .rn{flex:1;min-width:0}.rrow .rn b{font-size:14.5px}.rrow .rn small{display:block;color:var(--faint);font-size:12px;margin-top:2px}
+.mi{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.mi:last-child{border:0}.mi .mn{flex:1}.mi .mn b{font-size:14.5px}.mi .mn small{display:block;color:var(--faint);font-size:12px;margin-top:2px}
+.ing{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.ing:last-child{border:0}.ing .idot{width:9px;height:9px;border-radius:50%;flex:none}
+.ing .in{flex:1}.ing .in b{font-size:14px}.ing .in small{display:block;color:var(--faint);font-size:11.5px}
+.linkbtn{display:inline-flex;align-items:center;gap:5px;color:var(--brand-ink);font:700 12px/1 var(--font-stack);background:none;border:0;cursor:pointer}
+.linkbtn .ic{width:14px;height:14px}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:10px;padding:6px 0}
+.bubble{max-width:84%;padding:10px 12px;border-radius:16px;font-size:13.5px;line-height:1.45}
+.bubble.bot{align-self:flex-start;background:var(--surface-2);border:1px solid var(--border);border-bottom-left-radius:5px}
+.bubble.me{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.bubble .rcard{margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:9px;display:flex;align-items:center;gap:9px}
+.chatbar{position:absolute;left:12px;right:12px;bottom:calc(var(--safe-bottom) + 10px);display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r-full);padding:5px 5px 5px 15px;box-shadow:var(--e2)}
+.chatbar input{flex:1;border:0;outline:0;background:transparent;color:var(--text);font:400 15px/1 var(--font-stack)}
+.chatbar .send{width:40px;height:40px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;border:0;flex:none;cursor:pointer}
+
+/* scan / ocr */
+.viewfinder{position:relative;height:200px;border-radius:var(--r-md);overflow:hidden;background:#0b1220;margin:0 0 12px;display:grid;place-items:center;outline:2px solid rgba(255,255,255,.16);outline-offset:-10px}
+.viewfinder .food{width:72%;height:78%;border-radius:10px;opacity:.9;background:radial-gradient(circle at 40% 40%,#c98b52,#7a4d24)}
+.viewfinder .scanline{position:absolute;left:8%;right:8%;height:2px;background:var(--brand-400);box-shadow:0 0 12px 1px var(--brand-400);animation:vscan 2.2s var(--ease-standard) infinite}
+@keyframes vscan{0%,100%{top:16%}50%{top:82%}}
+.aiTag{display:inline-flex;align-items:center;gap:5px;font:700 11px/1 var(--font-stack);color:var(--brand-ink);background:var(--brand-soft);border-radius:var(--r-full);padding:5px 10px}
+
+/* admin desktop */
+.desk{width:100%;max-width:900px}
+.desklabel{display:flex;align-items:center;gap:8px;margin:0 0 10px 2px;font-weight:800;font-size:14px}
+.desklabel code{font:600 11.5px/1 var(--font-stack);color:var(--brand-ink);background:var(--brand-soft);border-radius:6px;padding:3px 7px}
+.deskframe{border:1px solid var(--border-strong);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--e3);background:var(--surface)}
+.deskbar{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.deskbar .dots{display:flex;gap:6px}.deskbar .dots i{width:11px;height:11px;border-radius:50%;background:var(--border-strong)}
+.deskbody{display:grid;grid-template-columns:196px 1fr;min-height:400px}
+.side{border-right:1px solid var(--border);padding:14px 10px;background:var(--surface-2)}
+.side a{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;color:var(--muted);text-decoration:none;font:600 13.5px/1 var(--font-stack);min-height:44px}
+.side a .ic{width:17px;height:17px}.side a.on{background:var(--brand-soft);color:var(--brand-ink)}
+.main{padding:18px}
+.admin-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.twopane{display:grid;gap:14px}.twopane.split{grid-template-columns:1.05fr 1fr}
+@media (max-width:720px){.twopane.split{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--border);vertical-align:middle}
+th{color:var(--faint);font:700 11px/1 var(--font-stack);text-transform:uppercase;letter-spacing:.05em}
+.dropzone{border:2px dashed var(--border-strong);border-radius:var(--r-md);padding:28px 18px;text-align:center;background:var(--surface-2);color:var(--muted)}
+.dropzone .ic{width:36px;height:36px;color:var(--brand);margin-bottom:8px}
+.ocrimg{position:relative;border-radius:var(--r-sm);overflow:hidden;background:#0b1220;min-height:220px;display:grid;place-items:center;outline:2px solid rgba(255,255,255,.14);outline-offset:-10px}
+.ocrimg .food{width:74%;height:80%;border-radius:8px;opacity:.9;background:radial-gradient(circle at 42% 40%,#c98b52,#7a4d24)}
+.parsed{border:1px solid var(--border);border-radius:var(--r-sm);padding:11px;margin-bottom:8px;background:var(--surface)}
+.parsed .ph{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rowbtns{display:flex;gap:6px;margin-left:auto}
+.sqbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.sqbtn.ok{color:var(--st-suit-fg);border-color:var(--st-suit-bd)}.sqbtn.no{color:var(--st-avoid-fg);border-color:var(--st-avoid-bd)}
+.actionbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.qrow{border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;margin-bottom:8px;background:var(--surface)}
+.qrow.sel{border-color:var(--brand);background:var(--brand-soft)}
+.foot{margin-top:64px;color:var(--faint);font-size:13px;border-top:1px solid var(--border);padding-top:18px}
+.note-inline{font-size:12px;color:var(--faint);margin:10px 4px 0;max-width:520px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></symbol>
+<symbol id="circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="msg-q" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+<symbol id="octagon-x" viewBox="0 0 24 24"><path d="M2.59 16.73A2 2 0 0 1 2 15.31V8.69a2 2 0 0 1 .59-1.42l4.68-4.68A2 2 0 0 1 8.69 2h6.62a2 2 0 0 1 1.42.59l4.68 4.68A2 2 0 0 1 22 8.69v6.62a2 2 0 0 1-.59 1.42l-4.68 4.68a2 2 0 0 1-1.42.59H8.69a2 2 0 0 1-1.42-.59z"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol>
+<symbol id="circle-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+<symbol id="house" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/></symbol>
+<symbol id="map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
+<symbol id="message" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+<symbol id="circle-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+<symbol id="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+<symbol id="pencil" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.99-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"/><path d="m15 5 4 4"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
+<symbol id="rotate" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6 6 4.5 4.5M19.5 19.5 18 18M18 6l1.5-1.5M4.5 19.5 6 18"/></symbol>
+<symbol id="peanut" viewBox="0 0 24 24"><path d="M9 3.5a3 3 0 0 0 0 6c1.7 0 2.4 1.2 3 2.5.6-1.3 1.3-2.5 3-2.5a3 3 0 0 0 0-6c-1.7 0-2.4 1.2-3 2.5-.6-1.3-1.3-2.5-3-2.5Z"/><path d="M8 12a4 4 0 1 0 8 0"/><path d="M8 12v2a4 4 0 0 0 8 0v-2"/></symbol>
+<symbol id="upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+<symbol id="sparkles" viewBox="0 0 24 24"><path d="M12 3l1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6z"/><path d="M19 15v4M17 17h4"/></symbol>
+<symbol id="flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+<symbol id="triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+<symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
+<symbol id="fingerprint" viewBox="0 0 24 24"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .13-5.35 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></symbol>
+<symbol id="scan-face" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></symbol>
+<symbol id="bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
+<symbol id="send" viewBox="0 0 24 24"><path d="M14.54 21.69a.5.5 0 0 0 .94-.03l6.5-19a.5.5 0 0 0-.64-.63l-19 6.5a.5.5 0 0 0-.02.93l7.93 3.18a2 2 0 0 1 1.11 1.11z"/><path d="m21.85 2.15-10.94 10.94"/></symbol>
+<symbol id="navigation" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"/></symbol>
+<symbol id="star" viewBox="0 0 24 24"><path d="M11.5 2.5a.5.5 0 0 1 1 0l2.4 5 5.4.8a.5.5 0 0 1 .3.85l-3.9 3.8.92 5.4a.5.5 0 0 1-.72.53L12 16.9l-4.83 2.5a.5.5 0 0 1-.72-.53l.92-5.4-3.9-3.8a.5.5 0 0 1 .3-.85l5.4-.8z"/></symbol>
+<symbol id="flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.36-4.63 1.5-6C13 4.5 15 6 16 8c1 2 1.5 3 1.5 4.5a5.5 5.5 0 1 1-11 0c0-1 .5-2 1.5-3z"/></symbol>
+<symbol id="sheet" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></symbol>
+<symbol id="list" viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></symbol>
+<symbol id="map" viewBox="0 0 24 24"><path d="M14.1 5.55a2 2 0 0 0 1.8 0l3.66-1.83A1 1 0 0 1 21 4.62v12.76a1 1 0 0 1-.55.9l-4.55 2.27a2 2 0 0 1-1.8 0l-4.2-2.1a2 2 0 0 0-1.8 0l-3.66 1.83A1 1 0 0 1 3 19.38V6.62a1 1 0 0 1 .55-.9l4.55-2.27a2 2 0 0 1 1.8 0z"/><path d="M15 5.76v15"/><path d="M9 3.24v15"/></symbol>
+</defs></svg>
+
+<div class="topbar">
+  <span class="brandmark"><svg class="ic i24"><use href="#leaf"/></svg> SafeBite</span>
+  <span class="tag">UI/UX v2 · scoped</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="rmBtn" aria-pressed="false"><svg class="ic i16"><use href="#rotate"/></svg><span>Reduce motion</span></button>
+  <button class="tbtn" id="themeBtn" aria-label="Đổi giao diện sáng/tối"><svg class="ic i16"><use href="#sun"/></svg><span id="themeLbl">Theme</span></button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Trợ lý ăn uống cho người dị ứng</div>
+    <h1>SafeBite v2 — chỉ tập trung các nghiệp vụ cốt lõi.</h1>
+    <p>Bản mockup này cắt bớt màn thừa, giữ đúng phạm vi yêu cầu: đăng nhập sinh trắc, bản đồ gợi ý quán theo % phù hợp, menu &amp; nguyên liệu theo đèn giao thông (xanh/vàng/đỏ), trợ lý chat, OCR món ăn, món nổi tiếng, thẻ hồ sơ song ngữ — và desktop admin. <b>App chỉ GỢI Ý — cần con người xác nhận (human-in-the-loop).</b></p>
+    <div class="chips">
+      <span class="hpill"><svg class="ic i15"><use href="#shield"/></svg>Gợi ý, không đảm bảo</span>
+      <span class="hpill"><svg class="ic i15"><use href="#map-pin"/></svg>Bản đồ % phù hợp</span>
+      <span class="hpill"><svg class="ic i15"><use href="#bot"/></svg>Trợ lý chat</span>
+      <span class="hpill"><svg class="ic i15"><use href="#globe"/></svg>Song ngữ VI / EN</span>
+    </div>
+  </header>
+
+  <!-- ===== LEGEND ===== -->
+  <section class="section">
+    <h2>Quy ước hiển thị</h2>
+    <p class="sub">Đèn giao thông cho độ phù hợp của từng món · vòng tròn % cho độ phù hợp của quán. Màu luôn đi kèm icon + chữ (không chỉ dựa vào màu).</p>
+    <div class="grid cols">
+      <div class="panel">
+        <h3>Độ phù hợp món ăn</h3>
+        <div class="legend">
+          <div class="row"><span class="st st--suit"><svg class="ic"><use href="#circle-check"/></svg>Hợp</span><small>Không chứa chất gây dị ứng của bạn</small></div>
+          <div class="row"><span class="st st--ask"><svg class="ic"><use href="#msg-q"/></svg>Hỏi lại chủ quán</span><small>Có thể có — cần xác nhận</small></div>
+          <div class="row"><span class="st st--avoid"><svg class="ic"><use href="#octagon-x"/></svg>Không hợp</span><small>Chứa/khả năng cao chứa chất gây dị ứng</small></div>
+          <div class="row"><span class="st st--unk"><svg class="ic"><use href="#circle-q"/></svg>Chưa rõ</span><small>Thiếu dữ liệu — hỏi nhân viên</small></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Độ phù hợp quán ăn</h3>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span class="compat"><span class="ring" style="--_p:88;--_c:var(--st-suit-fg)"><span>88%</span></span><span class="lbl"><b>Phù hợp cao</b><small>≥ 80% món hợp với hồ sơ</small></span></span>
+          <span class="compat"><span class="ring" style="--_p:62;--_c:var(--st-ask-fg)"><span>62%</span></span><span class="lbl"><b>Nên hỏi trước</b><small>50–79% — nhiều món cần hỏi</small></span></span>
+          <span class="compat"><span class="ring" style="--_p:28;--_c:var(--st-avoid-fg)"><span>28%</span></span><span class="lbl"><b>Ít phù hợp</b><small>&lt; 50% — cân nhắc chỗ khác</small></span></span>
+        </div>
+        <p class="small" style="margin:12px 0 0">% là gợi ý dựa trên dữ liệu — luôn hỏi lại nhân viên trước khi gọi món.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== APP · AUTH + PROFILE SETUP ===== -->
+  <section class="section">
+    <h2>App người dùng · Đăng nhập &amp; hồ sơ dị ứng</h2>
+    <p class="sub">Đăng nhập bằng Face ID / vân tay · điền dị ứng · đọc cảnh báo (app chỉ gợi ý, cần con người xác nhận).</p>
+    <div class="gallery">
+
+      <div class="device">
+        <div class="cap"><b>Đăng nhập sinh trắc</b><code>/login</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen hero-top" style="padding-bottom:18px">
+            <div style="display:grid;place-items:center;margin:26px 0 6px"><svg class="ic i40" style="width:48px;height:48px;color:var(--brand)"><use href="#leaf"/></svg></div>
+            <div class="h1" style="text-align:center;margin-bottom:2px">SafeBite</div>
+            <p class="p" style="text-align:center">Đăng nhập nhanh &amp; bảo mật</p>
+            <div class="biobtn" style="margin-top:8px"><svg class="ic"><use href="#scan-face"/></svg></div>
+            <p class="small" style="text-align:center;margin:12px 0 16px">Nhìn vào camera để đăng nhập bằng <b>Face ID</b></p>
+            <button class="btn"><svg class="ic"><use href="#scan-face"/></svg>Đăng nhập bằng Face ID</button>
+            <button class="btn btn--ghost"><svg class="ic"><use href="#fingerprint"/></svg>Dùng vân tay</button>
+            <p class="small" style="text-align:center;margin-top:12px">Hồ sơ dị ứng được lưu &amp; mã hoá trên thiết bị của bạn.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Điền dị ứng</b><code>/onboarding</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><button class="iconbtn" aria-label="Quay lại"><svg class="ic"><use href="#chevron-left"/></svg></button><div class="ttl">Hồ sơ của bạn</div></div>
+            <div class="stepno">BƯỚC 1 / 2</div><div class="steps"><i class="on"></i><i></i></div>
+            <div class="h2">Bạn cần tránh gì?</div>
+            <div class="input" style="margin-bottom:12px;box-shadow:none"><svg class="ic"><use href="#search"/></svg><input placeholder="Tìm chất gây dị ứng…" aria-label="Tìm chất gây dị ứng"></div>
+            <div class="chiprow">
+              <span class="chip sel"><svg class="ic"><use href="#check"/></svg>Đậu phộng</span>
+              <span class="chip">Hải sản</span><span class="chip">Sữa</span><span class="chip">Trứng</span>
+              <span class="chip">Gluten</span><span class="chip">Đậu nành</span><span class="chip">Mè</span><span class="chip">Cá</span>
+            </div>
+            <button class="btn">Tiếp tục</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Đọc cảnh báo</b><code>/onboarding · warning</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><button class="iconbtn" aria-label="Quay lại"><svg class="ic"><use href="#chevron-left"/></svg></button><div class="ttl">Trước khi bắt đầu</div></div>
+            <div class="stepno">BƯỚC 2 / 2</div><div class="steps"><i class="on"></i><i class="on"></i></div>
+            <div class="card brand">
+              <h4 style="justify-content:flex-start;gap:8px"><svg class="ic i20" style="color:var(--brand)"><use href="#shield"/></svg>App chỉ GỢI Ý</h4>
+              <p class="p" style="margin:8px 0 0">SafeBite giúp bạn hiểu rủi ro dị ứng và hỏi đúng câu. <b>App không thể đảm bảo món ăn phù hợp tuyệt đối.</b> Luôn xác nhận thành phần &amp; cách chế biến với nhân viên trước khi gọi món.</p>
+            </div>
+            <div class="notice notice--warn"><svg class="ic"><use href="#triangle-alert"/></svg><span>Cần con người trong vòng lặp (human-in-the-loop): gợi ý của app + xác nhận của chủ quán.</span></div>
+            <button class="btn"><svg class="ic"><use href="#check"/></svg>Tôi đã hiểu</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== APP · HOME MAP ===== -->
+  <section class="section">
+    <h2>App người dùng · Home (bản đồ)</h2>
+    <p class="sub">Tìm/gợi ý món theo dị ứng kiểu Google Map · pin quán hiển thị % phù hợp · danh sách quán kèm % + khoảng cách.</p>
+    <div class="gallery">
+
+      <div class="device">
+        <div class="cap"><b>Bản đồ gợi ý</b><code>/home</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen flush pad-b" style="position:relative;min-height:560px">
+            <div class="mapbox" style="position:absolute;inset:0">
+              <div class="water"></div><div class="road"></div>
+              <div class="here" style="left:50%;top:54%"></div>
+              <div class="compin" style="left:60%;top:30%"><b style="background:#1f8f60"><span>88</span></b></div>
+              <div class="compin" style="left:33%;top:44%"><b style="background:#a9812a"><span>62</span></b></div>
+              <div class="compin" style="left:73%;top:60%"><b style="background:#cc2b2b"><span>28</span></b></div>
+              <div class="compin" style="left:45%;top:70%"><b style="background:#1f8f60"><span>81</span></b></div>
+              <div class="attrib">Bản đồ © nhà cung cấp</div>
+              <div class="mapsearch"><div class="input"><svg class="ic"><use href="#search"/></svg><input value="Món không đậu phộng gần đây" aria-label="Tìm món theo dị ứng"><svg class="ic" style="color:var(--brand)"><use href="#peanut"/></svg></div></div>
+            </div>
+            <div class="sheet">
+              <div class="grip"></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b style="font-size:14px">4 quán quanh bạn</b><span class="sp" style="flex:1"></span><span class="meta"><svg class="ic"><use href="#peanut"/></svg>Đậu phộng</span></div>
+              <div class="rrow">
+                <span class="compat"><span class="ring" style="--_p:88;--_c:var(--st-suit-fg)"><span>88%</span></span></span>
+                <div class="rn"><b>Bếp Việt A</b><small>Cơm · 320 m</small></div>
+                <svg class="ic i18" style="color:var(--faint)"><use href="#chevron-left"/></svg>
+              </div>
+              <div class="rrow">
+                <span class="compat"><span class="ring" style="--_p:62;--_c:var(--st-ask-fg)"><span>62%</span></span></span>
+                <div class="rn"><b>Quán Nhỏ Ẩm</b><small>Bún · 210 m</small></div>
+                <svg class="ic i18" style="color:var(--faint)"><use href="#chevron-left"/></svg>
+              </div>
+            </div>
+          </div>
+          <nav class="bottomnav">
+            <a class="on"><span class="pillbox"><svg class="ic i22"><use href="#map-pin"/></svg></span>Bản đồ</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#bot"/></svg></span>Trợ lý</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#camera"/></svg></span>OCR</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#flame"/></svg></span>Nổi tiếng</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#user"/></svg></span>Hồ sơ</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Chi tiết nhà hàng</b><code>/restaurant/:id</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><button class="iconbtn" aria-label="Quay lại"><svg class="ic"><use href="#chevron-left"/></svg></button><div class="ttl">Bếp Việt A<small>Cơm · Món Việt</small></div></div>
+            <div class="card brand">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span class="compat big"><span class="ring" style="--_p:88;--_c:var(--st-suit-fg)"><span>88%</span></span></span>
+                <div><b style="font-size:15px">Phù hợp cao với hồ sơ của bạn</b><div class="small" style="margin-top:2px">6 món hợp · 3 hỏi lại · 1 không hợp</div></div>
+              </div>
+              <div class="metarow"><span class="meta"><svg class="ic"><use href="#map-pin"/></svg>Cách 320 m</span><button class="meta" style="cursor:pointer;color:var(--brand-ink)"><svg class="ic"><use href="#navigation"/></svg>Mở Google Maps</button></div>
+            </div>
+            <div class="eyebrow">Thực đơn (đèn phù hợp theo dị ứng của bạn)</div>
+            <div class="card" style="padding:4px 14px">
+              <div class="mi"><div class="mn"><b>Cơm gà</b><small>Cơm, gà, hành, rau</small></div><span class="st st--suit st--sm"><svg class="ic"><use href="#circle-check"/></svg>Hợp</span></div>
+              <div class="mi"><div class="mn"><b>Mì Quảng</b><small>Có thể rắc đậu phộng rang</small></div><span class="st st--ask st--sm"><svg class="ic"><use href="#msg-q"/></svg>Hỏi lại</span></div>
+              <div class="mi"><div class="mn"><b>Gỏi cuốn</b><small>Thường ăn kèm sốt đậu phộng</small></div><span class="st st--avoid st--sm"><svg class="ic"><use href="#octagon-x"/></svg>Không hợp</span></div>
+            </div>
+            <div class="notice notice--info"><svg class="ic"><use href="#info"/></svg><span>Đèn là gợi ý theo hồ sơ. Luôn hỏi lại nhân viên trước khi gọi món.</span></div>
+          </div>
+          <nav class="bottomnav">
+            <a class="on"><span class="pillbox"><svg class="ic i22"><use href="#map-pin"/></svg></span>Bản đồ</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#bot"/></svg></span>Trợ lý</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#camera"/></svg></span>OCR</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#flame"/></svg></span>Nổi tiếng</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#user"/></svg></span>Hồ sơ</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Món &amp; nguyên liệu</b><code>/restaurant/:id/dish</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><button class="iconbtn" aria-label="Quay lại"><svg class="ic"><use href="#chevron-left"/></svg></button><div class="ttl">Mì Quảng</div><div class="sp" style="flex:1"></div><span class="st st--ask st--sm"><svg class="ic"><use href="#msg-q"/></svg>Hỏi lại</span></div>
+            <div class="eyebrow">Nguyên liệu (theo quán này)</div>
+            <div class="card" style="padding:4px 14px">
+              <div class="ing"><span class="idot" style="background:var(--st-suit-fg)"></span><div class="in"><b>Mì gạo, thịt gà, nghệ</b></div></div>
+              <div class="ing"><span class="idot" style="background:var(--st-ask-fg)"></span><div class="in"><b>Đậu phộng rang</b><small>Rắc lên trên · có thể bỏ nếu yêu cầu</small></div></div>
+              <div class="ing"><span class="idot" style="background:var(--st-ask-fg)"></span><div class="in"><b>Nước mắm</b><small>Có thể có cá</small></div></div>
+            </div>
+            <div class="actionbar" style="margin-top:0">
+              <button class="btn btn--sm btn--ghost"><svg class="ic"><use href="#circle-plus"/></svg>Thêm nguyên liệu</button>
+              <button class="btn btn--sm btn--ghost" style="color:var(--st-avoid-fg);border-color:var(--st-avoid-bd)"><svg class="ic"><use href="#flag"/></svg>Báo nguyên liệu sai</button>
+            </div>
+            <div class="notice notice--info" style="margin-top:12px"><svg class="ic"><use href="#user"/></svg><span>Nguồn: quán tự khai + 2 đóng góp từ người dùng. Cảm ơn bạn giúp dữ liệu chính xác hơn.</span></div>
+            <button class="btn"><svg class="ic"><use href="#message"/></svg>Tạo câu hỏi cho chủ quán</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note-inline">"Mở Google Maps" chuyển sang app bản đồ để chỉ đường; SafeBite chỉ dùng vị trí để tính khoảng cách &amp; hiển thị quán gần bạn.</p>
+  </section>
+
+  <!-- ===== APP · AGENT + OCR + FAMOUS + PROFILE ===== -->
+  <section class="section">
+    <h2>App người dùng · Trợ lý · OCR · Món nổi tiếng · Hồ sơ</h2>
+    <p class="sub">Chat gợi ý món &amp; link quán · OCR ra thành phần dự đoán từ công thức chung · danh sách món nổi tiếng · thẻ hồ sơ song ngữ.</p>
+    <div class="gallery">
+
+      <div class="device">
+        <div class="cap"><b>Trợ lý (chat)</b><code>/agent</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen" style="position:relative;min-height:560px;padding-bottom:70px">
+            <div class="appbar"><div class="ttl" style="display:flex;align-items:center;gap:8px"><svg class="ic i20" style="color:var(--brand)"><use href="#bot"/></svg>Trợ lý SafeBite</div></div>
+            <div class="chat">
+              <div class="bubble me">Gợi ý món gần đây không có đậu phộng giúp tôi</div>
+              <div class="bubble bot">Dựa trên dị ứng đậu phộng của bạn, mình gợi ý <b>Cơm gà</b> (thường không có đậu phộng). Có ở:
+                <div class="rcard"><span class="compat"><span class="ring" style="--_p:88;--_c:var(--st-suit-fg)"><span>88%</span></span></span><div style="flex:1"><b style="font-size:13.5px">Bếp Việt A</b><div class="small">Cách 320 m</div></div><svg class="ic i16" style="color:var(--faint)"><use href="#chevron-left"/></svg></div>
+                <div class="small" style="margin-top:6px">Luôn hỏi lại nhân viên để chắc chắn nhé.</div>
+              </div>
+              <div class="bubble me">Chủ quán nói món này có dùng dầu đậu phộng để chiên</div>
+              <div class="bubble bot"><svg class="ic i14" style="color:var(--brand-ink);vertical-align:-2px"><use href="#sparkles"/></svg> Cảm ơn! Mình sẽ <b>thêm "dầu đậu phộng"</b> vào nguyên liệu của <b>Cơm gà @ Bếp Việt A</b> và đổi đèn sang <b>Không hợp</b>. Xác nhận thêm?
+                <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn--sm" style="width:auto">Xác nhận</button><button class="btn btn--sm btn--ghost" style="width:auto">Sửa</button></div>
+              </div>
+            </div>
+            <div class="chatbar"><input value="" placeholder="Hỏi trợ lý về món / nguyên liệu…" aria-label="Nhắn trợ lý"><button class="send" aria-label="Gửi"><svg class="ic i18"><use href="#send"/></svg></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>OCR món ăn</b><code>/ocr</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen" style="padding-bottom:18px">
+            <div class="appbar"><button class="iconbtn" aria-label="Quay lại"><svg class="ic"><use href="#chevron-left"/></svg></button><div class="ttl">Chụp món ăn</div></div>
+            <div class="viewfinder"><div class="food"></div><div class="scanline"></div></div>
+            <span class="aiTag"><svg class="ic i14"><use href="#sparkles"/></svg>AI dự đoán · công thức chung</span>
+            <div class="notice notice--warn" style="margin-top:10px"><svg class="ic"><use href="#triangle-alert"/></svg><span>Thành phần dự đoán từ <b>công thức nấu chung</b> của món — <b>không phải</b> công thức riêng của quán này. Hãy hỏi lại quán.</span></div>
+            <div class="eyebrow">Nhận diện: Gỏi cuốn — thành phần dự đoán</div>
+            <div class="card" style="padding:4px 14px">
+              <div class="ing"><span class="idot" style="background:var(--st-suit-fg)"></span><div class="in"><b>Bánh tráng, bún, rau, tôm/thịt</b></div></div>
+              <div class="ing"><span class="idot" style="background:var(--st-avoid-fg)"></span><div class="in"><b>Sốt đậu phộng</b><small>Rất thường đi kèm món này</small></div></div>
+            </div>
+            <div class="metarow" style="margin-bottom:12px"><span class="st st--avoid st--sm"><svg class="ic"><use href="#octagon-x"/></svg>Đậu phộng: khả năng cao</span></div>
+            <button class="btn btn--ghost"><svg class="ic"><use href="#map-pin"/></svg>Tìm quán bán Gỏi cuốn</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Món nổi tiếng</b><code>/famous</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl" style="display:flex;align-items:center;gap:8px"><svg class="ic i20" style="color:var(--appetite)"><use href="#flame"/></svg>Món nổi tiếng · Hà Nội</div></div>
+            <div class="card">
+              <h4>Phở bò <span class="st st--ask st--sm"><svg class="ic"><use href="#msg-q"/></svg>Hỏi lại</span></h4>
+              <div class="vi">Bánh phở, thịt bò, nước dùng xương</div>
+              <div class="chiprow" style="margin:10px 0 0"><span class="chip" style="min-height:30px">Bánh phở</span><span class="chip" style="min-height:30px">Thịt bò</span><span class="chip" style="min-height:30px;border-color:var(--st-ask-bd);color:var(--st-ask-fg)">Nước mắm</span></div>
+              <button class="linkbtn" style="margin-top:10px"><svg class="ic"><use href="#map-pin"/></svg>5 quán bán Phở bò gần bạn</button>
+            </div>
+            <div class="card">
+              <h4>Bún chả <span class="st st--suit st--sm"><svg class="ic"><use href="#circle-check"/></svg>Hợp</span></h4>
+              <div class="vi">Bún, chả nướng, nước chấm, rau</div>
+              <div class="chiprow" style="margin:10px 0 0"><span class="chip" style="min-height:30px">Bún</span><span class="chip" style="min-height:30px">Thịt lợn</span><span class="chip" style="min-height:30px">Rau sống</span></div>
+              <button class="linkbtn" style="margin-top:10px"><svg class="ic"><use href="#map-pin"/></svg>8 quán bán Bún chả gần bạn</button>
+            </div>
+          </div>
+          <nav class="bottomnav">
+            <a><span class="pillbox"><svg class="ic i22"><use href="#map-pin"/></svg></span>Bản đồ</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#bot"/></svg></span>Trợ lý</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#camera"/></svg></span>OCR</a>
+            <a class="on"><span class="pillbox"><svg class="ic i22"><use href="#flame"/></svg></span>Nổi tiếng</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#user"/></svg></span>Hồ sơ</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="cap"><b>Hồ sơ (thẻ song ngữ)</b><code>/profile</code></div>
+        <div class="phone"><div class="notch"><span>9:41</span><span class="r"><svg viewBox="0 0 26 12"><rect x="1" y="2" width="20" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="22" y="4" width="2" height="4" rx="1"/></svg></span></div>
+          <div class="screen pad-b">
+            <div class="appbar"><div class="ttl">Hồ sơ dị ứng</div><div class="sp" style="flex:1"></div><span class="seg"><button class="on">VI</button><button>EN</button></span></div>
+            <div class="card brand">
+              <div class="metarow" style="margin:0 0 10px"><span class="st st--avoid"><svg class="ic"><use href="#peanut"/></svg>Đậu phộng</span><span class="meta">Mức độ: Nặng</span></div>
+              <div class="trust" style="border-top:0;padding-top:0;margin-top:4px;display:grid;gap:8px">
+                <div style="font-size:13px"><b style="color:var(--faint);font-weight:700">🇻🇳 Tiếng Việt</b><div style="margin-top:2px">Tôi bị dị ứng nặng với đậu phộng. Vui lòng tránh đậu phộng, dầu đậu phộng và dụng cụ dùng chung.</div></div>
+                <div style="font-size:13px"><b style="color:var(--faint);font-weight:700">🇬🇧 English</b><div style="margin-top:2px">I have a severe peanut allergy. Please avoid peanut, peanut oil, and shared cookware.</div></div>
+              </div>
+            </div>
+            <div class="notice notice--info"><svg class="ic"><use href="#info"/></svg><span>Đưa thẻ này cho nhân viên. Thẻ giúp giao tiếp, không thay cho việc hỏi &amp; xác nhận.</span></div>
+            <button class="btn btn--ghost"><svg class="ic"><use href="#pencil"/></svg>Sửa dị ứng của tôi</button>
+          </div>
+          <nav class="bottomnav">
+            <a><span class="pillbox"><svg class="ic i22"><use href="#map-pin"/></svg></span>Bản đồ</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#bot"/></svg></span>Trợ lý</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#camera"/></svg></span>OCR</a>
+            <a><span class="pillbox"><svg class="ic i22"><use href="#flame"/></svg></span>Nổi tiếng</a>
+            <a class="on"><span class="pillbox"><svg class="ic i22"><use href="#user"/></svg></span>Hồ sơ</a>
+          </nav>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== ADMIN DESKTOP ===== -->
+  <section class="section">
+    <h2>Desktop cho Admin</h2>
+    <p class="sub">Quản lý quán ăn (bản đồ + danh sách) với món &amp; nguyên liệu + nguồn (ai thêm) · import Excel · kiểm tra OCR · báo cáo nguyên liệu sai từ người dùng.</p>
+
+    <div class="desk">
+      <div class="desklabel"><b>Danh sách quán ăn — bản đồ &amp; danh sách</b><code>/admin/restaurants</code></div>
+      <div class="deskframe">
+        <div class="deskbar"><div class="dots"><i></i><i></i><i></i></div><span class="small">SafeBite Admin · /admin/restaurants</span></div>
+        <div class="deskbody">
+          <aside class="side">
+            <a class="on"><svg class="ic"><use href="#map-pin"/></svg>Quán ăn</a>
+            <a><svg class="ic"><use href="#sheet"/></svg>Import Excel</a>
+            <a><svg class="ic"><use href="#scan-face"/></svg>Kiểm tra OCR</a>
+            <a><svg class="ic"><use href="#flag"/></svg>Báo cáo</a>
+          </aside>
+          <div class="main">
+            <div class="admin-head">
+              <div class="seg"><button class="on"><svg class="ic i14" style="vertical-align:-2px"><use href="#map"/></svg> Bản đồ</button><button><svg class="ic i14" style="vertical-align:-2px"><use href="#list"/></svg> Danh sách</button></div>
+              <div class="input" style="min-height:38px;box-shadow:none;max-width:240px"><svg class="ic"><use href="#search"/></svg><input placeholder="Tìm quán / món…" aria-label="Tìm quán"></div>
+              <span class="sp" style="flex:1"></span><button class="btn btn--sm"><svg class="ic"><use href="#plus"/></svg>Thêm quán</button>
+            </div>
+            <div class="twopane split">
+              <div class="mapbox" style="border-radius:var(--r-md);min-height:300px;position:relative">
+                <div class="water"></div>
+                <div class="here" style="left:50%;top:54%"></div>
+                <div class="compin" style="left:58%;top:32%"><b style="background:#1f8f60"><span>A</span></b></div>
+                <div class="compin" style="left:34%;top:46%"><b style="background:#a9812a"><span>B</span></b></div>
+                <div class="compin" style="left:72%;top:62%"><b style="background:#64748b"><span>C</span></b></div>
+                <div class="attrib">Bản đồ © nhà cung cấp</div>
+              </div>
+              <div>
+                <div class="qrow sel">
+                  <div style="display:flex;align-items:center;gap:8px"><b>Bếp Việt A</b><span class="sp" style="flex:1"></span><span class="prov"><svg class="ic i12"><use href="#user"/></svg>admin · seed</span></div>
+                  <div class="small" style="margin-top:6px">12 món · 34 nguyên liệu · đã duyệt</div>
+                  <div class="chiprow" style="margin:8px 0 0"><span class="chip" style="min-height:26px;font-size:11.5px">Cơm gà</span><span class="chip" style="min-height:26px;font-size:11.5px">Mì Quảng</span><span class="chip" style="min-height:26px;font-size:11.5px">Gỏi cuốn</span></div>
+                </div>
+                <div class="qrow">
+                  <div style="display:flex;align-items:center;gap:8px"><b>Quán Nhỏ Ẩm</b><span class="sp" style="flex:1"></span><span class="prov"><svg class="ic i12"><use href="#globe"/></svg>OpenMap · chưa duyệt</span></div>
+                  <div class="small" style="margin-top:6px">Nguồn khám phá · chờ bổ sung menu</div>
+                </div>
+              </div>
+            </div>
+            <p class="note-inline">Mỗi nguyên liệu ghi <b>nguồn</b>: quán tự khai · admin · người dùng đóng góp · OCR — để truy vết &amp; tin cậy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desk" style="margin-top:24px">
+      <div class="desklabel"><b>Import dữ liệu Excel</b><code>/admin/import</code></div>
+      <div class="deskframe">
+        <div class="deskbar"><div class="dots"><i></i><i></i><i></i></div><span class="small">SafeBite Admin · /admin/import</span></div>
+        <div class="deskbody">
+          <aside class="side">
+            <a><svg class="ic"><use href="#map-pin"/></svg>Quán ăn</a>
+            <a class="on"><svg class="ic"><use href="#sheet"/></svg>Import Excel</a>
+            <a><svg class="ic"><use href="#scan-face"/></svg>Kiểm tra OCR</a>
+            <a><svg class="ic"><use href="#flag"/></svg>Báo cáo</a>
+          </aside>
+          <div class="main">
+            <div class="admin-head"><b style="font-size:15px">Cập nhật dữ liệu bằng Excel</b></div>
+            <div class="dropzone"><svg class="ic"><use href="#upload"/></svg><div style="font-weight:700;color:var(--text)">Kéo thả file .xlsx / .csv vào đây</div><div class="small" style="margin-top:4px">Cột: quán · món · nguyên liệu · nguồn · dị ứng · ghi chú</div><button class="btn btn--sm" style="margin:12px auto 0"><svg class="ic"><use href="#sheet"/></svg>Chọn file</button></div>
+            <div class="eyebrow" style="margin-top:16px">Xem trước · restaurants_hanoi.xlsx (52 dòng)</div>
+            <table>
+              <thead><tr><th>Quán</th><th>Món</th><th>Nguyên liệu</th><th>Nguồn</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr><td>Bếp Việt A</td><td>Cơm gà</td><td>cơm, gà, hành</td><td>quán tự khai</td><td style="color:var(--st-suit-fg);font-weight:700">Hợp lệ</td></tr>
+                <tr><td>Quán Nhỏ Ẩm</td><td>Mì Quảng</td><td>mì, gà, đậu phộng</td><td>admin</td><td style="color:var(--st-suit-fg);font-weight:700">Hợp lệ</td></tr>
+                <tr><td>—</td><td>Bánh xèo</td><td>(thiếu quán)</td><td>—</td><td style="color:var(--st-ask-fg);font-weight:700">Cần sửa</td></tr>
+              </tbody>
+            </table>
+            <div class="actionbar"><button class="btn btn--sm"><svg class="ic"><use href="#check"/></svg>Nhập 50 dòng hợp lệ</button><button class="btn btn--sm btn--ghost">Tải file mẫu</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desk" style="margin-top:24px">
+      <div class="desklabel"><b>Kiểm tra OCR (AI đúng hay không?)</b><code>/admin/ocr-review</code></div>
+      <div class="deskframe">
+        <div class="deskbar"><div class="dots"><i></i><i></i><i></i></div><span class="small">SafeBite Admin · /admin/ocr-review</span></div>
+        <div class="deskbody">
+          <aside class="side">
+            <a><svg class="ic"><use href="#map-pin"/></svg>Quán ăn</a>
+            <a><svg class="ic"><use href="#sheet"/></svg>Import Excel</a>
+            <a class="on"><svg class="ic"><use href="#scan-face"/></svg>Kiểm tra OCR</a>
+            <a><svg class="ic"><use href="#flag"/></svg>Báo cáo</a>
+          </aside>
+          <div class="main">
+            <div class="admin-head"><b style="font-size:15px">Đối chiếu ảnh ↔ kết quả AI</b><span class="aiTag"><svg class="ic i14"><use href="#sparkles"/></svg>AI ước lượng</span><span class="sp" style="flex:1"></span><span class="small">3 chờ duyệt</span></div>
+            <div class="twopane split">
+              <div>
+                <div class="ocrimg"><div class="food"></div></div>
+                <div class="small" style="margin-top:8px">Ảnh: Gỏi cuốn · người dùng gửi</div>
+              </div>
+              <div>
+                <div class="eyebrow">AI dự đoán nguyên liệu (công thức chung)</div>
+                <div class="parsed">
+                  <div class="ph"><b>Bánh tráng, bún, rau, tôm</b><span class="rowbtns"><button class="sqbtn ok" aria-label="Đúng"><svg class="ic i16"><use href="#check"/></svg></button><button class="sqbtn" aria-label="Sửa"><svg class="ic i16"><use href="#pencil"/></svg></button></span></div>
+                </div>
+                <div class="parsed">
+                  <div class="ph"><b>Sốt đậu phộng</b><span class="st st--avoid st--sm"><svg class="ic"><use href="#octagon-x"/></svg>Đậu phộng</span><span class="rowbtns"><button class="sqbtn ok" aria-label="Đúng"><svg class="ic i16"><use href="#check"/></svg></button><button class="sqbtn no" aria-label="Sai"><svg class="ic i16"><use href="#x"/></svg></button></span></div>
+                </div>
+                <div class="parsed">
+                  <div class="ph"><b>Trứng (?)</b><span class="st st--unk st--sm"><svg class="ic"><use href="#circle-q"/></svg>Độ tin thấp</span><span class="rowbtns"><button class="sqbtn ok" aria-label="Đúng"><svg class="ic i16"><use href="#check"/></svg></button><button class="sqbtn no" aria-label="Sai"><svg class="ic i16"><use href="#x"/></svg></button></span></div>
+                </div>
+                <div class="actionbar"><button class="btn btn--sm"><svg class="ic"><use href="#check"/></svg>Duyệt mục đã kiểm</button><button class="btn btn--sm btn--danger"><svg class="ic"><use href="#x"/></svg>Từ chối</button></div>
+              </div>
+            </div>
+            <p class="note-inline">OCR/AI chỉ là <b>ước lượng từ công thức chung</b> — admin xác nhận trước khi lưu; không tự động gắn "đã xác minh".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desk" style="margin-top:24px">
+      <div class="desklabel"><b>Báo cáo nguyên liệu sai (từ người dùng)</b><code>/admin/reports</code></div>
+      <div class="deskframe">
+        <div class="deskbar"><div class="dots"><i></i><i></i><i></i></div><span class="small">SafeBite Admin · /admin/reports</span></div>
+        <div class="deskbody">
+          <aside class="side">
+            <a><svg class="ic"><use href="#map-pin"/></svg>Quán ăn</a>
+            <a><svg class="ic"><use href="#sheet"/></svg>Import Excel</a>
+            <a><svg class="ic"><use href="#scan-face"/></svg>Kiểm tra OCR</a>
+            <a class="on"><svg class="ic"><use href="#flag"/></svg>Báo cáo</a>
+          </aside>
+          <div class="main">
+            <div class="admin-head"><div class="seg"><button class="on">Tất cả</button><button>Chưa xử lý</button></div><span class="sp" style="flex:1"></span><span class="meta" style="color:var(--st-avoid-fg);border-color:var(--st-avoid-bd)"><svg class="ic"><use href="#flag"/></svg>5 báo cáo mới</span></div>
+            <table>
+              <thead><tr><th>Quán · Món</th><th>Nội dung báo cáo</th><th>Người gửi</th><th>Thao tác</th></tr></thead>
+              <tbody>
+                <tr><td><b>Bếp Việt A</b><br><span class="small">Cơm gà</span></td><td>Có dùng <b>dầu đậu phộng</b> để chiên (chủ quán xác nhận)</td><td>user_2481</td><td><button class="btn btn--sm">Cập nhật</button></td></tr>
+                <tr><td><b>Quán Nhỏ Ẩm</b><br><span class="small">Mì Quảng</span></td><td>Không rắc đậu phộng như app ghi</td><td>user_9032</td><td><button class="btn btn--sm btn--ghost">Xem</button></td></tr>
+                <tr><td><b>Nhà hàng An</b><br><span class="small">Bánh xèo</span></td><td>Thiếu nguyên liệu <b>tôm</b></td><td>user_1177</td><td><button class="btn btn--sm btn--ghost">Xem</button></td></tr>
+              </tbody>
+            </table>
+            <p class="note-inline">Duyệt báo cáo → cập nhật nguyên liệu + đổi đèn phù hợp; ghi nguồn "người dùng đóng góp".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="foot">
+    <p><b>SafeBite — UI/UX mockups v2 (scoped).</b> Dùng lại design system v2 (ocean-blue, Lucide, đèn giao thông + vòng % color-blind-safe, light/dark). Đã cắt các màn thừa; chỉ giữ đúng nghiệp vụ yêu cầu. Nguyên tắc: <b>gợi ý, không đảm bảo — cần con người xác nhận</b>.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var tBtn=document.getElementById('themeBtn'), tLbl=document.getElementById('themeLbl'), rBtn=document.getElementById('rmBtn');
+  function sysDark(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;}
+  function cur(){return root.getAttribute('data-theme')||(sysDark()?'dark':'light');}
+  function setTheme(t){root.setAttribute('data-theme',t);tLbl.textContent=(t==='dark'?'Dark':'Light');}
+  setTheme(cur());
+  tBtn.addEventListener('click',function(){setTheme(cur()==='dark'?'light':'dark');});
+  rBtn.addEventListener('click',function(){var on=root.classList.toggle('rm');rBtn.setAttribute('aria-pressed',on?'true':'false');rBtn.querySelector('span').textContent=on?'Motion off':'Reduce motion';});
+})();
+</script>
+</body>
+</html>

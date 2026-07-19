@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import type { FeedbackFlag, Prisma } from '@prisma/client';
 import { evaluateDishes, type DishRecommendationLike, type LocalUserProfile } from '@safebite/domain';
 import { prisma } from './db';
 import { dishCardToLike } from './restaurant-recommend';
@@ -43,4 +43,27 @@ export async function loadDishRecMap(
   const cards = evaluateDishes(profile, dishes.map(dishToEvaluationInput));
   for (const card of cards) map.set(card.dishId, dishCardToLike(card));
   return map;
+}
+
+// Load ACTIVE feedback flags scoped to the result set (spec §11.1), mirroring `loadDishRecMap`:
+// dedupe id lists, drop empty OR branches, one `findMany`. Only `status: 'active'` rows influence
+// recommendations — resolved/dismissed/expired/spam flags are never returned. Rows stay raw; the
+// route coerces them to JSON-safe `FeedbackSignal`s via `flagRowToSignal`.
+export async function loadActiveFeedbackFlags(ids: {
+  restaurantIds?: Array<string | null | undefined>;
+  menuItemIds?: Array<string | null | undefined>;
+  dishIds?: Array<string | null | undefined>;
+}): Promise<FeedbackFlag[]> {
+  const dedupe = (xs?: Array<string | null | undefined>) => [...new Set((xs ?? []).filter((x): x is string => Boolean(x)))];
+  const restaurantIds = dedupe(ids.restaurantIds);
+  const menuItemIds = dedupe(ids.menuItemIds);
+  const dishIds = dedupe(ids.dishIds);
+
+  const or: Prisma.FeedbackFlagWhereInput[] = [];
+  if (restaurantIds.length) or.push({ entityType: 'restaurant', restaurantId: { in: restaurantIds } });
+  if (menuItemIds.length) or.push({ entityType: 'menu_item', menuItemId: { in: menuItemIds } });
+  if (dishIds.length) or.push({ entityType: 'dish', dishId: { in: dishIds } });
+  if (or.length === 0) return [];
+
+  return prisma.feedbackFlag.findMany({ where: { status: 'active', OR: or } });
 }

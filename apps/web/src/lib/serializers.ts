@@ -55,6 +55,8 @@ export function dishToDTO(dish: DishWithRisks) {
     })),
     source: dish.sourceType,
     reviewStatus: dish.reviewStatus,
+    isFamous: dish.isFamous,
+    featuredRank: dish.featuredRank,
   };
 }
 

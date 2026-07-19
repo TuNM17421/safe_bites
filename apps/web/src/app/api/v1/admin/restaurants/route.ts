@@ -28,7 +28,11 @@ export async function GET(req: Request) {
 
   const rows = await prisma.restaurant.findMany({
     where,
-    include: { _count: { select: { menuItems: true } } },
+    include: {
+      _count: { select: { menuItems: true } },
+      // Per-menu-item ingredient counts, summed to a per-restaurant "nguyên liệu" total (v2).
+      menuItems: { select: { _count: { select: { ingredients: true } } } },
+    },
     orderBy: { updatedAt: 'desc' },
   });
   return apiOk(rows.map(adminRestaurantToDTO));

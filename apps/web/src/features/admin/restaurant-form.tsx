@@ -43,6 +43,7 @@ export interface RestaurantRow {
   reviewStatus: string;
   notes: string | null;
   menuItemCount: number | null;
+  ingredientCount: number | null;
 }
 
 const opt = optText;

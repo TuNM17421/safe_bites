@@ -1,11 +1,14 @@
 'use client';
 import { CircleUser, Languages, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import type { LanguageCode } from '@safebite/domain';
 import { SkeletonCard } from '@/components/common/skeleton-card';
 import { AllergenChip } from '@/components/safety/allergen-chip';
+import { LanguageToggle } from '@/components/common/language-toggle';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useProfileStore } from '@/lib/profile-store';
+import { ProfileAllergyCard } from './profile-allergy-card';
 
 function MetaChip({ icon, label }: { icon: ReactNode; label: string }) {
   return (
@@ -21,12 +24,14 @@ function MetaChip({ icon, label }: { icon: ReactNode; label: string }) {
 export function ProfileView() {
   const t = useTranslations('profile');
   const tSev = useTranslations('severity');
+  const tCard = useTranslations('allergyCard');
   const locale = useLocale() as 'en' | 'vi';
   const hydrated = useProfileStore((s) => s.hydrated);
   const profile = useProfileStore((s) => s.profile);
   const card = useProfileStore((s) => s.allergyCard);
   const clearAll = useProfileStore((s) => s.clearAll);
   const router = useRouter();
+  const [dataLang, setDataLang] = useState<LanguageCode>(locale);
 
   if (!hydrated) return <SkeletonCard />;
   if (!profile) {
@@ -87,12 +92,23 @@ export function ProfileView() {
         </div>
       </section>
 
+      {card && entries.length > 0 && (
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sb-title font-bold text-sb-fg">{t('staffCardTitle')}</h2>
+            <LanguageToggle value={dataLang} onChange={setDataLang} />
+          </div>
+          <p className="text-sb-body-s text-sb-muted">{tCard('showToStaff')}</p>
+          <ProfileAllergyCard entries={entries} dataLang={dataLang} updatedAt={card.updatedAt} />
+        </section>
+      )}
+
       <Link
         href="/onboarding"
         className="inline-flex min-h-sb-tap w-full items-center justify-center gap-2 rounded-sb-md border border-sb-border bg-sb-surface font-medium text-sb-fg focus-visible:shadow-sb-focus"
       >
         <Pencil aria-hidden className="size-4" />
-        {t('restartOnboarding')}
+        {t('editAllergies')}
       </Link>
 
       <div className="mt-2 border-t border-sb-border pt-4">

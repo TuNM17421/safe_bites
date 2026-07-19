@@ -7,6 +7,13 @@ export { STATUS_RANK, ALLERGEN_CATALOG, ALLERGY_ALLERGEN_IDS } from './constants
 export { evaluateDish, evaluateDishes } from './risk-engine';
 export { evaluateMenuItem } from './menu-item';
 export { evaluateRestaurantReadiness } from './restaurant-readiness';
+export {
+  compatibilityPercent,
+  summarizeIngredientProvenance,
+  type IngredientContributorType,
+  type IngredientProvenanceRow,
+  type IngredientProvenanceSummary,
+} from './restaurant-compatibility';
 export { isStale, downgradeConfidence } from './staleness';
 export { buildQuestionCard } from './question-card';
 export * from './feedback';

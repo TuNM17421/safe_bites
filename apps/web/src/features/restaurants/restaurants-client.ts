@@ -1,4 +1,4 @@
-import type { LocalUserProfile } from '@safebite/domain';
+import { FeedbackSummarySchema, type LocalUserProfile } from '@safebite/domain';
 import { z } from 'zod';
 
 // Feature-local fetchers + response Zod (mirrors dishes-client.ts). Each fetcher unwraps the
@@ -25,17 +25,21 @@ const listItemSchema = z.object({
   address: z.string().nullable(),
   district: z.string().nullable(),
   city: z.string(),
+  lat: z.number().nullable(),
+  lon: z.number().nullable(),
   distanceMeters: z.number().nullable(),
   cuisine: z.array(z.string()),
   readinessClass,
   confidence,
   counts,
+  compatibility: z.number().nullable(),
   summary: bilingual,
   source: z.string(),
   verificationStatus: z.string(),
   menuStatus: z.string(),
   lastCheckedAt: z.string().nullable(),
   stale: z.boolean(),
+  feedbackSummary: FeedbackSummarySchema.optional(),
 });
 
 const listResponseSchema = z.object({
@@ -59,6 +63,7 @@ const menuRecSchema = z.object({
   lastCheckedAt: z.string().nullable().optional(),
   stale: z.boolean(),
   matchedDishName: bilingual.nullable().optional(),
+  feedbackSummary: FeedbackSummarySchema.optional(),
 });
 
 const detailResponseSchema = z.object({
@@ -89,9 +94,11 @@ const detailResponseSchema = z.object({
     readinessClass,
     confidence,
     counts,
+    compatibility: z.number().nullable(),
     summary: bilingual,
     reasons: z.array(bilingual),
     stale: z.boolean(),
+    feedbackSummary: FeedbackSummarySchema.optional(),
   }),
   menuRecommendations: z.array(menuRecSchema),
   attribution: z.string().nullable(),

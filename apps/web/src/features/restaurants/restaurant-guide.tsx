@@ -106,7 +106,7 @@ export function RestaurantGuide() {
         icon={<WifiOff className="size-8" />}
         title={t('offlineNoSaved')}
         action={
-          <Link href="/allergy-card" className="inline-flex min-h-sb-tap items-center font-bold text-sb-brand underline">
+          <Link href="/profile" className="inline-flex min-h-sb-tap items-center font-bold text-sb-brand underline">
             {t('showAllergyCard')}
           </Link>
         }

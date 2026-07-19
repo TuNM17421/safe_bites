@@ -9,35 +9,19 @@ test('onboard → browse dishes → question card → offline allergy card', asy
   await page.getByRole('link', { name: 'Start allergy profile' }).first().click();
   await expect(page).toHaveURL(/\/en\/onboarding/);
 
-  // The design-system reskin turned onboarding into a stepped wizard advanced by "Continue",
-  // with severity as a radio group. Each step: make a choice, then Continue.
-  // 3. Select the Peanut allergen
+  // v2: onboarding is a 2-step wizard advanced by "Continue" — (1) pick allergens, (2) accept.
+  // 3. Select the Peanut allergen, then Continue
   await page.getByRole('button', { name: /^Peanut$/i }).click();
   await page.getByRole('button', { name: 'Continue' }).click();
 
-  // 4-5. Severity: Anaphylaxis risk (role="radio")
-  await page.getByRole('radio', { name: /anaphylaxis/i }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  // 6. Cross-contact: Yes
-  await page.getByRole('button', { name: 'Yes', exact: true }).first().click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  // 7. Destination city: Hanoi
-  await page.getByRole('button', { name: /hanoi/i }).first().click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  // 8. Language step: keep English
-  await page.getByRole('button', { name: 'Continue' }).click();
-
-  // 9. Accept the safety disclaimer and finish
+  // 4. Accept the safety disclaimer and finish
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: /save my card|I understand|Finish/i }).click();
 
   // 10. Landed on /home with no profile data in the URL
   await expect(page).toHaveURL(/\/en\/home$/);
 
-  // 11. Dish guide: a severe peanut allergy yields at least one flagged (non-Suitable) card
+  // 11. Dish guide: a peanut allergy (moderate default in v2) yields at least one flagged card
   await page.goto('/en/dishes');
   await expect(page.getByText(/Avoid|Risky|Ask First/).first()).toBeVisible();
 
@@ -49,7 +33,7 @@ test('onboard → browse dishes → question card → offline allergy card', asy
   await page.getByRole('button', { name: 'Copy' }).click();
   await expect(page.getByText('Copied')).toBeVisible();
 
-  // 14. Allergy card is available offline
-  await page.goto('/en/allergy-card');
+  // 14. Allergy card is available offline (v2: folded into /profile)
+  await page.goto('/en/profile');
   await expect(page.getByText('Available offline')).toBeVisible();
 });

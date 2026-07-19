@@ -12,7 +12,7 @@
 Three admin-only API surfaces plus the transactional service behind them: `GET /api/v1/admin/feedback` (filtered, cursor-paginated list, default sort priority-desc then createdAt-desc), `GET|PATCH /api/v1/admin/feedback/[reportId]` (rich detail + simple state change), and `POST /api/v1/admin/feedback/[reportId]/actions` (apply an admin action with side effects). **Every** admin action — and simple PATCH — writes a `FeedbackAdminAction` row with `before`/`after` JSON snapshots. All routes gated by `requireAdmin`. No UI in this phase.
 
 ## Key Insights (grounded)
-- **Auth idiom** (`lib/admin-auth.ts:75`): `const denied = await requireAdmin(req); if (denied) return denied;`. Cookie is `sbt_admin`; middleware already 401s `/admin` API. Never reinvent.
+- **Auth idiom** (`lib/admin-auth.ts:75`): `const denied = await requireAdmin(req); if (denied) return denied;`. Cookie is `sbt_admin`; the proxy boundary (`proxy.ts`, Next 16 — formerly `middleware.ts`) already 401s `/admin` API. Never reinvent.
 - **Route conventions** (from `admin/restaurants/[restaurantId]/route.ts`): `export const runtime='nodejs'; export const dynamic='force-dynamic';`. `ctx.params` is a **Promise** → `const { reportId } = await ctx.params;`. Prisma errors: `P2025→404 NOT_FOUND`, `P2002→409 CONFLICT`. Envelope via `apiOk`/`apiError`; body via `parseBody(req, schema)`, query via `parseQuery(req.url, schema)` (both return `{ok, data|response}`).
 - **No actor identity exists** — `sbt_admin` is a shared token digest, not a user. Set `actor='admin'` for human actions, `actor='system'` for auto-created rows. **Flag this in the return summary** (no richer identity available in Phase 03).
 - **No audit/StatusBadge/serializer for feedback exists** — all net-new. Reuse `restaurant-serializers.ts` `num`/`iso` helpers (Decimal/Date → JSON-safe) when snapshotting.
@@ -131,7 +131,7 @@ Flag creation reuses [[phase-03-public-feedback-api]] `create-auto-flags.ts` bui
 - **`applyAdminAction` file > 200 lines** → extract per-action helpers + shared flag insert.
 
 ## Security & Privacy Considerations
-- Every route behind `requireAdmin`; rely on middleware + in-handler guard (defense-in-depth). Never log the `sbt_admin` cookie.
+- Every route behind `requireAdmin`; rely on the `proxy.ts` boundary + in-handler guard (defense-in-depth). Never log the `sbt_admin` cookie.
 - Admin detail exposes internal `notes`/`staffAnswerText`/`profileSnapshot` — this is intentional (trusted admin, §6.6) but these fields MUST NOT be reachable from any public serializer/route; keep admin serializers in `features/admin/feedback/` only.
 - No raw Prisma errors to client (`P2025→404`, `P2002→409`, else generic 500 via thrown → framework).
 - `actor` is always `'admin'`/`'system'` — **no per-user identity exists in Phase 03** (shared token). Flagged as a known limitation; audit trail attributes to the admin role, not a person.

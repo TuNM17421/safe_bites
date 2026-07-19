@@ -21,7 +21,11 @@ test('restaurants: profile → list → detail → menu recommendations → ques
   // no-profile state to settle first so the page isn't mid-navigation when we write to IndexedDB.
   await page.goto('/en/restaurants', { waitUntil: 'networkidle' });
   await page.getByText('Create a profile to see restaurant readiness').first().waitFor({ timeout: 20000 });
+  // Inject a legacy plaintext profile (the app reads it via the defensive legacy path) and mark the
+  // session unlocked — injecting a profile simulates a returning user, who views app content in an
+  // unlocked session (Phase 14 lock gate). A row without `blob` is treated as legacy plaintext.
   await page.evaluate(async (profile) => {
+    window.sessionStorage.setItem('sb_unlocked', '1');
     await new Promise<void>((resolve, reject) => {
       const req = indexedDB.open('safebite_pwa_v1');
       req.onsuccess = () => {
@@ -38,19 +42,22 @@ test('restaurants: profile → list → detail → menu recommendations → ques
 
   // List: personalized cards with a readiness class + source label.
   await page.goto('/en/restaurants');
-  await expect(page.getByRole('heading', { name: 'Restaurants' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Nearby' })).toBeVisible();
   await expect(page.getByText('Demo Bun Cha (Hoan Kiem)')).toBeVisible();
   await expect(page.getByText('Curated').first()).toBeVisible();
 
   // Detail: menu items grouped by status with a risk classification.
-  await page.goto('/en/restaurants/demo-bun-cha-hoan-kiem');
+  await page.goto('/en/restaurant/demo-bun-cha-hoan-kiem');
   await expect(page.getByRole('heading', { name: 'Menu items' })).toBeVisible();
   // Menu-item title (a heading) — specific so it doesn't also match the "Matched dish:" line.
   await expect(page.getByRole('heading', { name: 'Grilled pork with rice noodles' })).toBeVisible();
   await expect(page.getByText(/Avoid|Risky|Ask First|Unknown/).first()).toBeVisible();
 
-  // Ask about this item → question card with menu context (menuItemId in the URL, not the profile).
-  await page.getByRole('link', { name: 'Ask about this item' }).first().click();
+  // v2: the menu-item card links to the dish-at-restaurant page; the owner-question action lives
+  // there. Menu context travels in the URL (menuItemId), never in the profile.
+  await page.getByRole('heading', { name: 'Grilled pork with rice noodles' }).click();
+  await expect(page).toHaveURL(/\/en\/restaurant\/.+\/dish\?menuItemId=/);
+  await page.getByRole('link', { name: 'Create question for owner' }).click();
   await expect(page).toHaveURL(/\/en\/question-card\?menuItemId=/);
   await expect(page.getByRole('heading', { name: 'Ask the restaurant' })).toBeVisible();
 });

@@ -38,11 +38,21 @@
   },
   "nav": {
     "home": "Home",
+    "map": "Map",
+    "agent": "Assistant",
+    "ocr": "OCR",
+    "famous": "Famous",
     "dishes": "Dishes",
     "restaurants": "Nearby",
     "allergyCard": "Allergy card",
     "questionCard": "Question card",
     "profile": "Profile"
+  },
+  "scaffold": {
+    "comingSoon": "This screen is coming soon.",
+    "restaurant": "Restaurant",
+    "dish": "Dish",
+    "login": "Sign in"
   },
   "home": {
     "destinationCity": "Destination city",
@@ -58,7 +68,14 @@
     "greeting": "Welcome back",
     "greetingNamed": "Hi {name}",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "searchPlaceholder": "Search nearby places",
+    "nearbyCount": "{count} places near you",
+    "noResults": "No places match your search.",
+    "mapOffline": "Map is unavailable offline — showing your saved list.",
+    "compatLabel": "{percent}% match",
+    "compatUnknown": "Match not rated yet",
+    "toggleSheet": "Toggle nearby list"
   },
   "offline": {
     "title": "You are offline",
@@ -128,7 +145,9 @@
     "clearData": "Clear local + offline data",
     "noProfile": "No profile yet.",
     "startProfile": "Start allergy profile",
-    "you": "Your profile"
+    "you": "Your profile",
+    "editAllergies": "Edit my allergies",
+    "staffCardTitle": "Allergy card"
   },
   "dishes": {
     "reason": "Reason",
@@ -287,7 +306,14 @@
     "loading": "Loading restaurant…",
     "notFound": "Restaurant not found.",
     "error": "Could not load this restaurant.",
-    "back2list": "Browse restaurants"
+    "back2list": "Browse restaurants",
+    "compatHigh": "High match for your profile",
+    "compatAsk": "Ask before ordering",
+    "compatLow": "Low match — consider elsewhere",
+    "compatUnknown": "Not enough data yet",
+    "compatAria": "{percent}% match",
+    "countsSummary": "{suit} suitable · {ask} ask first · {avoid} avoid",
+    "openGoogleMaps": "Open Google Maps"
   },
   "menuItemCard": {
     "matchedDish": "Matched dish",
@@ -307,7 +333,8 @@
       "not_applicable": "Not applicable",
       "true": "Yes",
       "false": "No"
-    }
+    },
+    "viewIngredients": "View ingredients"
   },
   "locationPermission": {
     "useMyLocation": "Use my location",
@@ -317,5 +344,202 @@
     "unsupported": "Location is not available on this device. You can still browse by city.",
     "sortingByDistance": "Sorting by distance from you",
     "clear": "Clear"
+  },
+  "feedback": {
+    "entry": {
+      "share": "Share meal feedback",
+      "iAteThis": "I ate this / Share feedback"
+    },
+    "form": {
+      "title": "Share meal feedback",
+      "stepOf": "Step {current} of {total}",
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Submit feedback",
+      "submitting": "Submitting…",
+      "fixErrors": "Please review the highlighted fields."
+    },
+    "step1": {
+      "title": "Confirm the item",
+      "menuItemLabel": "Which menu item?",
+      "otherNotListed": "Other / not listed",
+      "dontRemember": "I do not remember",
+      "currentStatus": "Current status"
+    },
+    "step2": {
+      "title": "What happened?",
+      "visitedAtLabel": "When did you visit?",
+      "helper": "This report helps improve confidence and review outdated information. It does not prove that a dish is suitable for other travelers."
+    },
+    "step3": {
+      "title": "Relevant allergen",
+      "selectAllergens": "Select the allergens this report is about",
+      "noProfile": "No profile found. Choose the allergens this report is about."
+    },
+    "step4": {
+      "title": "Did you ask staff?",
+      "answerLabel": "What did staff tell you?",
+      "noteLabel": "Add a short note (optional)",
+      "noMedical": "Do not include personal medical details."
+    },
+    "step5": {
+      "title": "Any reaction after eating?",
+      "timingLabel": "When did it happen?"
+    },
+    "step6": {
+      "title": "Trust and notes",
+      "trustLabel": "How much did you trust this restaurant? (optional)",
+      "notesLabel": "Anything else? (optional)",
+      "notesHint": "Up to 500 characters. Do not include personal medical details."
+    },
+    "ternary": {
+      "yes": "Yes",
+      "no": "No",
+      "not_sure": "Not sure"
+    },
+    "reaction": {
+      "none": "No reaction",
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe",
+      "anaphylaxis_or_emergency": "Anaphylaxis or emergency",
+      "not_sure": "Not sure",
+      "prefer_not_to_say": "Prefer not to say"
+    },
+    "timing": {
+      "during_meal": "During the meal",
+      "within_2_hours": "Within 2 hours",
+      "later_same_day": "Later the same day",
+      "next_day_or_later": "Next day or later",
+      "not_sure": "Not sure",
+      "not_applicable": "Not applicable"
+    },
+    "staffAnswer": {
+      "confirmed_no_allergen": "Confirmed no allergen",
+      "confirmed_contains_allergen": "Confirmed it contains the allergen",
+      "confirmed_can_remove": "They can remove it",
+      "confirmed_cannot_remove": "They cannot remove it",
+      "kitchen_checked": "Kitchen checked",
+      "not_sure": "Not sure",
+      "language_barrier": "Language barrier",
+      "no_answer": "No answer",
+      "other": "Other"
+    },
+    "severeNotice": {
+      "title": "Seek local emergency help if needed",
+      "body": "If you may be having a serious allergic reaction, seek local emergency help immediately. This app cannot provide medical advice or emergency support."
+    },
+    "underReview": "Feedback under review",
+    "summary": {
+      "title": "Feedback under review",
+      "recentReports": "{count, plural, one {# recent report} other {# recent reports}}",
+      "lastReport": "Last report: {date}",
+      "action": "Ask staff directly before ordering.",
+      "severe": "Recent feedback for this allergen is under review. For severe allergy profiles, consider avoiding this item until the information is reviewed."
+    },
+    "success": {
+      "title": "Thank you",
+      "body": "Your report was submitted for review. Recommendations may show a review warning while the team checks this information.",
+      "back": "Back to restaurants",
+      "queuedTitle": "Saved on this device",
+      "queuedBody": "This report will be sent when you are back online."
+    },
+    "errors": {
+      "submitFailed": "Could not submit your feedback. Please try again."
+    },
+    "offline": {
+      "pending": "{count, plural, one {# report waiting to sync} other {# reports waiting to sync}}",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…"
+    },
+    "reportIngredient": {
+      "title": "Report a wrong ingredient",
+      "searchIngredient": "Search ingredient…",
+      "contains": "Dish contains it",
+      "notContains": "Dish does not contain it",
+      "notePlaceholder": "Add a note (optional)",
+      "submit": "Submit report",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "error": "Couldn't submit. Please try again.",
+      "submitted": "Thanks — an admin will review your report.",
+      "queued": "Saved offline — it will send when you're back online.",
+      "close": "Done"
+    }
+  },
+  "dishAtRestaurant": {
+    "back": "Back",
+    "noDish": "No dish selected.",
+    "offline": "You're offline. Ingredient details need a connection.",
+    "error": "Couldn't load ingredients.",
+    "ingredientsSubtitle": "Ingredients (as recorded for this place)",
+    "noIngredients": "No ingredients recorded yet. Add one or ask the owner.",
+    "containsYourAllergen": "Contains your allergen",
+    "addIngredient": "Add ingredient",
+    "reportWrong": "Report wrong ingredient",
+    "createQuestion": "Create question for owner",
+    "searchIngredient": "Search ingredient…",
+    "searching": "Searching…",
+    "noIngredientMatches": "No matching ingredients.",
+    "addDisclaimer": "Your contribution is pending review — it won't show as verified.",
+    "provPrefix": "Source:",
+    "provSelfDeclared": "restaurant self-declared",
+    "provUser": "{count} user contributions",
+    "provAdmin": "{count} admin-added",
+    "provOcr": "{count} from OCR"
+  },
+  "famous": {
+    "screenTitle": "Famous dishes",
+    "reminder": "Popular local dishes. The chip reflects your allergy profile — always confirm with staff.",
+    "restaurantsNearby": "{count} restaurants serving this near you",
+    "noRestaurantsNearby": "Not listed near you yet",
+    "empty": "No famous dishes yet for this area.",
+    "error": "Couldn't load famous dishes."
+  },
+  "agent": {
+    "welcome": "Hi! I can suggest nearby dishes for your allergies, or note an ingredient a restaurant told you about. What would you like?",
+    "placeholder": "Ask about a dish or report an ingredient…",
+    "send": "Send",
+    "newChat": "New chat",
+    "thinking": "Assistant is typing…",
+    "error": "Couldn't reach the assistant. Please try again.",
+    "matchLabel": "{percent}% match with your profile",
+    "matchUnknown": "Match unknown",
+    "distanceKm": "{km} km away",
+    "proposalTitle": "Proposed data edit",
+    "contains": "should be marked as containing {ingredient}",
+    "notContains": "should be marked as NOT containing {ingredient}",
+    "confirm": "Confirm",
+    "confirming": "Sending…",
+    "edit": "Edit",
+    "sentForReview": "Sent for review — thanks!",
+    "sentForReviewQueued": "Saved offline — it will send when you're back online.",
+    "hitlNote": "An admin reviews every edit before it goes live — nothing is auto-verified."
+  },
+  "login": {
+    "subtitle": "Fast, secure sign-in",
+    "lookAtCamera": "Look at the camera to sign in with Face ID",
+    "scanning": "Scanning…",
+    "faceIdAffordance": "Sign in with Face ID",
+    "signInFaceId": "Sign in with Face ID",
+    "useFingerprint": "Use fingerprint",
+    "continueWithout": "Continue without biometrics",
+    "signingIn": "Signing in…",
+    "failed": "Sign-in failed. Please try again.",
+    "encryptionNote": "Your allergy profile is stored and encrypted on your device."
+  },
+  "ocr": {
+    "title": "Scan a dish",
+    "aiTag": "AI estimate · general recipe",
+    "capture": "Capture dish",
+    "scanning": "Analyzing…",
+    "starting": "Starting camera…",
+    "permissionDenied": "Camera permission denied.",
+    "cameraUnsupported": "Camera not available here.",
+    "fallbackHint": "Grant camera access, or open on a device with a camera.",
+    "generalRecipeWarning": "Ingredients are predicted from a GENERAL recipe — NOT this restaurant's. Always ask staff.",
+    "recognized": "Recognized: {dish}",
+    "findRestaurants": "Find restaurants serving {dish}",
+    "rescan": "Scan again"
   }
 }

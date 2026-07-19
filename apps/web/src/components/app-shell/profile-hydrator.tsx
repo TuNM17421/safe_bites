@@ -1,30 +1,36 @@
 'use client';
 import { useEffect } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
+import { decideRedirect } from '@/lib/auth/route-gate';
 import { useProfileStore } from '@/lib/profile-store';
 
-const PROFILE_REQUIRED = ['/dishes', '/allergy-card', '/question-card'];
-
-// Hydrates the profile store from Dexie on mount and, once hydrated, redirects
-// profile-required routes to /onboarding when there is no local profile. /home and
-// /profile handle the no-profile state themselves.
+// Single owner of first-run + lock gating. On mount it runs the cheap `probe()` (does an encrypted
+// profile exist?), then applies the pure `decideRedirect` decision: locked profile → /login,
+// no profile on a profile-required route → /onboarding. When unlocked with a profile on disk it
+// hydrates (decrypts) it into the store for synchronous reads elsewhere.
 export function ProfileHydrator() {
-  const hydrate = useProfileStore((s) => s.hydrate);
-  const hydrated = useProfileStore((s) => s.hydrated);
+  const probe = useProfileStore((s) => s.probe);
+  const probed = useProfileStore((s) => s.probed);
+  const hasProfileOnDisk = useProfileStore((s) => s.hasProfileOnDisk);
+  const unlocked = useProfileStore((s) => s.unlocked);
   const profile = useProfileStore((s) => s.profile);
+  const hydrate = useProfileStore((s) => s.hydrate);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    void hydrate();
-  }, [hydrate]);
+    void probe();
+  }, [probe]);
 
   useEffect(() => {
-    if (!hydrated || profile) return;
-    if (PROFILE_REQUIRED.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
-      router.replace('/onboarding');
+    const target = decideRedirect({ probed, hasProfileOnDisk, unlocked, pathname });
+    if (target) {
+      router.replace(target);
+      return;
     }
-  }, [hydrated, profile, pathname, router]);
+    // Passed the gate while unlocked but not yet in memory → decrypt into the store.
+    if (probed && hasProfileOnDisk && unlocked && !profile) void hydrate();
+  }, [probed, hasProfileOnDisk, unlocked, profile, pathname, router, hydrate]);
 
   return null;
 }
